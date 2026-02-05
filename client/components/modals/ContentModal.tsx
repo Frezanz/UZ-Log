@@ -112,11 +112,11 @@ export const ContentModal: React.FC<ContentModalProps> = ({
 
         <div className="space-y-4">
           {/* Type Selection - Collapsible */}
-          <div>
-            <label className="text-sm font-medium text-foreground mb-2 block">
+          <div className="text-center space-y-2">
+            <label className="text-sm font-medium text-foreground block">
               Content Type
             </label>
-            <div className="flex justify-center mb-3">
+            <div className="flex justify-center">
               <button
                 onClick={() => setShowContentType(!showContentType)}
                 className="text-muted-foreground hover:text-foreground transition-colors duration-200 focus:outline-none p-2 active:bg-transparent active:text-foreground"
