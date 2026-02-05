@@ -196,6 +196,21 @@ export default function Index() {
             />
             <div className="flex gap-2 w-full sm:w-auto">
               <Button
+                onClick={() => setShowActions(!showActions)}
+                variant="ghost"
+                size="sm"
+                className="text-muted-foreground hover:text-foreground"
+                title={showActions ? "Hide actions" : "Show actions"}
+              >
+                <Plus className="w-4 h-4" />
+              </Button>
+            </div>
+          </div>
+
+          {/* Action Buttons - Hidden by Default */}
+          {showActions && (
+            <div className="flex gap-2 w-full animate-in fade-in duration-200">
+              <Button
                 onClick={() => setShowFilters(!showFilters)}
                 variant="outline"
                 className="flex-1 sm:flex-none"
@@ -214,7 +229,7 @@ export default function Index() {
                 New Content
               </Button>
             </div>
-          </div>
+          )}
 
           {/* Filters Section */}
           {showFilters && (
