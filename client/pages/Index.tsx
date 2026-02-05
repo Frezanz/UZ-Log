@@ -198,18 +198,16 @@ export default function Index() {
 
           {/* Centered Chevron Toggle */}
           <div className="flex justify-center">
-            <Button
+            <button
               onClick={() => setShowActions(!showActions)}
-              variant="ghost"
-              size="sm"
-              className={`text-muted-foreground hover:text-foreground transition-transform duration-200 focus:outline-none focus-visible:outline-none ${showActions ? "[transform:rotateX(180deg)]" : ""}`}
+              className="text-muted-foreground hover:text-foreground transition-colors duration-200 focus:outline-none p-2 active:bg-transparent active:text-foreground -webkit-tap-highlight-color-transparent"
               title={showActions ? "Hide actions" : "Show actions"}
             >
               <ChevronDown
                 className="w-5 h-5 transition-transform duration-200"
                 style={{ transform: showActions ? "rotate(180deg)" : "rotate(0deg)" }}
               />
-            </Button>
+            </button>
           </div>
 
           {/* Action Buttons & Filters - Hidden by Default */}
