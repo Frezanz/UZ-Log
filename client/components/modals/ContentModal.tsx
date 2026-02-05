@@ -44,6 +44,7 @@ export const ContentModal: React.FC<ContentModalProps> = ({
   const [isLoading, setIsLoading] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isUploading, setIsUploading] = useState(false);
+  const [showContentType, setShowContentType] = useState(false);
   const [formData, setFormData] = useState<Partial<ContentItem>>(
     initialData || {
       type: 'text',
