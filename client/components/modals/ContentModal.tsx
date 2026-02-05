@@ -130,22 +130,20 @@ export const ContentModal: React.FC<ContentModalProps> = ({
             </div>
 
             {showContentType && (
-              <div className="px-4 py-3 border-t border-border bg-secondary/30 space-y-2">
-                <div className="grid grid-cols-3 gap-2">
-                  {contentTypes.map((type) => (
-                    <button
-                      key={type}
-                      onClick={() => setFormData({ ...formData, type })}
-                      className={`px-3 py-2 rounded border text-sm font-medium transition-colors ${
-                        formData.type === type
-                          ? 'bg-primary text-primary-foreground border-primary'
-                          : 'border-border bg-card text-foreground hover:bg-secondary'
-                      }`}
-                    >
-                      {type.charAt(0).toUpperCase() + type.slice(1)}
-                    </button>
-                  ))}
-                </div>
+              <div className="grid grid-cols-3 gap-2 animate-in fade-in duration-200">
+                {contentTypes.map((type) => (
+                  <button
+                    key={type}
+                    onClick={() => setFormData({ ...formData, type })}
+                    className={`px-3 py-2 rounded border text-sm font-medium transition-colors ${
+                      formData.type === type
+                        ? 'bg-primary text-primary-foreground border-primary'
+                        : 'border-border bg-card text-foreground hover:bg-secondary'
+                    }`}
+                  >
+                    {type.charAt(0).toUpperCase() + type.slice(1)}
+                  </button>
+                ))}
               </div>
             )}
           </div>
