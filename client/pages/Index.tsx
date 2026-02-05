@@ -239,39 +239,54 @@ export default function Index() {
               {showFilters && (
                 <div className="bg-secondary/30 border border-border rounded-lg p-4 space-y-4">
               {/* Sort Options */}
-              <div>
-                <h3 className="text-sm font-medium text-foreground mb-2">
+              <div className="text-center space-y-2">
+                <h3 className="text-sm font-medium text-foreground">
                   Sort By
                 </h3>
-                <div className="flex flex-wrap gap-2">
-                  {(["newest", "oldest", "a-z", "word-count"] as const).map(
-                    (option) => (
-                      <Button
-                        key={option}
-                        variant={
-                          displayFilters.sortBy === option
-                            ? "default"
-                            : "outline"
-                        }
-                        size="sm"
-                        onClick={() =>
-                          setDisplayFilters({
-                            ...displayFilters,
-                            sortBy: option,
-                          })
-                        }
-                      >
-                        {option === "newest"
-                          ? "Newest"
-                          : option === "oldest"
-                            ? "Oldest"
-                            : option === "a-z"
-                              ? "A-Z"
-                              : "Word Count"}
-                      </Button>
-                    ),
-                  )}
+                <div className="flex justify-center">
+                  <button
+                    onClick={() => setShowSortBy(!showSortBy)}
+                    className="text-muted-foreground hover:text-foreground transition-colors duration-200 focus:outline-none p-2 active:bg-transparent active:text-foreground"
+                    title={showSortBy ? "Hide sort options" : "Show sort options"}
+                  >
+                    <ChevronDown
+                      className="w-5 h-5 transition-transform duration-200"
+                      style={{ transform: showSortBy ? "rotate(180deg)" : "rotate(0deg)" }}
+                    />
+                  </button>
                 </div>
+
+                {showSortBy && (
+                  <div className="flex flex-wrap gap-2 justify-center animate-in fade-in duration-200">
+                    {(["newest", "oldest", "a-z", "word-count"] as const).map(
+                      (option) => (
+                        <Button
+                          key={option}
+                          variant={
+                            displayFilters.sortBy === option
+                              ? "default"
+                              : "outline"
+                          }
+                          size="sm"
+                          onClick={() =>
+                            setDisplayFilters({
+                              ...displayFilters,
+                              sortBy: option,
+                            })
+                          }
+                        >
+                          {option === "newest"
+                            ? "Newest"
+                            : option === "oldest"
+                              ? "Oldest"
+                              : option === "a-z"
+                                ? "A-Z"
+                                : "Word Count"}
+                        </Button>
+                      ),
+                    )}
+                  </div>
+                )}
               </div>
 
               {/* Category Filter */}
