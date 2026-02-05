@@ -196,7 +196,7 @@ export const ContentModal: React.FC<ContentModalProps> = ({
                 value={formData.content || ''}
                 onChange={(e) => setFormData({ ...formData, content: e.target.value })}
                 placeholder="Enter your content here..."
-                className="w-full min-h-[200px] px-3 py-2 rounded border border-border bg-background text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+                className="w-full min-h-[500px] px-3 py-2 rounded border border-border bg-background text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary resize-vertical"
               />
               {formData.content && (
                 <p className="text-xs text-muted-foreground mt-1">
