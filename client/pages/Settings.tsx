@@ -111,6 +111,110 @@ export default function Settings() {
             </div>
           </TabsContent>
 
+          {/* How to Use Tab */}
+          <TabsContent value="how-to-use" className="space-y-4">
+            <div className="bg-card border border-border rounded-lg p-6 space-y-6">
+              <div>
+                <h3 className="font-semibold text-foreground mb-3">Getting Started</h3>
+                <div className="space-y-3 text-sm text-muted-foreground leading-relaxed">
+                  <p>
+                    UZ-log is a personal content vault where you can store, organize, and share various types of content. Here's how to get started:
+                  </p>
+                </div>
+              </div>
+
+              <div>
+                <h3 className="font-semibold text-foreground mb-3">1. Creating Content</h3>
+                <div className="space-y-3 text-sm text-muted-foreground">
+                  <p>Click the chevron (↓) on the home screen to expand the action buttons, then click "New Content".</p>
+                  <div className="bg-secondary/30 border border-border rounded-lg p-4 space-y-3">
+                    <div>
+                      <p className="font-medium text-foreground mb-1">Step 1: Select Content Type</p>
+                      <p>Click the "Content Type" chevron to choose from:</p>
+                      <ul className="list-disc list-inside mt-2 space-y-1 text-xs">
+                        <li><span className="font-medium">Text</span> - Notes, articles, ideas</li>
+                        <li><span className="font-medium">Code</span> - Code snippets, algorithms</li>
+                        <li><span className="font-medium">Script</span> - Bash, Python, etc.</li>
+                        <li><span className="font-medium">Prompt</span> - AI prompts, templates</li>
+                        <li><span className="font-medium">Link</span> - URLs and web links</li>
+                        <li><span className="font-medium">Image/Video/File</span> - Media uploads</li>
+                        <li><span className="font-medium">Book</span> - Book references</li>
+                      </ul>
+                    </div>
+                    <div>
+                      <p className="font-medium text-foreground mb-1">Example: Creating a Code Snippet</p>
+                      <p className="text-xs bg-background/50 p-2 rounded font-mono">
+                        1. Choose "Code" type<br/>
+                        2. Add title: "Python List Reversal"<br/>
+                        3. Enter code: my_list = [1,2,3]; reversed_list = my_list[::-1]<br/>
+                        4. Add tags: python, useful<br/>
+                        5. Set category: Programming
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <h3 className="font-semibold text-foreground mb-3">2. Organizing Content</h3>
+                <div className="space-y-3 text-sm text-muted-foreground">
+                  <p>Every content item has:</p>
+                  <div className="bg-secondary/30 border border-border rounded-lg p-4 space-y-2 text-xs">
+                    <p><span className="font-medium">Title:</span> Name your content</p>
+                    <p><span className="font-medium">Category:</span> Organize by type (e.g., Work, Personal, Ideas)</p>
+                    <p><span className="font-medium">Tags:</span> Add comma-separated keywords (e.g., important, urgent, review)</p>
+                    <p><span className="font-medium">Public:</span> Make content shareable via link</p>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <h3 className="font-semibold text-foreground mb-3">3. Searching & Filtering</h3>
+                <div className="space-y-3 text-sm text-muted-foreground">
+                  <p>Use the search bar to find content instantly. Expand the chevron to access advanced filters:</p>
+                  <div className="bg-secondary/30 border border-border rounded-lg p-4 space-y-2 text-xs">
+                    <p><span className="font-medium">Search:</span> Full-text search across all content</p>
+                    <p><span className="font-medium">Sort By:</span> Newest, Oldest, A-Z, Word Count</p>
+                    <p><span className="font-medium">Categories:</span> Filter by category</p>
+                    <p><span className="font-medium">Tags:</span> Filter by tags</p>
+                  </div>
+                  <p className="text-xs italic mt-2">Example: Search "python" → Filter by "code" category → Sort by "newest"</p>
+                </div>
+              </div>
+
+              <div>
+                <h3 className="font-semibold text-foreground mb-3">4. Sharing Content</h3>
+                <div className="space-y-3 text-sm text-muted-foreground">
+                  <p>Click the share icon on any content card to:</p>
+                  <div className="bg-secondary/30 border border-border rounded-lg p-4 space-y-2 text-xs">
+                    <p>• Make it public (shareable via link)</p>
+                    <p>• Copy the public link</p>
+                    <p>• Anyone with the link can view public content</p>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <h3 className="font-semibold text-foreground mb-3">5. Editing & Deleting</h3>
+                <div className="space-y-3 text-sm text-muted-foreground">
+                  <p>Hover over any content card to see action buttons:</p>
+                  <div className="bg-secondary/30 border border-border rounded-lg p-4 space-y-2 text-xs">
+                    <p><span className="font-medium">Edit:</span> Modify content, category, tags</p>
+                    <p><span className="font-medium">Share:</span> Make public or copy link</p>
+                    <p><span className="font-medium">Download:</span> Download files (if applicable)</p>
+                    <p><span className="font-medium">Delete:</span> Permanently remove content</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-secondary/50 border border-border rounded-lg p-3">
+                <p className="text-xs text-muted-foreground">
+                  💡 Pro Tip: Use consistent categories and tags to make searching and organizing easier. The more structured your content, the better you can find it later!
+                </p>
+              </div>
+            </div>
+          </TabsContent>
+
           {/* About Tab */}
           <TabsContent value="about" className="space-y-4">
             <div className="bg-card border border-border rounded-lg p-6 space-y-4">
