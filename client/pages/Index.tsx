@@ -10,7 +10,7 @@ import { ContentModal } from "@/components/modals/ContentModal";
 import { ShareModal } from "@/components/modals/ShareModal";
 import { DeleteModal } from "@/components/modals/DeleteModal";
 import { Button } from "@/components/ui/button";
-import { Plus, Filter } from "lucide-react";
+import { Plus, Filter, ChevronDown } from "lucide-react";
 import { toast } from "sonner";
 import { getAllPublicContent } from "@/lib/api";
 
@@ -49,6 +49,8 @@ export default function Index() {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deleteItem, setDeleteItem] = useState<ContentItem | null>(null);
   const [showFilters, setShowFilters] = useState(false);
+  const [showActions, setShowActions] = useState(false);
+  const [showSortBy, setShowSortBy] = useState(false);
 
   // Load public content for anonymous users (if Supabase is available)
   // If not, guests will just see their own localStorage content
@@ -193,159 +195,202 @@ export default function Index() {
                 setDisplayFilters({ ...displayFilters, searchQuery: query })
               }
             />
-            <div className="flex gap-2 w-full sm:w-auto">
-              <Button
-                onClick={() => setShowFilters(!showFilters)}
-                variant="outline"
-                className="flex-1 sm:flex-none"
-              >
-                <Filter className="w-4 h-4 mr-2" />
-                Filters
-              </Button>
-              <Button
-                onClick={() => {
-                  setEditingItem(undefined);
-                  setShowContentModal(true);
-                }}
-                className="flex-1 sm:flex-none"
-              >
-                <Plus className="w-4 h-4 mr-2" />
-                New Content
-              </Button>
-            </div>
           </div>
 
-          {/* Filters Section */}
-          {showFilters && (
-            <div className="bg-secondary/30 border border-border rounded-lg p-4 space-y-4">
-              {/* Sort Options */}
-              <div>
-                <h3 className="text-sm font-medium text-foreground mb-2">
-                  Sort By
-                </h3>
-                <div className="flex flex-wrap gap-2">
-                  {(["newest", "oldest", "a-z", "word-count"] as const).map(
-                    (option) => (
-                      <Button
-                        key={option}
-                        variant={
-                          displayFilters.sortBy === option
-                            ? "default"
-                            : "outline"
-                        }
-                        size="sm"
-                        onClick={() =>
-                          setDisplayFilters({
-                            ...displayFilters,
-                            sortBy: option,
-                          })
-                        }
-                      >
-                        {option === "newest"
-                          ? "Newest"
-                          : option === "oldest"
-                            ? "Oldest"
-                            : option === "a-z"
-                              ? "A-Z"
-                              : "Word Count"}
-                      </Button>
-                    ),
-                  )}
-                </div>
-              </div>
+          {/* Centered Chevron Toggle */}
+          <div className="flex justify-center">
+            <button
+              onClick={() => setShowActions(!showActions)}
+              className="text-muted-foreground hover:text-foreground transition-colors duration-200 focus:outline-none p-2 active:bg-transparent active:text-foreground -webkit-tap-highlight-color-transparent"
+              title={showActions ? "Hide actions" : "Show actions"}
+            >
+              <ChevronDown
+                className="w-5 h-5 transition-transform duration-200"
+                style={{
+                  transform: showActions ? "rotate(180deg)" : "rotate(0deg)",
+                }}
+              />
+            </button>
+          </div>
 
-              {/* Category Filter */}
-              {categories.length > 0 && (
-                <div>
-                  <h3 className="text-sm font-medium text-foreground mb-2">
-                    Categories
-                  </h3>
-                  <div className="flex flex-wrap gap-2">
-                    {categories.map((cat) => (
-                      <Button
-                        key={cat}
-                        variant={
-                          displayFilters.categories.includes(cat)
-                            ? "default"
-                            : "outline"
-                        }
-                        size="sm"
-                        onClick={() => {
-                          const newCategories =
-                            displayFilters.categories.includes(cat)
-                              ? displayFilters.categories.filter(
-                                  (c) => c !== cat,
-                                )
-                              : [...displayFilters.categories, cat];
-                          setDisplayFilters({
-                            ...displayFilters,
-                            categories: newCategories,
-                          });
-                        }}
-                      >
-                        {cat}
-                      </Button>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* Tag Filter */}
-              {tags.length > 0 && (
-                <div>
-                  <h3 className="text-sm font-medium text-foreground mb-2">
-                    Tags
-                  </h3>
-                  <div className="flex flex-wrap gap-2">
-                    {tags.slice(0, 10).map((tag) => (
-                      <Button
-                        key={tag}
-                        variant={
-                          displayFilters.tags.includes(tag)
-                            ? "default"
-                            : "outline"
-                        }
-                        size="sm"
-                        onClick={() => {
-                          const newTags = displayFilters.tags.includes(tag)
-                            ? displayFilters.tags.filter((t) => t !== tag)
-                            : [...displayFilters.tags, tag];
-                          setDisplayFilters({
-                            ...displayFilters,
-                            tags: newTags,
-                          });
-                        }}
-                      >
-                        #{tag}
-                      </Button>
-                    ))}
-                    {tags.length > 10 && (
-                      <span className="text-xs text-muted-foreground px-2 py-1.5">
-                        +{tags.length - 10} more
-                      </span>
-                    )}
-                  </div>
-                </div>
-              )}
-
-              <div className="flex gap-2 pt-2">
+          {/* Action Buttons & Filters - Hidden by Default */}
+          {showActions && (
+            <div className="space-y-4 animate-in fade-in duration-200">
+              <div className="flex gap-2 w-full">
                 <Button
-                  variant="ghost"
-                  size="sm"
+                  onClick={() => setShowFilters(!showFilters)}
+                  variant="outline"
+                  className="flex-1 sm:flex-none"
+                >
+                  <Filter className="w-4 h-4 mr-2" />
+                  Filters
+                </Button>
+                <Button
                   onClick={() => {
-                    setDisplayFilters({
-                      searchQuery: "",
-                      categories: [],
-                      types: [],
-                      tags: [],
-                      sortBy: "newest",
-                    });
+                    setEditingItem(undefined);
+                    setShowContentModal(true);
                   }}
                   className="flex-1 sm:flex-none"
                 >
-                  Reset Filters
+                  <Plus className="w-4 h-4 mr-2" />
+                  New Content
                 </Button>
               </div>
+
+              {/* Filters Section - Nested inside showActions */}
+              {showFilters && (
+                <div className="bg-secondary/30 border border-border rounded-lg p-4 space-y-4">
+                  {/* Sort Options */}
+                  <div className="text-center space-y-2">
+                    <h3 className="text-sm font-medium text-foreground">
+                      Sort By
+                    </h3>
+                    <div className="flex justify-center">
+                      <button
+                        onClick={() => setShowSortBy(!showSortBy)}
+                        className="text-muted-foreground hover:text-foreground transition-colors duration-200 focus:outline-none p-2 active:bg-transparent active:text-foreground"
+                        title={
+                          showSortBy ? "Hide sort options" : "Show sort options"
+                        }
+                      >
+                        <ChevronDown
+                          className="w-5 h-5 transition-transform duration-200"
+                          style={{
+                            transform: showSortBy
+                              ? "rotate(180deg)"
+                              : "rotate(0deg)",
+                          }}
+                        />
+                      </button>
+                    </div>
+
+                    {showSortBy && (
+                      <div className="flex flex-wrap gap-2 justify-center animate-in fade-in duration-200">
+                        {(
+                          ["newest", "oldest", "a-z", "word-count"] as const
+                        ).map((option) => (
+                          <Button
+                            key={option}
+                            variant={
+                              displayFilters.sortBy === option
+                                ? "default"
+                                : "outline"
+                            }
+                            size="sm"
+                            onClick={() =>
+                              setDisplayFilters({
+                                ...displayFilters,
+                                sortBy: option,
+                              })
+                            }
+                          >
+                            {option === "newest"
+                              ? "Newest"
+                              : option === "oldest"
+                                ? "Oldest"
+                                : option === "a-z"
+                                  ? "A-Z"
+                                  : "Word Count"}
+                          </Button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Category Filter */}
+                  {categories.length > 0 && (
+                    <div>
+                      <h3 className="text-sm font-medium text-foreground mb-2">
+                        Categories
+                      </h3>
+                      <div className="flex flex-wrap gap-2">
+                        {categories.map((cat) => (
+                          <Button
+                            key={cat}
+                            variant={
+                              displayFilters.categories.includes(cat)
+                                ? "default"
+                                : "outline"
+                            }
+                            size="sm"
+                            onClick={() => {
+                              const newCategories =
+                                displayFilters.categories.includes(cat)
+                                  ? displayFilters.categories.filter(
+                                      (c) => c !== cat,
+                                    )
+                                  : [...displayFilters.categories, cat];
+                              setDisplayFilters({
+                                ...displayFilters,
+                                categories: newCategories,
+                              });
+                            }}
+                          >
+                            {cat}
+                          </Button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Tag Filter */}
+                  {tags.length > 0 && (
+                    <div>
+                      <h3 className="text-sm font-medium text-foreground mb-2">
+                        Tags
+                      </h3>
+                      <div className="flex flex-wrap gap-2">
+                        {tags.slice(0, 10).map((tag) => (
+                          <Button
+                            key={tag}
+                            variant={
+                              displayFilters.tags.includes(tag)
+                                ? "default"
+                                : "outline"
+                            }
+                            size="sm"
+                            onClick={() => {
+                              const newTags = displayFilters.tags.includes(tag)
+                                ? displayFilters.tags.filter((t) => t !== tag)
+                                : [...displayFilters.tags, tag];
+                              setDisplayFilters({
+                                ...displayFilters,
+                                tags: newTags,
+                              });
+                            }}
+                          >
+                            #{tag}
+                          </Button>
+                        ))}
+                        {tags.length > 10 && (
+                          <span className="text-xs text-muted-foreground px-2 py-1.5">
+                            +{tags.length - 10} more
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  )}
+
+                  <div className="flex gap-2 pt-2">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => {
+                        setDisplayFilters({
+                          searchQuery: "",
+                          categories: [],
+                          types: [],
+                          tags: [],
+                          sortBy: "newest",
+                        });
+                      }}
+                      className="flex-1 sm:flex-none"
+                    >
+                      Reset Filters
+                    </Button>
+                  </div>
+                </div>
+              )}
             </div>
           )}
 

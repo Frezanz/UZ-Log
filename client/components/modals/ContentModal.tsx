@@ -1,19 +1,20 @@
-import React, { useState } from 'react';
-import { ContentItem, ContentType } from '@/types/content';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { FileUpload } from '@/components/FileUpload';
-import { uploadFile } from '@/lib/api';
-import { getCurrentUser } from '@/lib/api';
+import React, { useState } from "react";
+import { ContentItem, ContentType } from "@/types/content";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { FileUpload } from "@/components/FileUpload";
+import { uploadFile } from "@/lib/api";
+import { getCurrentUser } from "@/lib/api";
+import { ChevronDown } from "lucide-react";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { toast } from 'sonner';
+} from "@/components/ui/dialog";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { toast } from "sonner";
 
 interface ContentModalProps {
   isOpen: boolean;
@@ -23,15 +24,15 @@ interface ContentModalProps {
 }
 
 const contentTypes: ContentType[] = [
-  'text',
-  'code',
-  'image',
-  'video',
-  'file',
-  'link',
-  'prompt',
-  'script',
-  'book',
+  "text",
+  "code",
+  "image",
+  "video",
+  "file",
+  "link",
+  "prompt",
+  "script",
+  "book",
 ];
 
 export const ContentModal: React.FC<ContentModalProps> = ({
@@ -43,20 +44,21 @@ export const ContentModal: React.FC<ContentModalProps> = ({
   const [isLoading, setIsLoading] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isUploading, setIsUploading] = useState(false);
+  const [showContentType, setShowContentType] = useState(false);
   const [formData, setFormData] = useState<Partial<ContentItem>>(
     initialData || {
-      type: 'text',
-      title: '',
-      content: '',
-      category: '',
+      type: "text",
+      title: "",
+      content: "",
+      category: "",
       tags: [],
       is_public: false,
-    }
+    },
   );
 
   const handleSave = async () => {
     if (!formData.title?.trim() && !formData.content?.trim() && !selectedFile) {
-      toast.error('Please enter a title, content, or upload a file');
+      toast.error("Please enter a title, content, or upload a file");
       return;
     }
 
@@ -65,10 +67,15 @@ export const ContentModal: React.FC<ContentModalProps> = ({
       let dataToSave = { ...formData };
 
       // Handle file upload
-      if (selectedFile && (formData.type === 'file' || formData.type === 'image' || formData.type === 'video')) {
+      if (
+        selectedFile &&
+        (formData.type === "file" ||
+          formData.type === "image" ||
+          formData.type === "video")
+      ) {
         setIsUploading(true);
         const user = await getCurrentUser();
-        if (!user) throw new Error('User not authenticated');
+        if (!user) throw new Error("User not authenticated");
 
         const fileUrl = await uploadFile(selectedFile, user.id);
         dataToSave = {
@@ -81,12 +88,12 @@ export const ContentModal: React.FC<ContentModalProps> = ({
       }
 
       await onSave(dataToSave);
-      toast.success(initialData ? 'Content updated' : 'Content created');
+      toast.success(initialData ? "Content updated" : "Content created");
       setSelectedFile(null);
       onClose();
     } catch (error) {
-      console.error('Save error:', error);
-      toast.error('Failed to save content');
+      console.error("Save error:", error);
+      toast.error("Failed to save content");
     } finally {
       setIsLoading(false);
       setIsUploading(false);
@@ -94,7 +101,10 @@ export const ContentModal: React.FC<ContentModalProps> = ({
   };
 
   const handleTagsChange = (value: string) => {
-    const tags = value.split(',').map((tag) => tag.trim()).filter(Boolean);
+    const tags = value
+      .split(",")
+      .map((tag) => tag.trim())
+      .filter(Boolean);
     setFormData({ ...formData, tags });
   };
 
@@ -102,33 +112,54 @@ export const ContentModal: React.FC<ContentModalProps> = ({
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>{initialData ? 'Edit Content' : 'Create New Content'}</DialogTitle>
-          <DialogDescription>
-            Fill in the details below
-          </DialogDescription>
+          <DialogTitle>
+            {initialData ? "Edit Content" : "Create New Content"}
+          </DialogTitle>
+          <DialogDescription>Fill in the details below</DialogDescription>
         </DialogHeader>
 
         <div className="space-y-4">
-          {/* Type Selection */}
-          <div>
-            <label className="text-sm font-medium text-foreground mb-2 block">
+          {/* Type Selection - Collapsible */}
+          <div className="text-center space-y-2">
+            <label className="text-sm font-medium text-foreground block">
               Content Type
             </label>
-            <div className="grid grid-cols-3 gap-2">
-              {contentTypes.map((type) => (
-                <button
-                  key={type}
-                  onClick={() => setFormData({ ...formData, type })}
-                  className={`px-3 py-2 rounded border text-sm font-medium transition-colors ${
-                    formData.type === type
-                      ? 'bg-primary text-primary-foreground border-primary'
-                      : 'border-border bg-card text-foreground hover:bg-secondary'
-                  }`}
-                >
-                  {type.charAt(0).toUpperCase() + type.slice(1)}
-                </button>
-              ))}
+            <div className="flex justify-center">
+              <button
+                onClick={() => setShowContentType(!showContentType)}
+                className="text-muted-foreground hover:text-foreground transition-colors duration-200 focus:outline-none p-2 active:bg-transparent active:text-foreground"
+                title={
+                  showContentType ? "Hide content types" : "Show content types"
+                }
+              >
+                <ChevronDown
+                  className="w-5 h-5 transition-transform duration-200"
+                  style={{
+                    transform: showContentType
+                      ? "rotate(180deg)"
+                      : "rotate(0deg)",
+                  }}
+                />
+              </button>
             </div>
+
+            {showContentType && (
+              <div className="grid grid-cols-3 gap-2 animate-in fade-in duration-200">
+                {contentTypes.map((type) => (
+                  <button
+                    key={type}
+                    onClick={() => setFormData({ ...formData, type })}
+                    className={`px-3 py-2 rounded border text-sm font-medium transition-colors ${
+                      formData.type === type
+                        ? "bg-primary text-primary-foreground border-primary"
+                        : "border-border bg-card text-foreground hover:bg-secondary"
+                    }`}
+                  >
+                    {type.charAt(0).toUpperCase() + type.slice(1)}
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
 
           {/* Title */}
@@ -137,14 +168,18 @@ export const ContentModal: React.FC<ContentModalProps> = ({
               Title (optional)
             </label>
             <Input
-              value={formData.title || ''}
-              onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+              value={formData.title || ""}
+              onChange={(e) =>
+                setFormData({ ...formData, title: e.target.value })
+              }
               placeholder="Leave empty for auto-generated title"
             />
           </div>
 
           {/* File Upload for certain types */}
-          {(formData.type === 'file' || formData.type === 'image' || formData.type === 'video') && (
+          {(formData.type === "file" ||
+            formData.type === "image" ||
+            formData.type === "video") && (
             <div>
               <label className="text-sm font-medium text-foreground mb-2 block">
                 Upload File
@@ -159,28 +194,34 @@ export const ContentModal: React.FC<ContentModalProps> = ({
           )}
 
           {/* Content */}
-          {formData.type === 'link' ? (
+          {formData.type === "link" ? (
             <div>
               <label className="text-sm font-medium text-foreground mb-2 block">
                 URL
               </label>
               <Input
                 type="url"
-                value={formData.content || ''}
-                onChange={(e) => setFormData({ ...formData, content: e.target.value })}
+                value={formData.content || ""}
+                onChange={(e) =>
+                  setFormData({ ...formData, content: e.target.value })
+                }
                 placeholder="https://example.com"
               />
             </div>
-          ) : formData.type !== 'file' && formData.type !== 'image' && formData.type !== 'video' ? (
+          ) : formData.type !== "file" &&
+            formData.type !== "image" &&
+            formData.type !== "video" ? (
             <div>
               <label className="text-sm font-medium text-foreground mb-2 block">
                 Content
               </label>
               <textarea
-                value={formData.content || ''}
-                onChange={(e) => setFormData({ ...formData, content: e.target.value })}
+                value={formData.content || ""}
+                onChange={(e) =>
+                  setFormData({ ...formData, content: e.target.value })
+                }
                 placeholder="Enter your content here..."
-                className="w-full min-h-[200px] px-3 py-2 rounded border border-border bg-background text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+                className="w-full min-h-[500px] px-3 py-2 rounded border border-border bg-background text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary resize-vertical"
               />
               {formData.content && (
                 <p className="text-xs text-muted-foreground mt-1">
@@ -203,8 +244,10 @@ export const ContentModal: React.FC<ContentModalProps> = ({
                   Category
                 </label>
                 <Input
-                  value={formData.category || ''}
-                  onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                  value={formData.category || ""}
+                  onChange={(e) =>
+                    setFormData({ ...formData, category: e.target.value })
+                  }
                   placeholder="e.g., Work, Personal, Ideas"
                 />
               </div>
@@ -214,7 +257,7 @@ export const ContentModal: React.FC<ContentModalProps> = ({
                   Tags (comma-separated)
                 </label>
                 <Input
-                  value={formData.tags?.join(', ') || ''}
+                  value={formData.tags?.join(", ") || ""}
                   onChange={(e) => handleTagsChange(e.target.value)}
                   placeholder="e.g., important, urgent, review"
                 />
@@ -232,7 +275,9 @@ export const ContentModal: React.FC<ContentModalProps> = ({
                 <input
                   type="checkbox"
                   checked={formData.is_public || false}
-                  onChange={(e) => setFormData({ ...formData, is_public: e.target.checked })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, is_public: e.target.checked })
+                  }
                   className="w-4 h-4 rounded border-border cursor-pointer"
                 />
               </div>
@@ -246,7 +291,7 @@ export const ContentModal: React.FC<ContentModalProps> = ({
             Cancel
           </Button>
           <Button onClick={handleSave} disabled={isLoading}>
-            {isLoading ? 'Saving...' : 'Save'}
+            {isLoading ? "Saving..." : "Save"}
           </Button>
         </div>
       </DialogContent>
