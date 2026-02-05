@@ -194,17 +194,20 @@ export default function Index() {
                 setDisplayFilters({ ...displayFilters, searchQuery: query })
               }
             />
-            <div className="flex gap-2 w-full sm:w-auto">
-              <Button
-                onClick={() => setShowActions(!showActions)}
-                variant="ghost"
-                size="sm"
-                className="text-muted-foreground hover:text-foreground"
-                title={showActions ? "Hide actions" : "Show actions"}
-              >
-                <Plus className="w-4 h-4" />
-              </Button>
-            </div>
+          </div>
+
+          {/* Centered Chevron Toggle */}
+          <div className="flex justify-center">
+            <Button
+              onClick={() => setShowActions(!showActions)}
+              variant="ghost"
+              size="sm"
+              className="text-muted-foreground hover:text-foreground transition-transform duration-200"
+              style={{ transform: showActions ? "rotate(180deg)" : "rotate(0deg)" }}
+              title={showActions ? "Hide actions" : "Show actions"}
+            >
+              <ChevronDown className="w-5 h-5" />
+            </Button>
           </div>
 
           {/* Action Buttons - Hidden by Default */}
