@@ -112,19 +112,22 @@ export const ContentModal: React.FC<ContentModalProps> = ({
 
         <div className="space-y-4">
           {/* Type Selection - Collapsible */}
-          <div className="border border-border rounded-lg">
-            <button
-              onClick={() => setShowContentType(!showContentType)}
-              className="w-full flex items-center justify-between px-4 py-3 hover:bg-secondary/50 transition-colors"
-            >
-              <label className="text-sm font-medium text-foreground cursor-pointer">
-                Content Type
-              </label>
-              <ChevronDown
-                className="w-4 h-4 transition-transform duration-200"
-                style={{ transform: showContentType ? "rotate(180deg)" : "rotate(0deg)" }}
-              />
-            </button>
+          <div>
+            <label className="text-sm font-medium text-foreground mb-2 block">
+              Content Type
+            </label>
+            <div className="flex justify-center mb-3">
+              <button
+                onClick={() => setShowContentType(!showContentType)}
+                className="text-muted-foreground hover:text-foreground transition-colors duration-200 focus:outline-none p-2 active:bg-transparent active:text-foreground"
+                title={showContentType ? "Hide content types" : "Show content types"}
+              >
+                <ChevronDown
+                  className="w-5 h-5 transition-transform duration-200"
+                  style={{ transform: showContentType ? "rotate(180deg)" : "rotate(0deg)" }}
+                />
+              </button>
+            </div>
 
             {showContentType && (
               <div className="px-4 py-3 border-t border-border bg-secondary/30 space-y-2">
