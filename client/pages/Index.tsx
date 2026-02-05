@@ -212,33 +212,33 @@ export default function Index() {
             </Button>
           </div>
 
-          {/* Action Buttons - Hidden by Default */}
+          {/* Action Buttons & Filters - Hidden by Default */}
           {showActions && (
-            <div className="flex gap-2 w-full animate-in fade-in duration-200">
-              <Button
-                onClick={() => setShowFilters(!showFilters)}
-                variant="outline"
-                className="flex-1 sm:flex-none"
-              >
-                <Filter className="w-4 h-4 mr-2" />
-                Filters
-              </Button>
-              <Button
-                onClick={() => {
-                  setEditingItem(undefined);
-                  setShowContentModal(true);
-                }}
-                className="flex-1 sm:flex-none"
-              >
-                <Plus className="w-4 h-4 mr-2" />
-                New Content
-              </Button>
-            </div>
-          )}
+            <div className="space-y-4 animate-in fade-in duration-200">
+              <div className="flex gap-2 w-full">
+                <Button
+                  onClick={() => setShowFilters(!showFilters)}
+                  variant="outline"
+                  className="flex-1 sm:flex-none"
+                >
+                  <Filter className="w-4 h-4 mr-2" />
+                  Filters
+                </Button>
+                <Button
+                  onClick={() => {
+                    setEditingItem(undefined);
+                    setShowContentModal(true);
+                  }}
+                  className="flex-1 sm:flex-none"
+                >
+                  <Plus className="w-4 h-4 mr-2" />
+                  New Content
+                </Button>
+              </div>
 
-          {/* Filters Section */}
-          {showFilters && (
-            <div className="bg-secondary/30 border border-border rounded-lg p-4 space-y-4">
+              {/* Filters Section - Nested inside showActions */}
+              {showFilters && (
+                <div className="bg-secondary/30 border border-border rounded-lg p-4 space-y-4">
               {/* Sort Options */}
               <div>
                 <h3 className="text-sm font-medium text-foreground mb-2">
@@ -367,6 +367,8 @@ export default function Index() {
                   Reset Filters
                 </Button>
               </div>
+            </div>
+              )}
             </div>
           )}
 
