@@ -10,7 +10,7 @@ import { ContentModal } from "@/components/modals/ContentModal";
 import { ShareModal } from "@/components/modals/ShareModal";
 import { DeleteModal } from "@/components/modals/DeleteModal";
 import { Button } from "@/components/ui/button";
-import { Plus, Filter } from "lucide-react";
+import { Plus, Filter, ChevronDown } from "lucide-react";
 import { toast } from "sonner";
 import { getAllPublicContent } from "@/lib/api";
 
