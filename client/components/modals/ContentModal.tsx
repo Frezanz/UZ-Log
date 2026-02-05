@@ -5,6 +5,7 @@ import { Input } from '@/components/ui/input';
 import { FileUpload } from '@/components/FileUpload';
 import { uploadFile } from '@/lib/api';
 import { getCurrentUser } from '@/lib/api';
+import { ChevronDown } from 'lucide-react';
 import {
   Dialog,
   DialogContent,
