@@ -111,26 +111,40 @@ export const ContentModal: React.FC<ContentModalProps> = ({
         </DialogHeader>
 
         <div className="space-y-4">
-          {/* Type Selection */}
-          <div>
-            <label className="text-sm font-medium text-foreground mb-2 block">
-              Content Type
-            </label>
-            <div className="grid grid-cols-3 gap-2">
-              {contentTypes.map((type) => (
-                <button
-                  key={type}
-                  onClick={() => setFormData({ ...formData, type })}
-                  className={`px-3 py-2 rounded border text-sm font-medium transition-colors ${
-                    formData.type === type
-                      ? 'bg-primary text-primary-foreground border-primary'
-                      : 'border-border bg-card text-foreground hover:bg-secondary'
-                  }`}
-                >
-                  {type.charAt(0).toUpperCase() + type.slice(1)}
-                </button>
-              ))}
-            </div>
+          {/* Type Selection - Collapsible */}
+          <div className="border border-border rounded-lg">
+            <button
+              onClick={() => setShowContentType(!showContentType)}
+              className="w-full flex items-center justify-between px-4 py-3 hover:bg-secondary/50 transition-colors"
+            >
+              <label className="text-sm font-medium text-foreground cursor-pointer">
+                Content Type
+              </label>
+              <ChevronDown
+                className="w-4 h-4 transition-transform duration-200"
+                style={{ transform: showContentType ? "rotate(180deg)" : "rotate(0deg)" }}
+              />
+            </button>
+
+            {showContentType && (
+              <div className="px-4 py-3 border-t border-border bg-secondary/30 space-y-2">
+                <div className="grid grid-cols-3 gap-2">
+                  {contentTypes.map((type) => (
+                    <button
+                      key={type}
+                      onClick={() => setFormData({ ...formData, type })}
+                      className={`px-3 py-2 rounded border text-sm font-medium transition-colors ${
+                        formData.type === type
+                          ? 'bg-primary text-primary-foreground border-primary'
+                          : 'border-border bg-card text-foreground hover:bg-secondary'
+                      }`}
+                    >
+                      {type.charAt(0).toUpperCase() + type.slice(1)}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Title */}
