@@ -1,0 +1,67 @@
+# Netlify Configuration for UZ-log
+# This file configures build settings, environment, and routing for Netlify deployment
+
+[build]
+  # Build command that Netlify runs
+  command = "npm run build"
+  
+  # Directory containing the built site that will be deployed
+  publish = "dist/spa"
+  
+  # Node.js version for the build
+  node_version = "20"
+
+# Environment variables (can also be set in Netlify dashboard)
+# These are required for the application to work
+[build.environment]
+  # Supabase Configuration - MUST BE SET IN NETLIFY DASHBOARD
+  # These are sensitive and should not be in version control
+  # VITE_SUPABASE_URL = "https://your-project.supabase.co"
+  # VITE_SUPABASE_ANON_KEY = "your-anon-key-here"
+  # VITE_GOOGLE_OAUTH_CLIENT_ID = "your-client-id.apps.googleusercontent.com"
+
+# Redirect rules for React Router (SPA)
+# All non-file requests go to index.html for client-side routing
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+  condition = {Status = "404"}
+
+# Cache headers for static assets
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    X-Frame-Options = "SAMEORIGIN"
+    X-XSS-Protection = "1; mode=block"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+# Long-term cache for versioned assets
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# Short-term cache for HTML
+[[headers]]
+  for = "/*.html"
+  [headers.values]
+    Cache-Control = "public, max-age=3600"
+
+# Function handling for serverless features (if needed in future)
+# [functions]
+#   directory = "netlify/functions"
+
+# Context-specific settings (optional)
+# [context.production]
+#   command = "npm run build"
+#   publish = "dist/spa"
+
+# [context.develop]
+#   command = "npm run dev"
+#   environment = { NODE_ENV = "development" }
+
+# [context.branch-deploy]
+#   command = "npm run build"
+#   publish = "dist/spa"
