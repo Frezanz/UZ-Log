@@ -202,11 +202,13 @@ export default function Index() {
               onClick={() => setShowActions(!showActions)}
               variant="ghost"
               size="sm"
-              className="text-muted-foreground hover:text-foreground transition-transform duration-200"
-              style={{ transform: showActions ? "rotate(180deg)" : "rotate(0deg)" }}
+              className={`text-muted-foreground hover:text-foreground transition-transform duration-200 focus:outline-none focus-visible:outline-none ${showActions ? "[transform:rotateX(180deg)]" : ""}`}
               title={showActions ? "Hide actions" : "Show actions"}
             >
-              <ChevronDown className="w-5 h-5" />
+              <ChevronDown
+                className="w-5 h-5 transition-transform duration-200"
+                style={{ transform: showActions ? "rotate(180deg)" : "rotate(0deg)" }}
+              />
             </Button>
           </div>
 
