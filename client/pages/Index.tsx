@@ -518,7 +518,7 @@ export default function Index() {
                           title={showTags ? "Hide tags" : "Show tags"}
                         >
                           <ChevronDown
-                            className="w-5 h-5 transition-transform duration-200"
+                            className="w-4 h-4 transition-transform duration-200"
                             style={{
                               transform: showTags
                                 ? "rotate(180deg)"
