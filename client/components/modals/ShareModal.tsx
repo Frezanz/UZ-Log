@@ -183,9 +183,14 @@ export const ShareModal: React.FC<ShareModalProps> = ({
                 target="_blank"
                 rel="noopener noreferrer"
                 className={`inline-flex items-center justify-center px-3 py-2 rounded border border-border bg-card hover:bg-secondary transition-colors text-sm font-medium ${
-                  !item.is_public ? "opacity-50 cursor-not-allowed" : ""
+                  !item.is_public ? "opacity-50" : ""
                 }`}
-                onClick={(e) => !item.is_public && e.preventDefault()}
+                onClick={(e) => {
+                  if (!item.is_public) {
+                    e.preventDefault();
+                    toast.error("Make content public to share");
+                  }
+                }}
               >
                 Twitter
               </a>
