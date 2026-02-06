@@ -331,6 +331,14 @@ export const shareContent = async (
   return updateContent(id, { is_public: isPublic });
 };
 
+// ============ Content Status ============
+export const toggleStatus = async (
+  id: string,
+  status: "active" | "pending" | "completed",
+): Promise<ContentItem> => {
+  return updateContent(id, { status });
+};
+
 export const getPublicContent = async (id: string): Promise<ContentItem> => {
   const supabase = getSupabase();
   const { data, error } = await supabase
