@@ -63,47 +63,15 @@ export const ShareModal: React.FC<ShareModalProps> = ({
     }
   };
 
-  const handleNativeShare = async () => {
+  const handleNativeShare = () => {
     // Check if content is public
     if (!item.is_public) {
       toast.error("Make content public to share");
       return;
     }
 
-    console.log("Share button clicked, navigator.share available:", !!navigator.share);
-
-    if (!navigator.share) {
-      console.log("Web Share API not available, showing fallback menu");
-      setShowMoreMenu(true);
-      return;
-    }
-
-    try {
-      console.log("Attempting to share via Web Share API");
-      await navigator.share({
-        title: item.title,
-        text: `Check out this content on UZ-log: ${item.title}`,
-        url: shareUrl,
-      });
-      console.log("Share successful");
-    } catch (error) {
-      console.error("Share error:", error);
-      if (error instanceof Error) {
-        // Ignore user cancellation
-        if (error.name === "AbortError" || error.message.includes("cancelled")) {
-          console.log("User cancelled share");
-          return;
-        }
-        // Handle permission denied - show fallback menu
-        if (error.name === "NotAllowedError" || error.message.includes("Permission")) {
-          console.log("Permission denied, showing fallback menu");
-          setShowMoreMenu(true);
-          return;
-        }
-      }
-      // Show fallback menu on any error
-      setShowMoreMenu(true);
-    }
+    // Toggle fallback menu
+    setShowMoreMenu(!showMoreMenu);
   };
 
   return (
