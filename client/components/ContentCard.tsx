@@ -97,7 +97,7 @@ export const ContentCard: React.FC<ContentCardProps> = ({
 
   return (
     <div
-      className="group border border-border rounded-lg bg-card hover:shadow-md hover:border-foreground/20 transition-all duration-200 overflow-hidden flex flex-col h-full cursor-pointer"
+      className="group border border-border bg-card hover:shadow-md hover:border-foreground/20 transition-all duration-200 overflow-hidden flex flex-col h-full cursor-pointer"
       onMouseEnter={() => setShowActions(true)}
       onMouseLeave={() => setShowActions(false)}
       onClick={() => onView?.(item)}
