@@ -69,6 +69,7 @@ export const ContentCard: React.FC<ContentCardProps> = ({
   onEdit,
   onDelete,
   onShare,
+  onDuplicate,
   onStatusChange,
   onDownload,
 }) => {
