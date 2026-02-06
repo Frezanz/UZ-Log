@@ -43,7 +43,6 @@ const typeIcons: Record<ContentType, React.ReactNode> = {
   prompt: <Zap className="w-4 h-4" />,
   script: <FileCode className="w-4 h-4" />,
   book: <BookOpen className="w-4 h-4" />,
-  voice: <Mic className="w-4 h-4" />,
 };
 
 const typeColors: Record<ContentType, string> = {
@@ -57,7 +56,6 @@ const typeColors: Record<ContentType, string> = {
   script:
     "bg-indigo-50 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300",
   book: "bg-pink-50 dark:bg-pink-950 text-pink-700 dark:text-pink-300",
-  voice: "bg-teal-50 dark:bg-teal-950 text-teal-700 dark:text-teal-300",
 };
 
 export const ContentViewer: React.FC<ContentViewerProps> = ({
