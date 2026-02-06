@@ -185,6 +185,14 @@ export const ContentCard: React.FC<ContentCardProps> = ({
             </span>
           </div>
         )}
+
+        {item.voice_url && (
+          <div className="mt-1">
+            <span className="inline-block text-[10px] bg-teal-100 dark:bg-teal-900 text-teal-700 dark:text-teal-300 px-1.5 py-0.5 rounded font-medium">
+              Has Voice
+            </span>
+          </div>
+        )}
       </div>
 
       {/* Metadata */}
