@@ -65,14 +65,28 @@ export const AudioRecorder: React.FC<AudioRecorderProps> = ({
     initializeAudio();
 
     return () => {
-      if (mediaRecorderRef.current && isRecording) {
-        mediaRecorderRef.current.stop();
+      // Stop recording if still active
+      if (mediaRecorderRef.current) {
+        try {
+          if (mediaRecorderRef.current.state === "recording") {
+            mediaRecorderRef.current.stop();
+          }
+        } catch (error) {
+          console.error("Error stopping media recorder:", error);
+        }
       }
+      // Close audio context if it exists
       if (audioContextRef.current) {
-        audioContextRef.current.close();
+        try {
+          if (audioContextRef.current.state !== "closed") {
+            audioContextRef.current.close();
+          }
+        } catch (error) {
+          console.error("Error closing audio context:", error);
+        }
       }
     };
-  }, []);
+  }, [isRecording]);
 
   // Timer for recording duration
   useEffect(() => {
