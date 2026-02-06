@@ -230,6 +230,147 @@ export const ShareModal: React.FC<ShareModalProps> = ({
             </div>
           )}
 
+          {/* Advanced Share Links */}
+          {isAuthenticated && !isLocalContent && (
+            <div className="space-y-3 border-t pt-4">
+              <div className="flex items-center justify-between">
+                <h3 className="text-sm font-medium text-foreground">Custom Share Links</h3>
+                {!showLinkForm && (
+                  <Button
+                    onClick={() => setShowLinkForm(true)}
+                    variant="outline"
+                    size="sm"
+                    className="h-7 text-xs"
+                  >
+                    <Plus className="w-3 h-3 mr-1" />
+                    Create
+                  </Button>
+                )}
+              </div>
+
+              {/* Create Link Form */}
+              {showLinkForm && (
+                <div className="space-y-3 p-3 bg-secondary/20 rounded">
+                  <div>
+                    <label className="text-xs font-medium block mb-1">
+                      Password (optional)
+                    </label>
+                    <Input
+                      type="password"
+                      placeholder="Enter password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      className="h-7 text-xs"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="text-xs font-medium block mb-1">
+                      Expires in (days)
+                    </label>
+                    <Input
+                      type="number"
+                      placeholder="Leave empty for no expiration"
+                      value={expirationDays}
+                      onChange={(e) => setExpirationDays(e.target.value)}
+                      className="h-7 text-xs"
+                      min="1"
+                    />
+                  </div>
+
+                  <div className="flex gap-2">
+                    <Button
+                      onClick={handleCreateShareLink}
+                      disabled={isCreatingLink}
+                      className="flex-1 h-7 text-xs"
+                    >
+                      Create Link
+                    </Button>
+                    <Button
+                      onClick={() => {
+                        setShowLinkForm(false);
+                        setPassword("");
+                        setExpirationDays("");
+                      }}
+                      variant="outline"
+                      className="flex-1 h-7 text-xs"
+                    >
+                      Cancel
+                    </Button>
+                  </div>
+                </div>
+              )}
+
+              {/* Share Links List */}
+              {shareLinks.length > 0 && (
+                <div className="space-y-2 max-h-48 overflow-y-auto">
+                  {shareLinks.map((link) => {
+                    const isExpired = link.expires_at && new Date(link.expires_at) < new Date();
+                    const linkUrl = `${window.location.origin}/s/${link.token}`;
+
+                    return (
+                      <div
+                        key={link.id}
+                        className={`p-2 rounded border text-xs ${
+                          isExpired
+                            ? "bg-destructive/5 border-destructive/30"
+                            : "bg-secondary/30 border-border"
+                        }`}
+                      >
+                        <div className="space-y-1">
+                          <div className="flex items-center gap-2 flex-wrap">
+                            {link.password && (
+                              <span className="flex items-center gap-1 text-muted-foreground">
+                                <Lock className="w-3 h-3" />
+                                Protected
+                              </span>
+                            )}
+                            {link.expires_at && (
+                              <span className={`flex items-center gap-1 ${
+                                isExpired ? "text-destructive" : "text-muted-foreground"
+                              }`}>
+                                <Clock className="w-3 h-3" />
+                                {isExpired ? "Expired" : `Expires ${new Date(link.expires_at).toLocaleDateString()}`}
+                              </span>
+                            )}
+                          </div>
+                          <div className="flex gap-2 items-center">
+                            <input
+                              type="text"
+                              value={linkUrl}
+                              readOnly
+                              className="flex-1 text-xs border rounded px-2 py-1 bg-background"
+                            />
+                            <button
+                              onClick={() => copyToClipboard(linkUrl)}
+                              className="p-1 hover:bg-primary/20 rounded transition-colors"
+                              title="Copy link"
+                            >
+                              <Copy className="w-3 h-3" />
+                            </button>
+                            <button
+                              onClick={() => handleDeleteShareLink(link.id)}
+                              className="p-1 hover:bg-destructive/20 rounded transition-colors"
+                              title="Delete link"
+                            >
+                              <Trash2 className="w-3 h-3 text-destructive" />
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+
+              {shareLinks.length === 0 && !showLinkForm && (
+                <p className="text-xs text-muted-foreground">
+                  No custom share links yet. Create one to get started.
+                </p>
+              )}
+            </div>
+          )}
+
           {/* Share Methods */}
           <div className="space-y-2">
             <p className="text-sm font-medium text-foreground">Share via</p>
