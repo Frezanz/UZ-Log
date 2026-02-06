@@ -7,7 +7,8 @@ export type ContentType =
   | "link"
   | "prompt"
   | "script"
-  | "book";
+  | "book"
+  | "voice";
 
 export type ContentStatus = "active" | "pending" | "completed";
 
