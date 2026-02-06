@@ -76,6 +76,7 @@ export const ContentCard: React.FC<ContentCardProps> = ({
   onDownload,
 }) => {
   const [showActions, setShowActions] = useState(false);
+  const [isLiked, setIsLiked] = useState(false);
   const wordCount = item.word_count || 0;
   const createdDate = new Date(item.created_at).toLocaleDateString();
   const createdTime = new Date(item.created_at).toLocaleTimeString(undefined, {
