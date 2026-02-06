@@ -301,37 +301,60 @@ export default function Index() {
 
                   {/* Category Filter */}
                   {categories.length > 0 && (
-                    <div>
-                      <h3 className="text-sm font-medium text-foreground mb-2">
+                    <div className="text-center space-y-2">
+                      <h3 className="text-sm font-medium text-foreground">
                         Categories
                       </h3>
-                      <div className="flex flex-wrap gap-2">
-                        {categories.map((cat) => (
-                          <Button
-                            key={cat}
-                            variant={
-                              displayFilters.categories.includes(cat)
-                                ? "default"
-                                : "outline"
-                            }
-                            size="sm"
-                            onClick={() => {
-                              const newCategories =
-                                displayFilters.categories.includes(cat)
-                                  ? displayFilters.categories.filter(
-                                      (c) => c !== cat,
-                                    )
-                                  : [...displayFilters.categories, cat];
-                              setDisplayFilters({
-                                ...displayFilters,
-                                categories: newCategories,
-                              });
+                      <div className="flex justify-center">
+                        <button
+                          onClick={() => setShowCategories(!showCategories)}
+                          className="text-muted-foreground hover:text-foreground transition-colors duration-200 focus:outline-none p-2 active:bg-transparent active:text-foreground"
+                          title={
+                            showCategories
+                              ? "Hide categories"
+                              : "Show categories"
+                          }
+                        >
+                          <ChevronDown
+                            className="w-5 h-5 transition-transform duration-200"
+                            style={{
+                              transform: showCategories
+                                ? "rotate(180deg)"
+                                : "rotate(0deg)",
                             }}
-                          >
-                            {cat}
-                          </Button>
-                        ))}
+                          />
+                        </button>
                       </div>
+
+                      {showCategories && (
+                        <div className="flex flex-wrap gap-2 justify-center animate-in fade-in duration-200">
+                          {categories.map((cat) => (
+                            <Button
+                              key={cat}
+                              variant={
+                                displayFilters.categories.includes(cat)
+                                  ? "default"
+                                  : "outline"
+                              }
+                              size="sm"
+                              onClick={() => {
+                                const newCategories =
+                                  displayFilters.categories.includes(cat)
+                                    ? displayFilters.categories.filter(
+                                        (c) => c !== cat,
+                                      )
+                                    : [...displayFilters.categories, cat];
+                                setDisplayFilters({
+                                  ...displayFilters,
+                                  categories: newCategories,
+                                });
+                              }}
+                            >
+                              {cat}
+                            </Button>
+                          ))}
+                        </div>
+                      )}
                     </div>
                   )}
 
