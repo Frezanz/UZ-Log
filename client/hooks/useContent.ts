@@ -168,13 +168,24 @@ export const useContent = () => {
   );
 
   const changeStatus = useCallback(
-    async (id: string, status: "active" | "pending" | "completed") => {
+    async (
+      id: string,
+      status: "active" | "pending" | "completed",
+      autoDeleteAt?: string | null,
+    ) => {
       try {
         let updated: ContentItem;
+        const updates: Partial<ContentItem> = { status };
+
+        if (autoDeleteAt !== undefined) {
+          updates.auto_delete_at = autoDeleteAt;
+          updates.auto_delete_enabled = !!autoDeleteAt;
+        }
+
         if (isAuthenticated) {
-          updated = await toggleStatus(id, status);
+          updated = await toggleStatus(id, status, autoDeleteAt);
         } else {
-          updated = updateGuestContent(id, { status });
+          updated = updateGuestContent(id, updates);
         }
 
         setItems((prev) =>
