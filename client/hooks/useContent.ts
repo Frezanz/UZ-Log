@@ -125,10 +125,13 @@ export const useContent = () => {
         } else {
           console.log('Deleting guest content');
           deleteGuestContent(id);
+          // Small delay to ensure localStorage is synced
+          await new Promise(resolve => setTimeout(resolve, 100));
         }
 
-        setItems(items.filter((item) => item.id !== id));
-        console.log('Content removed from state');
+        const updatedItems = items.filter((item) => item.id !== id);
+        setItems(updatedItems);
+        console.log('Content removed from state, remaining items:', updatedItems.length);
       } catch (err) {
         const message =
           err instanceof Error ? err.message : "Failed to delete content";
