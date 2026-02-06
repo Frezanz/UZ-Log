@@ -587,19 +587,90 @@ export default function Index() {
             ))}
           </div>
         ) : displayItems.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-            {displayItems.map((item) => (
-              <ContentCard
-                key={item.id}
-                item={item}
-                onView={handleOpenView}
-                onEdit={handleOpenEdit}
-                onDelete={handleOpenDelete}
-                onShare={handleOpenShare}
-                onStatusChange={handleStatusChange}
-                onDownload={handleDownload}
-              />
-            ))}
+          <div>
+            {/* Bulk Selection Toolbar */}
+            {selectedItems.size > 0 && (
+              <div className="mb-4 p-4 bg-primary/5 border border-primary/20 rounded-lg flex items-center justify-between gap-4 flex-wrap">
+                <div className="flex items-center gap-4">
+                  <input
+                    type="checkbox"
+                    checked={selectedItems.size === displayItems.length}
+                    onChange={handleSelectAll}
+                    className="w-5 h-5 rounded border-border cursor-pointer"
+                    title="Select all"
+                  />
+                  <span className="text-sm font-medium text-foreground">
+                    {selectedItems.size} item
+                    {selectedItems.size !== 1 ? "s" : ""} selected
+                  </span>
+                </div>
+
+                <div className="flex gap-2 flex-wrap">
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => handleBulkStatusChange("active")}
+                  >
+                    Mark Active
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => handleBulkStatusChange("pending")}
+                  >
+                    Mark Pending
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => handleBulkShare(true)}
+                  >
+                    Make Public
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => handleBulkShare(false)}
+                  >
+                    Make Private
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => setShowBulkDeleteModal(true)}
+                    className="text-destructive hover:text-destructive"
+                  >
+                    Delete
+                  </Button>
+                </div>
+              </div>
+            )}
+
+            {/* Content Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+              {displayItems.map((item) => (
+                <div key={item.id} className="relative">
+                  {/* Selection Checkbox */}
+                  <input
+                    type="checkbox"
+                    checked={selectedItems.has(item.id)}
+                    onChange={() => handleSelectItem(item.id)}
+                    className="absolute top-2 left-2 z-10 w-5 h-5 rounded border-border cursor-pointer"
+                    title="Select item"
+                  />
+                  <ContentCard
+                    item={item}
+                    onView={handleOpenView}
+                    onEdit={handleOpenEdit}
+                    onDelete={handleOpenDelete}
+                    onShare={handleOpenShare}
+                    onDuplicate={handleDuplicate}
+                    onStatusChange={handleStatusChange}
+                    onDownload={handleDownload}
+                  />
+                </div>
+              ))}
+            </div>
           </div>
         ) : (
           <div className="flex flex-col items-center justify-center py-12 text-center">
