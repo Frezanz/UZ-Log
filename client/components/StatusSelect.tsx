@@ -102,6 +102,7 @@ export const StatusDropdown: React.FC<StatusDropdownProps> = ({
   disabled = false,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isChanging, setIsChanging] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const safeStatus = (status || "active") as ContentStatus;
   const config = statusConfig[safeStatus];
@@ -122,7 +123,11 @@ export const StatusDropdown: React.FC<StatusDropdownProps> = ({
   }, [isOpen]);
 
   const handleStatusSelect = (newStatus: ContentStatus) => {
-    onChange(newStatus);
+    if (newStatus !== safeStatus) {
+      setIsChanging(true);
+      onChange(newStatus);
+      setTimeout(() => setIsChanging(false), 300);
+    }
     setIsOpen(false);
   };
 
