@@ -235,18 +235,6 @@ export const ImageViewer: React.FC<ImageViewerProps> = ({
               </Button>
             </div>
 
-            {/* Edit Button - Full Width */}
-            {onEdit && (
-              <Button
-                onClick={handleEdit}
-                className="w-full flex items-center justify-center gap-2 h-10"
-                title="Edit image details"
-              >
-                <Edit className="w-4 h-4" />
-                <span>Edit Details</span>
-              </Button>
-            )}
-
             {/* Click to Close Hint */}
             <p className="text-center text-xs text-muted-foreground pt-2">
               Press ESC or click outside to close
