@@ -166,10 +166,15 @@ export const ContentViewer: React.FC<ContentViewerProps> = ({
 
           {/* Code Viewer */}
           {content.type === "code" && content.content && (
-            <div className="bg-secondary/30 rounded-lg p-4 max-h-[60vh] overflow-auto">
-              <pre className="font-mono text-xs text-foreground leading-relaxed whitespace-pre-wrap break-words">
-                {content.content}
-              </pre>
+            <div className="space-y-3">
+              <div className="bg-secondary/30 rounded-lg p-4 max-h-[60vh] overflow-auto select-text">
+                <pre className="font-mono text-xs text-foreground leading-relaxed whitespace-pre-wrap break-words select-all cursor-text">
+                  {content.content}
+                </pre>
+              </div>
+              <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                <span>Tap the code above to select and copy it</span>
+              </div>
             </div>
           )}
 
