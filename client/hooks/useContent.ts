@@ -7,6 +7,7 @@ import {
   updateContent,
   deleteContent,
   shareContent,
+  toggleStatus,
 } from "@/lib/api";
 import {
   getGuestContent,
