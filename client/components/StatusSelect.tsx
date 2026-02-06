@@ -43,7 +43,11 @@ export const StatusSelect: React.FC<StatusSelectProps> = ({
   const Icon = currentStatus?.icon || CheckCircle2;
 
   return (
-    <Select value={safeValue} onValueChange={(v) => onChange(v as ContentStatus)} disabled={disabled}>
+    <Select
+      value={safeValue}
+      onValueChange={(v) => onChange(v as ContentStatus)}
+      disabled={disabled}
+    >
       <SelectTrigger className="w-full h-9 text-sm">
         <SelectValue />
       </SelectTrigger>
@@ -64,7 +68,9 @@ export const StatusSelect: React.FC<StatusSelectProps> = ({
   );
 };
 
-export const StatusBadge: React.FC<{ status?: ContentStatus }> = ({ status = "active" }) => {
+export const StatusBadge: React.FC<{ status?: ContentStatus }> = ({
+  status = "active",
+}) => {
   // Default to "active" if status is undefined
   const safeStatus = (status || "active") as ContentStatus;
   const config = statusConfig[safeStatus];
@@ -118,7 +124,8 @@ export const StatusDropdown: React.FC<StatusDropdownProps> = ({
 
     if (isOpen) {
       document.addEventListener("mousedown", handleClickOutside);
-      return () => document.removeEventListener("mousedown", handleClickOutside);
+      return () =>
+        document.removeEventListener("mousedown", handleClickOutside);
     }
   }, [isOpen]);
 
@@ -136,7 +143,8 @@ export const StatusDropdown: React.FC<StatusDropdownProps> = ({
       <button
         onClick={() => !disabled && setIsOpen(!isOpen)}
         className={`inline-flex items-center gap-1 px-2 py-1 rounded text-[10px] font-medium transition-all ${
-          config?.color || "bg-gray-100 dark:bg-gray-950 text-gray-700 dark:text-gray-300"
+          config?.color ||
+          "bg-gray-100 dark:bg-gray-950 text-gray-700 dark:text-gray-300"
         } ${disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer hover:opacity-90"} ${
           isChanging ? "scale-95" : "scale-100"
         }`}

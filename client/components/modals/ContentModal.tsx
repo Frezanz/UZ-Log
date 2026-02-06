@@ -123,7 +123,8 @@ export const ContentModal: React.FC<ContentModalProps> = ({
             title: dataToSave.title || selectedFile.name,
           };
         } catch (error) {
-          const errorMsg = error instanceof Error ? error.message : "Upload failed";
+          const errorMsg =
+            error instanceof Error ? error.message : "Upload failed";
           toast.error(`File upload failed: ${errorMsg}`);
           setIsUploading(false);
           setIsLoading(false);
@@ -257,7 +258,8 @@ export const ContentModal: React.FC<ContentModalProps> = ({
               />
               {!isAuthenticated && (
                 <p className="text-xs text-amber-600 dark:text-amber-400 mt-2">
-                  Note: Files are stored locally in your browser. Sign in to upload to cloud storage.
+                  Note: Files are stored locally in your browser. Sign in to
+                  upload to cloud storage.
                 </p>
               )}
             </div>

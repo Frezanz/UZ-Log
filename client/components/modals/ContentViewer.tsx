@@ -53,7 +53,8 @@ const typeColors = {
   file: "bg-orange-50 dark:bg-orange-950 text-orange-700 dark:text-orange-300",
   link: "bg-cyan-50 dark:bg-cyan-950 text-cyan-700 dark:text-cyan-300",
   prompt: "bg-amber-50 dark:bg-amber-950 text-amber-700 dark:text-amber-300",
-  script: "bg-indigo-50 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300",
+  script:
+    "bg-indigo-50 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300",
   book: "bg-pink-50 dark:bg-pink-950 text-pink-700 dark:text-pink-300",
 };
 
@@ -92,10 +93,13 @@ export const ContentViewer: React.FC<ContentViewerProps> = ({
   };
 
   const createdDate = new Date(content.created_at).toLocaleDateString();
-  const createdTime = new Date(content.created_at).toLocaleTimeString(undefined, {
-    hour: "2-digit",
-    minute: "2-digit",
-  });
+  const createdTime = new Date(content.created_at).toLocaleTimeString(
+    undefined,
+    {
+      hour: "2-digit",
+      minute: "2-digit",
+    },
+  );
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -236,17 +240,23 @@ export const ContentViewer: React.FC<ContentViewerProps> = ({
             {content.category && (
               <div>
                 <p className="text-xs text-muted-foreground">Category</p>
-                <p className="font-medium text-foreground">{content.category}</p>
-              </div>
-            )}
-            {content.word_count && (content.type === "text" || content.type === "code" || content.type === "prompt" || content.type === "script") && (
-              <div>
-                <p className="text-xs text-muted-foreground">Word Count</p>
                 <p className="font-medium text-foreground">
-                  {content.word_count} words
+                  {content.category}
                 </p>
               </div>
             )}
+            {content.word_count &&
+              (content.type === "text" ||
+                content.type === "code" ||
+                content.type === "prompt" ||
+                content.type === "script") && (
+                <div>
+                  <p className="text-xs text-muted-foreground">Word Count</p>
+                  <p className="font-medium text-foreground">
+                    {content.word_count} words
+                  </p>
+                </div>
+              )}
             {content.tags && content.tags.length > 0 && (
               <div className="col-span-2">
                 <p className="text-xs text-muted-foreground mb-1">Tags</p>
@@ -268,21 +278,13 @@ export const ContentViewer: React.FC<ContentViewerProps> = ({
         {/* Action Buttons */}
         <div className="flex gap-2 mt-6 pt-4 border-t border-border flex-wrap">
           {(content.content || content.file_url) && (
-            <Button
-              variant="outline"
-              onClick={handleCopy}
-              size="sm"
-            >
+            <Button variant="outline" onClick={handleCopy} size="sm">
               <Copy className="w-4 h-4 mr-2" />
               {copied ? "Copied!" : "Copy"}
             </Button>
           )}
           {content.file_url && content.type !== "image" && (
-            <Button
-              variant="outline"
-              onClick={handleDownload}
-              size="sm"
-            >
+            <Button variant="outline" onClick={handleDownload} size="sm">
               <Download className="w-4 h-4 mr-2" />
               Download
             </Button>

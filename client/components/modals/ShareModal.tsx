@@ -113,7 +113,9 @@ export const ShareModal: React.FC<ShareModalProps> = ({
                     Local Browser Storage
                   </p>
                   <p className="text-xs text-blue-800 dark:text-blue-300 mt-1">
-                    This content is stored locally in your browser. You can share it via link right now, or sign in to sync across devices and use cloud storage.
+                    This content is stored locally in your browser. You can
+                    share it via link right now, or sign in to sync across
+                    devices and use cloud storage.
                   </p>
                 </div>
               </div>

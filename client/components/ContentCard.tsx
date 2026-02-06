@@ -29,7 +29,10 @@ interface ContentCardProps {
   onEdit: (item: ContentItem) => void;
   onDelete: (item: ContentItem) => void;
   onShare: (item: ContentItem) => void;
-  onStatusChange?: (id: string, status: "active" | "pending" | "completed") => void;
+  onStatusChange?: (
+    id: string,
+    status: "active" | "pending" | "completed",
+  ) => void;
   onDownload?: (item: ContentItem) => void;
 }
 
