@@ -81,41 +81,50 @@ export const useTextToSpeech = (options: UseTextToSpeechOptions = {}) => {
 
       utterance.onerror = (event: SpeechSynthesisErrorEvent) => {
         try {
-          const errorType = event.error || "unknown";
+          // Safely extract error type
+          let errorType = "unknown";
+          if (event && typeof event === "object") {
+            errorType = String(event.error) || "unknown";
+          }
+
+          // Remove "SpeechSynthesisErrorEvent" if it somehow got included
+          errorType = errorType.replace(/\[object.*?\]/g, "").trim() || "unknown";
+
           const errorMessage = getErrorMessage(errorType);
 
-          // Log with clear formatting
-          console.error("Speech synthesis error details:", {
-            errorType: errorType,
-            message: errorMessage,
-            timestamp: new Date().toISOString(),
-          });
+          // Log with explicit string conversion
+          console.error("=== Speech Synthesis Error ===");
+          console.error(`Error Type: ${errorType}`);
+          console.error(`Error Message: ${errorMessage}`);
+          console.error(`Timestamp: ${new Date().toISOString()}`);
+          console.error("===============================");
 
           // Log specific error guidance
           switch (errorType) {
             case "network-error":
-              console.warn("Network error - Check your internet connection and try again");
+              console.warn("Network Error: Check your internet connection and try again");
               break;
             case "synthesis-unavailable":
-              console.warn("Speech synthesis not available - Try a different browser");
+              console.warn("Unavailable: Speech synthesis is not available - Try a different browser");
               break;
             case "synthesis-in-progress":
-              console.warn("Speech synthesis already in progress - Wait for current speech to finish");
+              console.warn("In Progress: Wait for current speech to finish before playing new audio");
               break;
             case "invalid-argument":
-              console.warn("Invalid argument - The text or parameters may be invalid");
+              console.warn("Invalid Argument: The text or parameters may be invalid");
               break;
             case "not-allowed":
-              console.warn("Not allowed - Check browser permissions");
+              console.warn("Permission Denied: Check browser permissions for speech synthesis");
               break;
             case "audio-busy":
-              console.warn("Audio device is busy - Try again shortly");
+              console.warn("Audio Busy: Audio device is busy - Try again shortly");
               break;
             default:
-              console.warn(`Unknown error type: ${errorType}`);
+              console.warn(`Unknown Error: ${errorType} - Check browser console for details`);
           }
         } catch (err) {
-          console.error("Error in error handler:", err);
+          const errMsg = err instanceof Error ? err.message : String(err);
+          console.error("Error in error handler itself:", errMsg);
         }
 
         setIsPlaying(false);
