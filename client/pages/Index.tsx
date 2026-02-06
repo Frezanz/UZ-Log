@@ -808,9 +808,13 @@ export default function Index() {
         isOpen={showViewer}
         onClose={handleCloseViewer}
         content={viewingItem}
+        allContent={items}
         onEdit={handleOpenEdit}
         onDelete={handleOpenDelete}
         onShare={handleOpenShare}
+        onLinksUpdate={() => {
+          // Refresh content when links are updated
+        }}
       />
 
       <ShareModal
