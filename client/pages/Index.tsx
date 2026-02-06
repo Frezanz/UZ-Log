@@ -143,10 +143,26 @@ export default function Index() {
   // Handle create/edit
   const handleSaveContent = async (data: Partial<ContentItem>) => {
     try {
+      // Auto-generate title if empty
+      let dataToSave = { ...data };
+      if (!dataToSave.title?.trim()) {
+        // Get the count of items with the same type (for order number)
+        const sameTypeItems = items.filter((item) => item.type === data.type);
+        const orderNumber = sameTypeItems.length + 1;
+
+        // Get current day of week
+        const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+        const today = new Date();
+        const dayOfWeek = days[today.getDay()];
+
+        // Generate title in format: "type-order dayofweek"
+        dataToSave.title = `${data.type}-${orderNumber} ${dayOfWeek}`;
+      }
+
       if (editingItem) {
-        await editContent(editingItem.id, data);
+        await editContent(editingItem.id, dataToSave);
       } else {
-        await createNewContent(data);
+        await createNewContent(dataToSave);
       }
       setEditingItem(undefined);
     } catch (error) {
