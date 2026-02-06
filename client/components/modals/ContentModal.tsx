@@ -179,9 +179,9 @@ export const ContentModal: React.FC<ContentModalProps> = ({
       await onSave(dataToSave);
       toast.success(initialData ? "Content updated" : "Content created");
       setSelectedFile(null);
-      setRecordedAudioBlob(null);
-      setRecordedAudioUrl(null);
-      setRecordedAudioDuration(0);
+      setRecordedVoiceBlob(null);
+      setRecordedVoiceUrl(null);
+      setRecordedVoiceDuration(0);
       onClose();
     } catch (error) {
       console.error("Save error:", error);
