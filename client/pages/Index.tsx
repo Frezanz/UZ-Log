@@ -63,6 +63,7 @@ export default function Index() {
   const [showFilters, setShowFilters] = useState(false);
   const [showActions, setShowActions] = useState(false);
   const [showSortBy, setShowSortBy] = useState(false);
+  const [showTypes, setShowTypes] = useState(false);
   const [showCategories, setShowCategories] = useState(false);
   const [showTags, setShowTags] = useState(false);
 
