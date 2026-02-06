@@ -278,6 +278,8 @@ export const useContent = () => {
         let newItem: ContentItem;
         if (isAuthenticated) {
           newItem = await duplicateContent(id);
+          // For authenticated users, need to manually add to state
+          setItems((prev) => [newItem, ...prev]);
         } else {
           // For guest users, manually duplicate from localStorage
           const original = items.find((i) => i.id === id);
@@ -285,7 +287,8 @@ export const useContent = () => {
 
           const { id: _id, created_at: _ca, updated_at: _ua, ...rest } =
             original;
-          newItem = await createNewContent({
+          // createNewContent already adds to state
+          await createNewContent({
             ...rest,
             title: `${original.title} (copy)`,
             is_public: false,
@@ -295,9 +298,7 @@ export const useContent = () => {
           });
         }
 
-        setItems((prev) => [newItem, ...prev]);
         toast.success("Item duplicated successfully!");
-        return newItem;
       } catch (err) {
         const message =
           err instanceof Error ? err.message : "Failed to duplicate item";
