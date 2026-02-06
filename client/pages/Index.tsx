@@ -368,50 +368,20 @@ export default function Index() {
             />
           </div>
 
-          {/* Centered Chevron Toggle */}
-          <div className="flex justify-center">
-            <button
-              onClick={() => setShowActions(!showActions)}
-              className="text-muted-foreground hover:text-foreground transition-colors duration-200 focus:outline-none p-2 active:bg-transparent active:text-foreground -webkit-tap-highlight-color-transparent"
-              title={showActions ? "Hide actions" : "Show actions"}
-            >
-              <ChevronDown
-                className="w-5 h-5 transition-transform duration-200"
-                style={{
-                  transform: showActions ? "rotate(180deg)" : "rotate(0deg)",
-                }}
-              />
-            </button>
-          </div>
-
-          {/* Action Buttons & Filters - Hidden by Default */}
-          {showActions && (
-            <div className="space-y-4 animate-in fade-in duration-200">
-              <div className="flex gap-2 w-full">
-                <Button
-                  onClick={() => setShowFilters(!showFilters)}
-                  variant="outline"
-                  className="flex-1 sm:flex-none"
-                >
-                  <Filter className="w-4 h-4 mr-2" />
-                  Filters
-                </Button>
-                <Button
-                  onClick={() => {
-                    setEditingItem(undefined);
-                    setShowContentModal(true);
-                  }}
-                  variant="outline"
-                  className="flex-1 sm:flex-none"
-                >
-                  <Plus className="w-4 h-4 mr-2" />
-                  New Content
-                </Button>
-              </div>
-
-              {/* Filters Section - Nested inside showActions */}
-              {showFilters && (
-                <div className="bg-secondary/30 border border-border rounded-lg p-4 space-y-4">
+          {/* Control Toggle: Filter | Chevron | New Content */}
+          <ControlToggle
+            isExpanded={showActions}
+            onToggle={setShowActions}
+            onFilterClick={() => setShowFilters(!showFilters)}
+            onNewContentClick={() => {
+              setEditingItem(undefined);
+              setShowContentModal(true);
+            }}
+            isFilterActive={showFilters}
+          >
+            {/* Filters Section - Nested inside ControlToggle children */}
+            {showFilters && (
+              <div className="space-y-4">
                   {/* Sort Options */}
                   <div className="text-center space-y-2">
                     <h3 className="text-sm font-medium text-foreground">
@@ -607,8 +577,7 @@ export default function Index() {
                   </div>
                 </div>
               )}
-            </div>
-          )}
+            </ControlToggle>
 
           {/* Results Info */}
           {displayItems.length > 0 && (
