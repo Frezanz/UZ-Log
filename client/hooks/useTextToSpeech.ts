@@ -126,9 +126,28 @@ export const useTextToSpeech = (options: UseTextToSpeechOptions = {}) => {
       utteranceRef.current = utterance;
 
       try {
+        // Check speech synthesis state before speaking
+        const pendingUtterances = window.speechSynthesis.pending;
+        const isSpeaking = window.speechSynthesis.speaking;
+        const isPaused = window.speechSynthesis.paused;
+
+        if (isSpeaking && !isPaused) {
+          console.info("Speech synthesis already speaking, canceling previous speech");
+          window.speechSynthesis.cancel();
+        }
+
+        console.info("Starting speech synthesis with:", {
+          textLength: text.length,
+          rate: utterance.rate,
+          pitch: utterance.pitch,
+          volume: utterance.volume,
+          pendingUtterances: pendingUtterances,
+        });
+
         window.speechSynthesis.speak(utterance);
       } catch (error) {
-        console.error("Error calling speak:", error);
+        const errorMsg = error instanceof Error ? error.message : String(error);
+        console.error("Error calling speak:", errorMsg);
         setIsPlaying(false);
         setIsPaused(false);
         setIsSpeaking(false);
