@@ -30,7 +30,14 @@ export const getGuestContentById = (id: string): ContentItem | null => {
   try {
     const items = getGuestContent();
     const item = items.find((item) => item.id === id);
-    return item ? { ...item, status: item.status || "active" } : null;
+    return item
+      ? {
+          ...item,
+          status: item.status || "active",
+          auto_delete_at: item.auto_delete_at || null,
+          auto_delete_enabled: item.auto_delete_enabled || false,
+        }
+      : null;
   } catch (error) {
     console.error("Failed to retrieve guest content by ID:", error);
     return null;
