@@ -745,6 +745,13 @@ export default function Index() {
         onConfirm={handleAutoDeleteConfirm}
         itemTitle={autoDeleteItem?.title || "Item"}
       />
+
+      <DeleteModal
+        isOpen={showBulkDeleteModal}
+        onClose={() => setShowBulkDeleteModal(false)}
+        onConfirm={handleBulkDelete}
+        title={`${selectedItems.size} Item${selectedItems.size !== 1 ? "s" : ""}`}
+      />
     </div>
   );
 }
