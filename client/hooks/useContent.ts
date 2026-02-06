@@ -91,6 +91,29 @@ export const useContent = () => {
     fetchContent();
   }, [fetchContent]);
 
+  // Periodically check for expired auto-delete items
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const now = new Date();
+      let hasExpired = false;
+
+      items.forEach((item) => {
+        if (item.auto_delete_at && item.auto_delete_enabled) {
+          const deleteTime = new Date(item.auto_delete_at);
+          if (deleteTime <= now) {
+            hasExpired = true;
+          }
+        }
+      });
+
+      if (hasExpired) {
+        fetchContent();
+      }
+    }, 60000); // Check every minute
+
+    return () => clearInterval(interval);
+  }, [items, fetchContent]);
+
   const createNewContent = useCallback(
     async (data: Partial<ContentItem>) => {
       try {
