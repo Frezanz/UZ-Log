@@ -748,7 +748,7 @@ export default function Index() {
         isOpen={showBulkDeleteModal}
         onClose={() => setShowBulkDeleteModal(false)}
         onConfirm={handleBulkDelete}
-        title={`${selectedItems.size} Item${selectedItems.size !== 1 ? "s" : ""}`}
+        title={`${selectedItems.length} Item${selectedItems.length !== 1 ? "s" : ""}`}
       />
     </div>
   );
