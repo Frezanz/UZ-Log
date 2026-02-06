@@ -198,19 +198,21 @@ export const ImageViewer: React.FC<ImageViewerProps> = ({
           </div>
 
           {/* Action Section - Instagram Style */}
-          <div className="px-3 py-3 border-t border-border space-y-2 flex-shrink-0">
-            {/* Like Button */}
-            <button
-              onClick={() => setIsLiked(!isLiked)}
-              className={`p-2 rounded-lg transition-all duration-200 ${
-                isLiked
-                  ? "text-red-500 dark:text-red-400"
-                  : "text-muted-foreground hover:text-foreground"
-              }`}
-              title={isLiked ? "Unlike" : "Like image"}
-            >
-              <Heart className={`w-5 h-5 ${isLiked ? "fill-current" : ""}`} />
-            </button>
+          <div className="px-3 py-3 border-t border-border flex-shrink-0 space-y-2">
+            <div className="flex items-center gap-2">
+              {/* Like Button */}
+              <button
+                onClick={() => setIsLiked(!isLiked)}
+                className={`p-2 rounded-lg transition-all duration-200 flex-shrink-0 ${
+                  isLiked
+                    ? "text-red-500 dark:text-red-400"
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+                title={isLiked ? "Unlike" : "Like image"}
+              >
+                <Heart className={`w-5 h-5 ${isLiked ? "fill-current" : ""}`} />
+              </button>
+            </div>
 
             {/* Action Buttons Grid */}
             <div className="grid grid-cols-2 gap-2">
