@@ -202,7 +202,7 @@ export const ImageViewer: React.FC<ImageViewerProps> = ({
             {/* Like Button */}
             <button
               onClick={() => setIsLiked(!isLiked)}
-              className={`w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg transition-all duration-200 font-medium ${
+              className={`w-full flex items-center justify-center gap-2 px-4 py-2 rounded-lg transition-all duration-200 font-medium text-sm ${
                 isLiked
                   ? "bg-red-500 dark:bg-red-600 text-white shadow-lg"
                   : "bg-secondary hover:bg-secondary/80 text-foreground"
