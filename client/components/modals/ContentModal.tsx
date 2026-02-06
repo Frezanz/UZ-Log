@@ -95,9 +95,10 @@ export const ContentModal: React.FC<ContentModalProps> = ({
       !formData.title?.trim() &&
       !formData.content?.trim() &&
       !selectedFile &&
+      !recordedAudioBlob &&
       !initialData?.file_url // Allow saving if there's already a file (edit mode)
     ) {
-      toast.error("Please enter a title, content, or upload a file");
+      toast.error("Please enter a title, content, upload a file, or record audio");
       return;
     }
 
@@ -142,9 +143,48 @@ export const ContentModal: React.FC<ContentModalProps> = ({
         }
       }
 
+      // Handle audio upload
+      if (recordedAudioBlob && formData.type === "voice") {
+        setIsUploading(true);
+        try {
+          const audioFile = new File([recordedAudioBlob], "recording.webm", {
+            type: "audio/webm",
+          });
+
+          let fileUrl: string;
+
+          if (isAuthenticated && user) {
+            // Upload to Supabase for authenticated users
+            fileUrl = await uploadFile(audioFile, user.id);
+          } else {
+            // Store as base64 for guest users
+            fileUrl = await uploadGuestFile(audioFile);
+          }
+
+          dataToSave = {
+            ...dataToSave,
+            file_url: fileUrl,
+            file_size: `${(audioFile.size / 1024 / 1024).toFixed(2)} MB`,
+            title: dataToSave.title || "Voice Recording",
+          };
+        } catch (error) {
+          const errorMsg =
+            error instanceof Error ? error.message : "Upload failed";
+          toast.error(`Audio upload failed: ${errorMsg}`);
+          setIsUploading(false);
+          setIsLoading(false);
+          return;
+        } finally {
+          setIsUploading(false);
+        }
+      }
+
       await onSave(dataToSave);
       toast.success(initialData ? "Content updated" : "Content created");
       setSelectedFile(null);
+      setRecordedAudioBlob(null);
+      setRecordedAudioUrl(null);
+      setRecordedAudioDuration(0);
       onClose();
     } catch (error) {
       console.error("Save error:", error);
