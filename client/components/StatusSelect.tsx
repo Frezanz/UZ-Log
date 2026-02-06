@@ -168,7 +168,7 @@ export const StatusDropdown: React.FC<StatusDropdownProps> = ({
       {/* Dropdown Menu */}
       {isOpen && !disabled && (
         <div
-          className="absolute top-full mt-1 left-0 z-50 bg-popover border border-border rounded-lg shadow-lg py-1 min-w-[140px]"
+          className="absolute top-full mt-1 left-0 z-50 bg-popover border border-border shadow-lg py-1 min-w-[140px]"
           role="listbox"
           onClick={(e) => e.stopPropagation()}
         >
