@@ -1,5 +1,5 @@
 import { getSupabase } from "./supabase";
-import { ContentItem, BookPage, User, ContentLink, ContentLinkWithTarget, LinkType } from "@/types/content";
+import { ContentItem, BookPage, User, ContentLink, ContentLinkWithTarget, LinkType, ShareLink } from "@/types/content";
 
 // ============ Authentication ============
 export const signInWithGoogle = async () => {
