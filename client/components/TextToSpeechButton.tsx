@@ -1,0 +1,110 @@
+import React from "react";
+import { Button } from "@/components/ui/button";
+import { useTextToSpeech } from "@/hooks/useTextToSpeech";
+import { Volume2, Pause, Play, X } from "lucide-react";
+import { toast } from "sonner";
+
+interface TextToSpeechButtonProps {
+  text: string;
+  contentType?: "text" | "code" | "prompt" | "script";
+  variant?: "default" | "outline" | "ghost";
+  size?: "default" | "sm" | "lg";
+  showLabel?: boolean;
+  className?: string;
+}
+
+export const TextToSpeechButton: React.FC<TextToSpeechButtonProps> = ({
+  text,
+  contentType = "text",
+  variant = "outline",
+  size = "sm",
+  showLabel = true,
+  className = "",
+}) => {
+  const { speak, pause, resume, stop, isPlaying, isPaused, isSupported } =
+    useTextToSpeech({
+      rate: 1,
+      pitch: 1,
+      volume: 1,
+    });
+
+  if (!isSupported) {
+    return null;
+  }
+
+  const handleClick = () => {
+    try {
+      if (!text || text.trim() === "") {
+        toast.error("No content to read");
+        return;
+      }
+
+      if (isPlaying || isPaused) {
+        if (isPaused) {
+          resume();
+        } else {
+          pause();
+        }
+      } else {
+        speak(text);
+      }
+    } catch (error) {
+      console.error("Text-to-speech error:", error);
+      toast.error("Failed to play audio");
+    }
+  };
+
+  const handleStop = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    stop();
+  };
+
+  return (
+    <div className="flex gap-1 items-center">
+      <Button
+        variant={variant}
+        size={size}
+        onClick={handleClick}
+        title={
+          isPlaying
+            ? "Pause reading"
+            : isPaused
+              ? "Resume reading"
+              : "Read aloud"
+        }
+        className={className}
+      >
+        {isPlaying || isPaused ? (
+          isPaused ? (
+            <>
+              <Play className="w-3 h-3" />
+              {showLabel && <span className="ml-1 text-xs hidden sm:inline">Resume</span>}
+            </>
+          ) : (
+            <>
+              <Pause className="w-3 h-3" />
+              {showLabel && <span className="ml-1 text-xs hidden sm:inline">Pause</span>}
+            </>
+          )
+        ) : (
+          <>
+            <Volume2 className="w-3 h-3" />
+            {showLabel && <span className="ml-1 text-xs hidden sm:inline">Read</span>}
+          </>
+        )}
+      </Button>
+
+      {(isPlaying || isPaused) && (
+        <Button
+          variant={variant}
+          size={size}
+          onClick={handleStop}
+          title="Stop reading"
+          className={className}
+        >
+          <X className="w-3 h-3" />
+        </Button>
+      )}
+    </div>
+  );
+};
