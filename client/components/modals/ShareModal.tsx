@@ -209,57 +209,6 @@ export const ShareModal: React.FC<ShareModalProps> = ({
                 More
               </Button>
             </div>
-
-            {/* Fallback More Menu */}
-            {showMoreMenu && (
-              <div className="space-y-2">
-                <p className="text-xs font-medium text-foreground">Share to:</p>
-                <div className="grid grid-cols-2 gap-2">
-                  <a
-                    href={`https://wa.me/?text=${encodeURIComponent(`Check out this content on UZ-log: ${item.title} - ${shareUrl}`)}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center justify-center px-3 py-2 rounded border border-border bg-card hover:bg-secondary transition-colors text-sm font-medium gap-2"
-                  >
-                    <MessageCircle className="w-4 h-4" />
-                    WhatsApp
-                  </a>
-                  <a
-                    href={`https://t.me/share/url?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(`Check out this content on UZ-log: ${item.title}`)}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center justify-center px-3 py-2 rounded border border-border bg-card hover:bg-secondary transition-colors text-sm font-medium gap-2"
-                  >
-                    <Send className="w-4 h-4" />
-                    Telegram
-                  </a>
-                  <a
-                    href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center justify-center px-3 py-2 rounded border border-border bg-card hover:bg-secondary transition-colors text-sm font-medium"
-                  >
-                    Facebook
-                  </a>
-                  <a
-                    href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center justify-center px-3 py-2 rounded border border-border bg-card hover:bg-secondary transition-colors text-sm font-medium"
-                  >
-                    LinkedIn
-                  </a>
-                </div>
-                <Button
-                  onClick={() => setShowMoreMenu(false)}
-                  variant="ghost"
-                  size="sm"
-                  className="w-full text-xs"
-                >
-                  Close
-                </Button>
-              </div>
-            )}
           </div>
 
           {/* Info */}
