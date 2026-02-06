@@ -34,6 +34,7 @@ interface ContentViewerProps {
   content: ContentItem | null;
   onEdit?: (item: ContentItem) => void;
   onDelete?: (item: ContentItem) => void;
+  onShare?: (item: ContentItem) => void;
 }
 
 const typeIcons: Record<ContentType, React.ReactNode> = {
@@ -67,6 +68,7 @@ export const ContentViewer: React.FC<ContentViewerProps> = ({
   content,
   onEdit,
   onDelete,
+  onShare,
 }) => {
   const [copied, setCopied] = useState(false);
   const [showImageViewer, setShowImageViewer] = useState(false);
@@ -97,6 +99,18 @@ export const ContentViewer: React.FC<ContentViewerProps> = ({
       />
     );
   }
+
+  const handleDownload = () => {
+    if (content.file_url) {
+      const link = document.createElement("a");
+      link.href = content.file_url;
+      link.download = content.title || "download";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      toast.success("Downloading...");
+    }
+  };
 
   const handleCopy = async () => {
     try {
