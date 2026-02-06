@@ -10,7 +10,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Copy, Check, Share2, AlertCircle, MoreHorizontal } from "lucide-react";
+import { Copy, Check, Share2, AlertCircle, MoreHorizontal, MessageCircle, Send } from "lucide-react";
 import { toast } from "sonner";
 import { copyToClipboard } from "@/lib/utils";
 
