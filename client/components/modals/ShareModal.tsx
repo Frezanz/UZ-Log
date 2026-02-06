@@ -48,6 +48,53 @@ export const ShareModal: React.FC<ShareModalProps> = ({
   const isLocalContent = item.user_id === "guest";
   const shareUrl = `${window.location.origin}/share/${item.id}`;
 
+  const loadShareLinks = async () => {
+    if (!isAuthenticated) return;
+    try {
+      const links = await getShareLinks(item.id);
+      setShareLinks(links);
+    } catch (error) {
+      console.error("Failed to load share links:", error);
+    }
+  };
+
+  const handleCreateShareLink = async () => {
+    if (!isAuthenticated) {
+      toast.error("Sign in to create custom share links");
+      return;
+    }
+
+    setIsCreatingLink(true);
+    try {
+      const expiresIn = expirationDays ? parseInt(expirationDays) : undefined;
+      await createShareLink(item.id, {
+        password: password || undefined,
+        expiresIn,
+      });
+      toast.success("Share link created");
+      setPassword("");
+      setExpirationDays("");
+      setShowLinkForm(false);
+      await loadShareLinks();
+    } catch (error) {
+      toast.error("Failed to create share link");
+      console.error(error);
+    } finally {
+      setIsCreatingLink(false);
+    }
+  };
+
+  const handleDeleteShareLink = async (linkId: string) => {
+    try {
+      await deleteShareLink(linkId);
+      toast.success("Share link deleted");
+      await loadShareLinks();
+    } catch (error) {
+      toast.error("Failed to delete link");
+      console.error(error);
+    }
+  };
+
   const handleTogglePublic = async () => {
     setIsLoading(true);
     try {
