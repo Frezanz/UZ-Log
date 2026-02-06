@@ -58,6 +58,8 @@ export const createGuestContent = (
     user_id: "guest",
     uploader_name: "Anonymous",
     status: content.status || "active",
+    auto_delete_at: content.auto_delete_at || null,
+    auto_delete_enabled: content.auto_delete_enabled || false,
     created_at: now,
     updated_at: now,
     word_count: content.content ? content.content.split(/\s+/).length : 0,
