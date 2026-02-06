@@ -166,6 +166,9 @@ export const ContentViewer: React.FC<ContentViewerProps> = ({
           {/* Text Viewer */}
           {content.type === "text" && content.content && (
             <div className="space-y-3">
+              {syntaxAnalysis && (
+                <SyntaxErrorDisplay result={syntaxAnalysis} compact={true} />
+              )}
               <div className="bg-secondary/30 rounded-lg p-4 max-h-[60vh] overflow-auto">
                 <pre className="font-sans whitespace-pre-wrap break-words text-foreground text-sm leading-relaxed cursor-text select-text">
                   {content.content}
@@ -191,6 +194,9 @@ export const ContentViewer: React.FC<ContentViewerProps> = ({
           {/* Code Viewer */}
           {content.type === "code" && content.content && (
             <div className="space-y-3">
+              {syntaxAnalysis && (
+                <SyntaxErrorDisplay result={syntaxAnalysis} compact={true} />
+              )}
               <div className="bg-secondary/30 rounded-lg p-4 max-h-[60vh] overflow-auto">
                 <pre className="font-mono text-xs text-foreground leading-relaxed whitespace-pre-wrap break-words cursor-text select-text">
                   {content.content}
@@ -216,6 +222,9 @@ export const ContentViewer: React.FC<ContentViewerProps> = ({
           {/* Prompt Viewer */}
           {content.type === "prompt" && content.content && (
             <div className="space-y-3">
+              {syntaxAnalysis && (
+                <SyntaxErrorDisplay result={syntaxAnalysis} compact={true} />
+              )}
               <div className="bg-secondary/30 rounded-lg p-4 max-h-[60vh] overflow-auto">
                 <pre className="font-sans whitespace-pre-wrap break-words text-foreground text-sm leading-relaxed cursor-text select-text">
                   {content.content}
@@ -241,6 +250,9 @@ export const ContentViewer: React.FC<ContentViewerProps> = ({
           {/* Script Viewer */}
           {content.type === "script" && content.content && (
             <div className="space-y-3">
+              {syntaxAnalysis && (
+                <SyntaxErrorDisplay result={syntaxAnalysis} compact={true} />
+              )}
               <div className="bg-secondary/30 rounded-lg p-4 max-h-[60vh] overflow-auto">
                 <pre className="font-mono text-xs text-foreground leading-relaxed whitespace-pre-wrap break-words cursor-text select-text">
                   {content.content}
