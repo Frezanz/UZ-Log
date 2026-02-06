@@ -119,21 +119,10 @@ export const ContentCard: React.FC<ContentCardProps> = ({
               Public
             </span>
           )}
-          <button
-            onClick={() => {
-              // Cycle through statuses
-              const statusCycle = {
-                active: "pending" as const,
-                pending: "completed" as const,
-                completed: "active" as const,
-              };
-              onStatusChange?.(item.id, statusCycle[item.status]);
-            }}
-            className="cursor-pointer hover:opacity-80 transition-opacity"
-            title="Click to change status"
-          >
-            <StatusBadge status={item.status} />
-          </button>
+          <StatusDropdown
+            status={item.status}
+            onChange={(newStatus) => onStatusChange?.(item.id, newStatus)}
+          />
         </div>
       </div>
 
