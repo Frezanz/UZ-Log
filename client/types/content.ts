@@ -9,6 +9,8 @@ export type ContentType =
   | "script"
   | "book";
 
+export type ContentStatus = "active" | "pending" | "completed";
+
 export interface ContentItem {
   id: string;
   user_id: string;
@@ -20,6 +22,7 @@ export interface ContentItem {
   file_url: string | null;
   file_size: string | null;
   is_public: boolean;
+  status: ContentStatus;
   created_at: string;
   updated_at: string;
   word_count?: number;
