@@ -96,12 +96,12 @@ export const ImageViewer: React.FC<ImageViewerProps> = ({
           <X className="w-6 h-6 text-white" />
         </button>
 
-        {/* Image Section - Flexible scrollable container */}
-        <div className="flex-1 flex flex-col items-center justify-center overflow-y-auto overflow-x-hidden p-2 sm:p-4 snap-center">
+        {/* Image Section - Edge-to-Edge Full Screen */}
+        <div className="flex-1 flex items-center justify-center overflow-auto bg-black">
           <img
             src={image.file_url}
             alt={image.title}
-            className="max-h-full max-w-full object-contain rounded-lg"
+            className="w-full h-full object-contain"
             onClick={(e) => e.stopPropagation()}
           />
         </div>
