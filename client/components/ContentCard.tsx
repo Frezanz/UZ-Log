@@ -136,6 +136,17 @@ export const ContentCard: React.FC<ContentCardProps> = ({
         </div>
       </div>
 
+      {/* Image - Instagram Style Full Width Preview */}
+      {item.type === "image" && item.file_url && (
+        <div className="w-full aspect-square overflow-hidden bg-secondary">
+          <img
+            src={item.file_url}
+            alt={item.title}
+            className="w-full h-full object-cover"
+          />
+        </div>
+      )}
+
       {/* Content Preview */}
       <div
         className={`flex-1 px-3 ${item.type === "link" ? "py-0.5 min-h-0" : "py-2 min-h-[60px]"}`}
@@ -145,17 +156,6 @@ export const ContentCard: React.FC<ContentCardProps> = ({
         >
           {item.title}
         </h3>
-
-        {/* Preview for certain types */}
-        {item.type === "image" && item.file_url && (
-          <div className="mt-1 mb-1">
-            <img
-              src={item.file_url}
-              alt={item.title}
-              className="w-full h-16 object-cover rounded border border-border"
-            />
-          </div>
-        )}
 
         {(item.type === "text" ||
           item.type === "code" ||
