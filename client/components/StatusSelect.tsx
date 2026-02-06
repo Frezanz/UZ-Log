@@ -34,15 +34,16 @@ const statusConfig = {
 };
 
 export const StatusSelect: React.FC<StatusSelectProps> = ({
-  value,
+  value = "active",
   onChange,
   disabled = false,
 }) => {
-  const currentStatus = statusConfig[value];
-  const Icon = currentStatus.icon;
+  const safeValue = (value || "active") as ContentStatus;
+  const currentStatus = statusConfig[safeValue];
+  const Icon = currentStatus?.icon || CheckCircle2;
 
   return (
-    <Select value={value} onValueChange={(v) => onChange(v as ContentStatus)} disabled={disabled}>
+    <Select value={safeValue} onValueChange={(v) => onChange(v as ContentStatus)} disabled={disabled}>
       <SelectTrigger className="w-full h-9 text-sm">
         <SelectValue />
       </SelectTrigger>
