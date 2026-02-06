@@ -111,7 +111,7 @@ export const ImageViewer: React.FC<ImageViewerProps> = ({
           onClick={(e) => e.stopPropagation()}
         >
           {/* Header with User Info */}
-          <div className="px-4 py-3 border-b border-border">
+          <div className="px-3 py-2 border-b border-border">
             <div className="flex items-center justify-between">
               <div>
                 <p className="font-semibold text-foreground text-sm">
