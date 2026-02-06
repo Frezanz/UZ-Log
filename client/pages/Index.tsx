@@ -530,6 +530,14 @@ export default function Index() {
         initialData={editingItem}
       />
 
+      <ContentViewer
+        isOpen={showViewer}
+        onClose={handleCloseViewer}
+        content={viewingItem}
+        onEdit={handleOpenEdit}
+        onDelete={handleOpenDelete}
+      />
+
       <ShareModal
         isOpen={showShareModal}
         onClose={() => setShowShareModal(false)}
