@@ -246,7 +246,7 @@ export const ContentCard: React.FC<ContentCardProps> = ({
         <Button
           variant="ghost"
           size="sm"
-          onClick={() => onDelete(item.id)}
+          onClick={() => onDelete(item)}
           title="Delete"
           className="flex-1 hover:bg-destructive/10 hover:text-destructive"
         >
