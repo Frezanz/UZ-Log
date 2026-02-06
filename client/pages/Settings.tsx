@@ -69,7 +69,7 @@ export default function Settings() {
 
           {/* Profile Tab */}
           <TabsContent value="profile" className="space-y-4">
-            <div className="bg-card border border-border rounded-lg p-6 space-y-4">
+            <div className="bg-card border border-border  p-6 space-y-4">
               {isAuthenticated && user ? (
                 <>
                   <div>
@@ -110,7 +110,7 @@ export default function Settings() {
                 </div>
               )}
 
-              <div className="bg-secondary/50 border border-border rounded-lg p-3 mt-4">
+              <div className="bg-secondary/50 border border-border  p-3 mt-4">
                 <p className="text-xs text-muted-foreground">
                   Dark mode is controlled from the header toggle. Your
                   preference is automatically saved.
@@ -121,7 +121,7 @@ export default function Settings() {
 
           {/* How to Use Tab */}
           <TabsContent value="how-to-use" className="space-y-4">
-            <div className="bg-card border border-border rounded-lg p-6 space-y-6">
+            <div className="bg-card border border-border  p-6 space-y-6">
               <div>
                 <h3 className="font-semibold text-foreground mb-3">
                   Getting Started with UZ-log
@@ -149,7 +149,7 @@ export default function Settings() {
                     for different use cases. Understanding these types will help
                     you organize your content effectively:
                   </p>
-                  <div className="bg-secondary/30 border border-border rounded-lg p-4 space-y-3">
+                  <div className="bg-secondary/30 border border-border  p-4 space-y-3">
                     <div className="space-y-2">
                       <p className="font-medium text-foreground">
                         Text - Notes, Articles & Ideas
@@ -261,7 +261,7 @@ export default function Settings() {
                     home screen to expand the action panel, then click "New
                     Content". Follow these detailed steps:
                   </p>
-                  <div className="bg-secondary/30 border border-border rounded-lg p-4 space-y-4">
+                  <div className="bg-secondary/30 border border-border  p-4 space-y-4">
                     <div>
                       <p className="font-medium text-foreground mb-2">
                         Step 1: Select Your Content Type
@@ -353,7 +353,7 @@ export default function Settings() {
                     Proper organization is key to making UZ-log useful. Here's
                     how to structure your content for maximum efficiency:
                   </p>
-                  <div className="bg-secondary/30 border border-border rounded-lg p-4 space-y-3">
+                  <div className="bg-secondary/30 border border-border  p-4 space-y-3">
                     <div>
                       <p className="font-medium text-foreground mb-1">
                         Categories: The Foundation of Organization
@@ -419,7 +419,7 @@ export default function Settings() {
                     to help you find exactly what you need instantly, even if
                     you have thousands of items stored:
                   </p>
-                  <div className="bg-secondary/30 border border-border rounded-lg p-4 space-y-3">
+                  <div className="bg-secondary/30 border border-border  p-4 space-y-3">
                     <div>
                       <p className="font-medium text-foreground mb-1">
                         Full-Text Search
@@ -497,7 +497,7 @@ export default function Settings() {
                     Make your content shareable and accessible to others with
                     just a few clicks:
                   </p>
-                  <div className="bg-secondary/30 border border-border rounded-lg p-4 space-y-3">
+                  <div className="bg-secondary/30 border border-border  p-4 space-y-3">
                     <div>
                       <p className="font-medium text-foreground mb-1">
                         Making Content Public
@@ -554,7 +554,7 @@ export default function Settings() {
                 </h3>
                 <div className="space-y-3 text-sm text-muted-foreground">
                   <p>Manage your content with full control and flexibility:</p>
-                  <div className="bg-secondary/30 border border-border rounded-lg p-4 space-y-3">
+                  <div className="bg-secondary/30 border border-border  p-4 space-y-3">
                     <div>
                       <p className="font-medium text-foreground mb-1">
                         Editing Content
@@ -620,7 +620,7 @@ export default function Settings() {
                 </div>
               </div>
 
-              <div className="bg-secondary/50 border border-border rounded-lg p-4 space-y-3">
+              <div className="bg-secondary/50 border border-border  p-4 space-y-3">
                 <p className="text-sm font-medium text-foreground">
                   Pro Tips for Maximum Productivity:
                 </p>
@@ -660,7 +660,7 @@ export default function Settings() {
 
           {/* About Tab */}
           <TabsContent value="about" className="space-y-4">
-            <div className="bg-card border border-border rounded-lg p-6 space-y-6">
+            <div className="bg-card border border-border  p-6 space-y-6">
               <div>
                 <h3 className="font-semibold text-foreground mb-3">
                   About UZ-log
@@ -841,7 +841,7 @@ export default function Settings() {
                 <p className="text-sm text-muted-foreground mb-3">
                   UZ-log is built with modern, reliable technologies:
                 </p>
-                <div className="bg-secondary/30 border border-border rounded-lg p-4">
+                <div className="bg-secondary/30 border border-border  p-4">
                   <ul className="text-sm text-muted-foreground space-y-2 list-disc list-inside">
                     <li>
                       <span className="font-medium">Frontend:</span> React 18
@@ -968,7 +968,7 @@ export default function Settings() {
                 </div>
               </div>
 
-              <div className="bg-secondary/50 border border-border rounded-lg p-4">
+              <div className="bg-secondary/50 border border-border  p-4">
                 <p className="font-medium text-foreground mb-2">Version</p>
                 <p className="text-sm text-muted-foreground mb-3">1.0.0</p>
                 <p className="text-xs text-muted-foreground">
@@ -981,7 +981,7 @@ export default function Settings() {
 
           {/* Contact Tab */}
           <TabsContent value="contact" className="space-y-4">
-            <div className="bg-card border border-border rounded-lg p-6 space-y-4">
+            <div className="bg-card border border-border  p-6 space-y-4">
               <p className="text-sm text-muted-foreground">
                 Have feedback, questions, or found a bug? We'd love to hear from
                 you!
@@ -989,7 +989,7 @@ export default function Settings() {
 
               <a
                 href="mailto:dupsobon@gmail.com"
-                className="flex items-center gap-3 p-3 rounded-lg border border-border hover:bg-secondary transition-colors"
+                className="flex items-center gap-3 p-3  border border-border hover:bg-secondary transition-colors"
               >
                 <Mail className="w-5 h-5 text-primary flex-shrink-0" />
                 <div>
@@ -1004,7 +1004,7 @@ export default function Settings() {
                 href="https://www.instagram.com/frezanz?igsh=NnM1MmJqOW5vNmky"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-3 p-3 rounded-lg border border-border hover:bg-secondary transition-colors"
+                className="flex items-center gap-3 p-3  border border-border hover:bg-secondary transition-colors"
               >
                 <Instagram className="w-5 h-5 text-primary flex-shrink-0" />
                 <div>
@@ -1019,7 +1019,7 @@ export default function Settings() {
                 href="https://youtube.com/@frezanzzz?si=qWfgz5qt421TIK74"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-3 p-3 rounded-lg border border-border hover:bg-secondary transition-colors"
+                className="flex items-center gap-3 p-3  border border-border hover:bg-secondary transition-colors"
               >
                 <Youtube className="w-5 h-5 text-primary flex-shrink-0" />
                 <div>
@@ -1028,7 +1028,7 @@ export default function Settings() {
                 </div>
               </a>
 
-              <div className="bg-secondary/50 border border-border rounded-lg p-3">
+              <div className="bg-secondary/50 border border-border  p-3">
                 <p className="text-xs text-muted-foreground">
                   Your feedback helps us improve. Contact us anytime with
                   suggestions or issues.
