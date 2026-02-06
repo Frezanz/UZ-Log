@@ -235,12 +235,22 @@ export const useTextToSpeech = (options: UseTextToSpeechOptions = {}) => {
     }
 
     try {
+      // Suppress errors during stop since we're explicitly canceling
+      suppressErrorRef.current = true;
       window.speechSynthesis.cancel();
+
+      // Reset suppression flag after a brief moment
+      setTimeout(() => {
+        suppressErrorRef.current = false;
+      }, 100);
+
       setIsPlaying(false);
       setIsPaused(false);
       setIsSpeaking(false);
     } catch (error) {
-      console.error("Error stopping speech:", error);
+      const errorMsg = error instanceof Error ? error.message : String(error);
+      console.debug("Info stopping speech (this is normal):", errorMsg);
+      suppressErrorRef.current = false;
     }
   }, [isSupported]);
 
