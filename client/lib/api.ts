@@ -350,7 +350,10 @@ export const getPublicContent = async (id: string): Promise<ContentItem> => {
     .single();
 
   if (error) throw error;
-  return data;
+  return {
+    ...data,
+    status: data.status || "active",
+  };
 };
 
 // Get all public content (no auth required)
