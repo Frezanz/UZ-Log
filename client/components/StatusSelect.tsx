@@ -141,7 +141,10 @@ export const StatusDropdown: React.FC<StatusDropdownProps> = ({
   return (
     <div className="relative" ref={menuRef}>
       <button
-        onClick={() => !disabled && setIsOpen(!isOpen)}
+        onClick={(e) => {
+          e.stopPropagation();
+          !disabled && setIsOpen(!isOpen);
+        }}
         className={`inline-flex items-center gap-1 px-2 py-1 rounded text-[10px] font-medium transition-all ${
           config?.color ||
           "bg-gray-100 dark:bg-gray-950 text-gray-700 dark:text-gray-300"
