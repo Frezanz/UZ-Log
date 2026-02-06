@@ -426,6 +426,7 @@ export default function Index() {
                                 : "outline"
                             }
                             size="sm"
+                            className="h-7 px-2 text-xs"
                             onClick={() =>
                               setDisplayFilters({
                                 ...displayFilters,
@@ -484,6 +485,7 @@ export default function Index() {
                                   : "outline"
                               }
                               size="sm"
+                              className="h-7 px-2 text-xs"
                               onClick={() => {
                                 const newCategories =
                                   displayFilters.categories.includes(cat)
@@ -539,6 +541,7 @@ export default function Index() {
                                   : "outline"
                               }
                               size="sm"
+                              className="h-7 px-2 text-xs"
                               onClick={() => {
                                 const newTags = displayFilters.tags.includes(
                                   tag,
