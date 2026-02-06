@@ -520,7 +520,10 @@ export default function Index() {
 
       <DeleteModal
         isOpen={showDeleteModal}
-        onClose={() => setShowDeleteModal(false)}
+        onClose={() => {
+          setShowDeleteModal(false);
+          setDeleteItem(null);
+        }}
         onConfirm={() =>
           deleteItem ? handleDelete(deleteItem.id) : Promise.resolve()
         }
