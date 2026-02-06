@@ -165,18 +165,41 @@ export const ContentModal: React.FC<ContentModalProps> = ({
             )}
           </div>
 
-          {/* Title */}
-          <div>
-            <label className="text-sm font-medium text-foreground mb-2 block">
+          {/* Title - Collapsible */}
+          <div className="text-center space-y-2">
+            <label className="text-sm font-medium text-foreground block">
               Title (optional)
             </label>
-            <Input
-              value={formData.title || ""}
-              onChange={(e) =>
-                setFormData({ ...formData, title: e.target.value })
-              }
-              placeholder="Leave empty for auto-generated title"
-            />
+            <div className="flex justify-center">
+              <button
+                onClick={() => setShowTitle(!showTitle)}
+                className="text-muted-foreground hover:text-foreground transition-colors duration-200 focus:outline-none p-2 active:bg-transparent active:text-foreground"
+                title={
+                  showTitle ? "Hide title" : "Show title"
+                }
+              >
+                <ChevronDown
+                  className="w-5 h-5 transition-transform duration-200"
+                  style={{
+                    transform: showTitle
+                      ? "rotate(180deg)"
+                      : "rotate(0deg)",
+                  }}
+                />
+              </button>
+            </div>
+
+            {showTitle && (
+              <div className="animate-in fade-in duration-200">
+                <Input
+                  value={formData.title || ""}
+                  onChange={(e) =>
+                    setFormData({ ...formData, title: e.target.value })
+                  }
+                  placeholder="Leave empty for auto-generated title"
+                />
+              </div>
+            )}
           </div>
 
           {/* File Upload for certain types */}
