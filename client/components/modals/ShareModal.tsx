@@ -68,7 +68,7 @@ export const ShareModal: React.FC<ShareModalProps> = ({
       return;
     }
 
-    // Capture user gesture immediately - some browsers block share if there are any awaits before it
+    // Capture user gesture immediately
     if (typeof navigator.share === "function") {
       try {
         await navigator.share({
@@ -79,20 +79,14 @@ export const ShareModal: React.FC<ShareModalProps> = ({
         return;
       } catch (error: any) {
         if (error.name === "AbortError") return;
-
-        console.error("Native share failed:", error);
-        if (error.name === "NotAllowedError") {
-          toast.error("Share blocked by browser context. Try opening the app link directly outside the preview.");
-        } else {
-          toast.error("Native share failed. Copying link instead.");
-        }
+        console.warn("Native share restricted:", error);
       }
     }
 
-    // Fallback: Copy to clipboard
+    // Fallback: Copy to clipboard if API is missing or blocked (e.g. in iframe)
     try {
       await copyToClipboard(shareUrl);
-      toast.success("Link copied to clipboard!");
+      toast.success("Link copied! (Native share is blocked in previews)");
     } catch (err) {
       toast.error("Failed to copy link");
     }
