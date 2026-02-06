@@ -89,3 +89,84 @@ export const StatusBadge: React.FC<{ status?: ContentStatus }> = ({ status = "ac
     </span>
   );
 };
+
+interface StatusDropdownProps {
+  status?: ContentStatus;
+  onChange: (status: ContentStatus) => void;
+  disabled?: boolean;
+}
+
+export const StatusDropdown: React.FC<StatusDropdownProps> = ({
+  status = "active",
+  onChange,
+  disabled = false,
+}) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+  const safeStatus = (status || "active") as ContentStatus;
+  const config = statusConfig[safeStatus];
+  const Icon = config?.icon || CheckCircle2;
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    };
+
+    if (isOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+      return () => document.removeEventListener("mousedown", handleClickOutside);
+    }
+  }, [isOpen]);
+
+  const handleStatusSelect = (newStatus: ContentStatus) => {
+    onChange(newStatus);
+    setIsOpen(false);
+  };
+
+  return (
+    <div className="relative" ref={menuRef}>
+      <button
+        onClick={() => !disabled && setIsOpen(!isOpen)}
+        className={`inline-flex items-center gap-1 px-2 py-1 rounded text-[10px] font-medium transition-all ${
+          config?.color || "bg-gray-100 dark:bg-gray-950 text-gray-700 dark:text-gray-300"
+        } ${disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer hover:opacity-90"}`}
+        title="Click to change status"
+        disabled={disabled}
+      >
+        <Icon className="w-2.5 h-2.5" />
+        <span>{config?.label || "Unknown"}</span>
+        {!disabled && (
+          <ChevronDown className={`w-2 h-2 transition-transform ${isOpen ? "rotate-180" : ""}`} />
+        )}
+      </button>
+
+      {/* Dropdown Menu */}
+      {isOpen && !disabled && (
+        <div className="absolute top-full mt-1 left-0 z-50 bg-popover border border-border rounded-lg shadow-lg py-1 min-w-[120px]">
+          {Object.entries(statusConfig).map(([key, cfg]) => {
+            const StatusIcon = cfg.icon;
+            const isSelected = key === safeStatus;
+            return (
+              <button
+                key={key}
+                onClick={() => handleStatusSelect(key as ContentStatus)}
+                className={`w-full text-left px-3 py-2 flex items-center gap-2 text-xs transition-colors ${
+                  isSelected
+                    ? "bg-primary/10 text-primary font-medium"
+                    : "text-foreground hover:bg-secondary"
+                }`}
+              >
+                <StatusIcon className="w-3 h-3" />
+                <span className="flex-1">{cfg.label}</span>
+                {isSelected && <Check className="w-3 h-3" />}
+              </button>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+};
