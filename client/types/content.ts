@@ -95,3 +95,19 @@ export interface ContentLinkWithTarget extends ContentLink {
 export interface ContentLinkWithSource extends ContentLink {
   source_content?: ContentItem;
 }
+
+export interface ShareLink {
+  id: string;
+  user_id: string;
+  content_id: string;
+  token: string;
+  password?: string | null;
+  expires_at?: string | null;
+  created_at: string;
+}
+
+export interface ContentShareSettings {
+  contentId: string;
+  isPublic: boolean;
+  shareLinks?: ShareLink[];
+}
