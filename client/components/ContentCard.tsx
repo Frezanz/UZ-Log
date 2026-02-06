@@ -231,7 +231,7 @@ export const ContentCard: React.FC<ContentCardProps> = ({
 
       {/* Actions - Always visible on mobile, hover on desktop */}
       <div
-        className={`px-3 py-1 border-t border-border bg-secondary/50 flex gap-1 transition-opacity duration-200 opacity-100 sm:opacity-0 sm:group-hover:opacity-100`}
+        className={`px-3 py-1 border-t border-border bg-secondary/50 flex gap-1 transition-opacity duration-200 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 flex-wrap`}
         onClick={(e) => e.stopPropagation()}
       >
         {(item.content || item.file_url) && (
@@ -246,6 +246,22 @@ export const ContentCard: React.FC<ContentCardProps> = ({
             <span className="hidden sm:inline text-xs">Copy</span>
           </Button>
         )}
+
+        {item.content &&
+          (item.type === "text" ||
+            item.type === "code" ||
+            item.type === "prompt" ||
+            item.type === "script") && (
+            <div className="flex-1 h-7 flex items-center justify-center">
+              <TextToSpeechButton
+                text={item.content}
+                contentType={item.type}
+                variant="ghost"
+                size="sm"
+                showLabel={false}
+              />
+            </div>
+          )}
 
         {item.file_url && item.type !== "image" && (
           <Button
