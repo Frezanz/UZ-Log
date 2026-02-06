@@ -35,6 +35,7 @@ export const DeleteModal: React.FC<DeleteModalProps> = ({
       console.error('Delete error:', error);
       const errorMessage = error instanceof Error ? error.message : 'Failed to delete content';
       toast.error(errorMessage);
+    } finally {
       setIsLoading(false);
     }
   };
