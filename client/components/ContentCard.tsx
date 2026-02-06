@@ -191,8 +191,8 @@ export const ContentCard: React.FC<ContentCardProps> = ({
       {/* Actions */}
       <div
         className={`px-4 py-2 border-t border-border bg-secondary/50 flex gap-1.5 transition-opacity duration-200 ${
-          showActions ? "opacity-100" : "opacity-0"
-        }`}
+          showActions ? "opacity-100" : "opacity-0 sm:opacity-0 md:opacity-0 lg:opacity-0"
+        } sm:group-hover:opacity-100`}
       >
         {(item.type === "text" ||
           item.type === "code" ||
