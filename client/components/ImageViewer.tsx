@@ -136,8 +136,8 @@ export const ImageViewer: React.FC<ImageViewerProps> = ({
           </div>
 
           {/* Title and Category */}
-          <div className="px-4 py-3 border-b border-border">
-            <h2 className="text-lg font-bold text-foreground mb-2">
+          <div className="px-3 py-2 border-b border-border">
+            <h2 className="text-base font-bold text-foreground mb-1">
               {image.title}
             </h2>
             {image.category && (
