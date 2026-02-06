@@ -51,6 +51,8 @@ export default function Index() {
   const [showFilters, setShowFilters] = useState(false);
   const [showActions, setShowActions] = useState(false);
   const [showSortBy, setShowSortBy] = useState(false);
+  const [showCategories, setShowCategories] = useState(false);
+  const [showTags, setShowTags] = useState(false);
 
   // Load public content for anonymous users (if Supabase is available)
   // If not, guests will just see their own localStorage content
@@ -106,9 +108,12 @@ export default function Index() {
   // Handle delete
   const handleDelete = async (id: string) => {
     try {
+      console.log("Deleting content:", id);
       await removeContent(id);
+      console.log("Content deleted successfully:", id);
       setDeleteItem(null);
     } catch (error) {
+      console.error("Error deleting content:", error);
       throw error;
     }
   };
@@ -299,75 +304,119 @@ export default function Index() {
 
                   {/* Category Filter */}
                   {categories.length > 0 && (
-                    <div>
-                      <h3 className="text-sm font-medium text-foreground mb-2">
+                    <div className="text-center space-y-2">
+                      <h3 className="text-sm font-medium text-foreground">
                         Categories
                       </h3>
-                      <div className="flex flex-wrap gap-2">
-                        {categories.map((cat) => (
-                          <Button
-                            key={cat}
-                            variant={
-                              displayFilters.categories.includes(cat)
-                                ? "default"
-                                : "outline"
-                            }
-                            size="sm"
-                            onClick={() => {
-                              const newCategories =
-                                displayFilters.categories.includes(cat)
-                                  ? displayFilters.categories.filter(
-                                      (c) => c !== cat,
-                                    )
-                                  : [...displayFilters.categories, cat];
-                              setDisplayFilters({
-                                ...displayFilters,
-                                categories: newCategories,
-                              });
+                      <div className="flex justify-center">
+                        <button
+                          onClick={() => setShowCategories(!showCategories)}
+                          className="text-muted-foreground hover:text-foreground transition-colors duration-200 focus:outline-none p-2 active:bg-transparent active:text-foreground"
+                          title={
+                            showCategories
+                              ? "Hide categories"
+                              : "Show categories"
+                          }
+                        >
+                          <ChevronDown
+                            className="w-5 h-5 transition-transform duration-200"
+                            style={{
+                              transform: showCategories
+                                ? "rotate(180deg)"
+                                : "rotate(0deg)",
                             }}
-                          >
-                            {cat}
-                          </Button>
-                        ))}
+                          />
+                        </button>
                       </div>
+
+                      {showCategories && (
+                        <div className="flex flex-wrap gap-2 justify-center animate-in fade-in duration-200">
+                          {categories.map((cat) => (
+                            <Button
+                              key={cat}
+                              variant={
+                                displayFilters.categories.includes(cat)
+                                  ? "default"
+                                  : "outline"
+                              }
+                              size="sm"
+                              onClick={() => {
+                                const newCategories =
+                                  displayFilters.categories.includes(cat)
+                                    ? displayFilters.categories.filter(
+                                        (c) => c !== cat,
+                                      )
+                                    : [...displayFilters.categories, cat];
+                                setDisplayFilters({
+                                  ...displayFilters,
+                                  categories: newCategories,
+                                });
+                              }}
+                            >
+                              {cat}
+                            </Button>
+                          ))}
+                        </div>
+                      )}
                     </div>
                   )}
 
                   {/* Tag Filter */}
                   {tags.length > 0 && (
-                    <div>
-                      <h3 className="text-sm font-medium text-foreground mb-2">
+                    <div className="text-center space-y-2">
+                      <h3 className="text-sm font-medium text-foreground">
                         Tags
                       </h3>
-                      <div className="flex flex-wrap gap-2">
-                        {tags.slice(0, 10).map((tag) => (
-                          <Button
-                            key={tag}
-                            variant={
-                              displayFilters.tags.includes(tag)
-                                ? "default"
-                                : "outline"
-                            }
-                            size="sm"
-                            onClick={() => {
-                              const newTags = displayFilters.tags.includes(tag)
-                                ? displayFilters.tags.filter((t) => t !== tag)
-                                : [...displayFilters.tags, tag];
-                              setDisplayFilters({
-                                ...displayFilters,
-                                tags: newTags,
-                              });
+                      <div className="flex justify-center">
+                        <button
+                          onClick={() => setShowTags(!showTags)}
+                          className="text-muted-foreground hover:text-foreground transition-colors duration-200 focus:outline-none p-2 active:bg-transparent active:text-foreground"
+                          title={showTags ? "Hide tags" : "Show tags"}
+                        >
+                          <ChevronDown
+                            className="w-5 h-5 transition-transform duration-200"
+                            style={{
+                              transform: showTags
+                                ? "rotate(180deg)"
+                                : "rotate(0deg)",
                             }}
-                          >
-                            #{tag}
-                          </Button>
-                        ))}
-                        {tags.length > 10 && (
-                          <span className="text-xs text-muted-foreground px-2 py-1.5">
-                            +{tags.length - 10} more
-                          </span>
-                        )}
+                          />
+                        </button>
                       </div>
+
+                      {showTags && (
+                        <div className="flex flex-wrap gap-2 justify-center animate-in fade-in duration-200">
+                          {tags.slice(0, 10).map((tag) => (
+                            <Button
+                              key={tag}
+                              variant={
+                                displayFilters.tags.includes(tag)
+                                  ? "default"
+                                  : "outline"
+                              }
+                              size="sm"
+                              onClick={() => {
+                                const newTags = displayFilters.tags.includes(
+                                  tag,
+                                )
+                                  ? displayFilters.tags.filter((t) => t !== tag)
+                                  : [...displayFilters.tags, tag];
+                                setDisplayFilters({
+                                  ...displayFilters,
+                                  tags: newTags,
+                                });
+                              }}
+                            >
+                              #{tag}
+                            </Button>
+                          ))}
+                          {tags.length > 10 && (
+                            <span className="text-xs text-muted-foreground px-2 py-1.5">
+                              +{tags.length - 10} more
+                            </span>
+                          )}
+                        </div>
+                      )}
                     </div>
                   )}
 
@@ -408,7 +457,7 @@ export default function Index() {
 
         {/* Content Grid */}
         {displayLoading ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
             {[...Array(6)].map((_, i) => (
               <div
                 key={i}
@@ -417,7 +466,7 @@ export default function Index() {
             ))}
           </div>
         ) : displayItems.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
             {displayItems.map((item) => (
               <ContentCard
                 key={item.id}
@@ -474,7 +523,10 @@ export default function Index() {
 
       <DeleteModal
         isOpen={showDeleteModal}
-        onClose={() => setShowDeleteModal(false)}
+        onClose={() => {
+          setShowDeleteModal(false);
+          setDeleteItem(null);
+        }}
         onConfirm={() =>
           deleteItem ? handleDelete(deleteItem.id) : Promise.resolve()
         }

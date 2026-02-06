@@ -10,7 +10,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Copy, Check, Share2, AlertCircle } from "lucide-react";
+import { Copy, Check, Share2, AlertCircle, MoreHorizontal } from "lucide-react";
 import { toast } from "sonner";
 import { copyToClipboard } from "@/lib/utils";
 
@@ -59,6 +59,42 @@ export const ShareModal: React.FC<ShareModalProps> = ({
       setTimeout(() => setCopied(false), 2000);
     } catch {
       toast.error("Failed to copy link");
+    }
+  };
+
+  const handleNativeShare = async () => {
+    // Check if content is public
+    if (!item.is_public) {
+      toast.error("Make content public to share");
+      return;
+    }
+
+    // Check if Web Share API is available
+    if (!navigator.share) {
+      toast.error("Web Share API not supported on this device");
+      return;
+    }
+
+    try {
+      await navigator.share({
+        title: item.title,
+        text: `Check out this content on UZ-log: ${item.title}`,
+        url: shareUrl,
+      });
+    } catch (error) {
+      // Silently ignore AbortError (user cancelled) and NotAllowedError
+      if (error instanceof Error) {
+        if (error.name === "AbortError") {
+          // User cancelled the share dialog - this is normal
+          return;
+        }
+        if (error.name === "NotAllowedError") {
+          // Permission denied - silently ignore, user can use other share methods
+          return;
+        }
+      }
+      // Log other errors for debugging
+      console.error("Share error:", error);
     }
   };
 
@@ -143,13 +179,15 @@ export const ShareModal: React.FC<ShareModalProps> = ({
           {/* Share Methods */}
           <div className="space-y-2">
             <p className="text-sm font-medium text-foreground">Share via</p>
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid grid-cols-3 gap-2">
               <a
                 href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(`Check out this content on UZ-log: ${item.title}`)}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                disabled={!item.is_public}
-                className="inline-flex items-center justify-center px-3 py-2 rounded border border-border bg-card hover:bg-secondary disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-sm font-medium"
+                className={`inline-flex items-center justify-center px-3 py-2 rounded border border-border bg-card hover:bg-secondary transition-colors text-sm font-medium ${
+                  !item.is_public ? "opacity-50 cursor-not-allowed" : ""
+                }`}
+                onClick={(e) => !item.is_public && e.preventDefault()}
               >
                 Twitter
               </a>
@@ -159,6 +197,21 @@ export const ShareModal: React.FC<ShareModalProps> = ({
               >
                 Email
               </a>
+              <Button
+                onClick={handleNativeShare}
+                variant="outline"
+                size="sm"
+                className={`w-full ${!item.is_public ? "opacity-50 cursor-not-allowed" : ""}`}
+                disabled={!item.is_public}
+                title={
+                  item.is_public
+                    ? "Share to other apps"
+                    : "Make content public to share"
+                }
+              >
+                <MoreHorizontal className="w-4 h-4 mr-1" />
+                More
+              </Button>
             </div>
           </div>
 

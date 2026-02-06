@@ -119,12 +119,16 @@ export const createContent = async (
   const title =
     content.title || `New ${content.type} - ${new Date().toLocaleString()}`;
 
+  // Get uploader name from user metadata or email
+  const uploaderName = user.user_metadata?.full_name || user.email || "Unknown";
+
   const { data, error } = await supabase
     .from("content")
     .insert({
       ...content,
       title,
       user_id: user.id,
+      uploader_name: uploaderName,
     })
     .select()
     .single();

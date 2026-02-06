@@ -45,6 +45,9 @@ export const ContentModal: React.FC<ContentModalProps> = ({
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isUploading, setIsUploading] = useState(false);
   const [showContentType, setShowContentType] = useState(false);
+  const [showTitle, setShowTitle] = useState(false);
+  const [showCategory, setShowCategory] = useState(false);
+  const [showTags, setShowTags] = useState(false);
   const [formData, setFormData] = useState<Partial<ContentItem>>(
     initialData || {
       type: "text",
@@ -162,18 +165,37 @@ export const ContentModal: React.FC<ContentModalProps> = ({
             )}
           </div>
 
-          {/* Title */}
-          <div>
-            <label className="text-sm font-medium text-foreground mb-2 block">
+          {/* Title - Collapsible */}
+          <div className="text-center space-y-2">
+            <label className="text-sm font-medium text-foreground block">
               Title (optional)
             </label>
-            <Input
-              value={formData.title || ""}
-              onChange={(e) =>
-                setFormData({ ...formData, title: e.target.value })
-              }
-              placeholder="Leave empty for auto-generated title"
-            />
+            <div className="flex justify-center">
+              <button
+                onClick={() => setShowTitle(!showTitle)}
+                className="text-muted-foreground hover:text-foreground transition-colors duration-200 focus:outline-none p-2 active:bg-transparent active:text-foreground"
+                title={showTitle ? "Hide title" : "Show title"}
+              >
+                <ChevronDown
+                  className="w-5 h-5 transition-transform duration-200"
+                  style={{
+                    transform: showTitle ? "rotate(180deg)" : "rotate(0deg)",
+                  }}
+                />
+              </button>
+            </div>
+
+            {showTitle && (
+              <div className="animate-in fade-in duration-200">
+                <Input
+                  value={formData.title || ""}
+                  onChange={(e) =>
+                    setFormData({ ...formData, title: e.target.value })
+                  }
+                  placeholder="Leave empty for auto-generated title"
+                />
+              </div>
+            )}
           </div>
 
           {/* File Upload for certain types */}
@@ -239,28 +261,70 @@ export const ContentModal: React.FC<ContentModalProps> = ({
             </TabsList>
 
             <TabsContent value="metadata" className="space-y-3 mt-3">
-              <div>
-                <label className="text-sm font-medium text-foreground mb-2 block">
+              {/* Category - Collapsible */}
+              <div className="text-center space-y-2">
+                <label className="text-sm font-medium text-foreground block">
                   Category
                 </label>
-                <Input
-                  value={formData.category || ""}
-                  onChange={(e) =>
-                    setFormData({ ...formData, category: e.target.value })
-                  }
-                  placeholder="e.g., Work, Personal, Ideas"
-                />
+                <div className="flex justify-center">
+                  <button
+                    onClick={() => setShowCategory(!showCategory)}
+                    className="text-muted-foreground hover:text-foreground transition-colors duration-200 focus:outline-none p-2 active:bg-transparent active:text-foreground"
+                    title={showCategory ? "Hide category" : "Show category"}
+                  >
+                    <ChevronDown
+                      className="w-5 h-5 transition-transform duration-200"
+                      style={{
+                        transform: showCategory
+                          ? "rotate(180deg)"
+                          : "rotate(0deg)",
+                      }}
+                    />
+                  </button>
+                </div>
+
+                {showCategory && (
+                  <div className="animate-in fade-in duration-200">
+                    <Input
+                      value={formData.category || ""}
+                      onChange={(e) =>
+                        setFormData({ ...formData, category: e.target.value })
+                      }
+                      placeholder="e.g., Work, Personal, Ideas"
+                    />
+                  </div>
+                )}
               </div>
 
-              <div>
-                <label className="text-sm font-medium text-foreground mb-2 block">
+              {/* Tags - Collapsible */}
+              <div className="text-center space-y-2">
+                <label className="text-sm font-medium text-foreground block">
                   Tags (comma-separated)
                 </label>
-                <Input
-                  value={formData.tags?.join(", ") || ""}
-                  onChange={(e) => handleTagsChange(e.target.value)}
-                  placeholder="e.g., important, urgent, review"
-                />
+                <div className="flex justify-center">
+                  <button
+                    onClick={() => setShowTags(!showTags)}
+                    className="text-muted-foreground hover:text-foreground transition-colors duration-200 focus:outline-none p-2 active:bg-transparent active:text-foreground"
+                    title={showTags ? "Hide tags" : "Show tags"}
+                  >
+                    <ChevronDown
+                      className="w-5 h-5 transition-transform duration-200"
+                      style={{
+                        transform: showTags ? "rotate(180deg)" : "rotate(0deg)",
+                      }}
+                    />
+                  </button>
+                </div>
+
+                {showTags && (
+                  <div className="animate-in fade-in duration-200">
+                    <Input
+                      value={formData.tags?.join(", ") || ""}
+                      onChange={(e) => handleTagsChange(e.target.value)}
+                      placeholder="e.g., important, urgent, review"
+                    />
+                  </div>
+                )}
               </div>
             </TabsContent>
 

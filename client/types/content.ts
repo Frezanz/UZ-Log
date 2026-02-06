@@ -1,13 +1,13 @@
-export type ContentType = 
-  | 'text' 
-  | 'code' 
-  | 'image' 
-  | 'video' 
-  | 'file' 
-  | 'link' 
-  | 'prompt' 
-  | 'script' 
-  | 'book';
+export type ContentType =
+  | "text"
+  | "code"
+  | "image"
+  | "video"
+  | "file"
+  | "link"
+  | "prompt"
+  | "script"
+  | "book";
 
 export interface ContentItem {
   id: string;
@@ -23,6 +23,7 @@ export interface ContentItem {
   created_at: string;
   updated_at: string;
   word_count?: number;
+  uploader_name?: string;
 }
 
 export interface BookPage {
@@ -31,13 +32,13 @@ export interface BookPage {
   title: string;
   order: number;
   content: string | null;
-  type: 'text' | 'image' | 'file';
+  type: "text" | "image" | "file";
   created_at: string;
   updated_at: string;
 }
 
 export interface BookContent extends ContentItem {
-  type: 'book';
+  type: "book";
   pages?: BookPage[];
 }
 
@@ -61,5 +62,5 @@ export interface FilterState {
   categories: string[];
   types: ContentType[];
   tags: string[];
-  sortBy: 'newest' | 'oldest' | 'a-z' | 'word-count';
+  sortBy: "newest" | "oldest" | "a-z" | "word-count";
 }
