@@ -8,6 +8,7 @@ import {
   deleteContent,
   shareContent,
   toggleStatus,
+  duplicateContent,
 } from "@/lib/api";
 import {
   getGuestContent,
