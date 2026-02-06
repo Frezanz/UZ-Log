@@ -137,7 +137,9 @@ export const StatusDropdown: React.FC<StatusDropdownProps> = ({
         onClick={() => !disabled && setIsOpen(!isOpen)}
         className={`inline-flex items-center gap-1 px-2 py-1 rounded text-[10px] font-medium transition-all ${
           config?.color || "bg-gray-100 dark:bg-gray-950 text-gray-700 dark:text-gray-300"
-        } ${disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer hover:opacity-90"}`}
+        } ${disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer hover:opacity-90"} ${
+          isChanging ? "scale-95" : "scale-100"
+        }`}
         title="Click to change status"
         disabled={disabled}
       >
