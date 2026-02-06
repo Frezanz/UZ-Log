@@ -86,7 +86,7 @@ export const AudioRecorder: React.FC<AudioRecorderProps> = ({
         }
       }
     };
-  }, [isRecording]);
+  }, []);
 
   // Timer for recording duration
   useEffect(() => {
