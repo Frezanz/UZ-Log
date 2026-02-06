@@ -108,9 +108,12 @@ export default function Index() {
   // Handle delete
   const handleDelete = async (id: string) => {
     try {
+      console.log('Deleting content:', id);
       await removeContent(id);
+      console.log('Content deleted successfully:', id);
       setDeleteItem(null);
     } catch (error) {
+      console.error('Error deleting content:', error);
       throw error;
     }
   };
