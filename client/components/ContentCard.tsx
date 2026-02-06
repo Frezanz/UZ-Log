@@ -266,7 +266,20 @@ export const ContentCard: React.FC<ContentCardProps> = ({
             </div>
           )}
 
-        {item.file_url && item.type !== "image" && (
+        {item.file_url && item.type === "voice" && (
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => onView?.(item)}
+            title="Play audio"
+            className="flex-1 h-7"
+          >
+            <Mic className="w-2.5 h-2.5" />
+            <span className="hidden sm:inline text-xs">Play</span>
+          </Button>
+        )}
+
+        {item.file_url && item.type !== "image" && item.type !== "voice" && (
           <Button
             variant="ghost"
             size="sm"
