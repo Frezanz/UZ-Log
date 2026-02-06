@@ -63,47 +63,38 @@ export const ShareModal: React.FC<ShareModalProps> = ({
   };
 
   const handleNativeShare = async () => {
-    // Immediate feedback to prove the click was registered
-    const shareToast = toast.loading("Preparing share menu...");
+    if (!item.is_public) {
+      toast.error("Make content public to share");
+      return;
+    }
 
-    try {
-      if (!item.is_public) {
-        toast.error("Make content public to share", { id: shareToast });
+    // Capture user gesture immediately - some browsers block share if there are any awaits before it
+    if (typeof navigator.share === "function") {
+      try {
+        await navigator.share({
+          title: item.title,
+          text: `Check out this content on UZ-log: ${item.title}`,
+          url: shareUrl,
+        });
         return;
-      }
+      } catch (error: any) {
+        if (error.name === "AbortError") return;
 
-      // Check if Web Share API is available
-      if (typeof navigator.share === "function") {
-        try {
-          await navigator.share({
-            title: item.title,
-            text: `Check out this content on UZ-log: ${item.title}`,
-            url: shareUrl,
-          });
-          toast.dismiss(shareToast);
-          return;
-        } catch (error: any) {
-          if (error.name === "AbortError") {
-            toast.dismiss(shareToast);
-            return;
-          }
-          console.error("Native share failed:", error);
-          // Don't return, fall through to fallback
+        console.error("Native share failed:", error);
+        if (error.name === "NotAllowedError") {
+          toast.error("Share blocked by browser context. Try opening the app link directly outside the preview.");
+        } else {
+          toast.error("Native share failed. Copying link instead.");
         }
       }
+    }
 
-      // Fallback: Copy to clipboard if native share is missing or fails
-      try {
-        await copyToClipboard(shareUrl);
-        toast.success("Link copied! (Native share unavailable)", {
-          id: shareToast,
-        });
-      } catch (copyError) {
-        toast.error("Failed to share or copy link", { id: shareToast });
-      }
-    } catch (err: any) {
-      console.error("Critical share error:", err);
-      toast.error("An unexpected error occurred", { id: shareToast });
+    // Fallback: Copy to clipboard
+    try {
+      await copyToClipboard(shareUrl);
+      toast.success("Link copied to clipboard!");
+    } catch (err) {
+      toast.error("Failed to copy link");
     }
   };
 
@@ -211,21 +202,21 @@ export const ShareModal: React.FC<ShareModalProps> = ({
               >
                 Email
               </a>
-              <button
+              <Button
                 type="button"
+                variant="outline"
+                size="sm"
+                className="w-full"
                 onClick={handleNativeShare}
-                className={`w-full inline-flex items-center justify-center px-3 py-2 rounded border border-border bg-card hover:bg-secondary transition-colors text-sm font-medium ${
-                  !item.is_public ? "opacity-50" : ""
-                }`}
                 title={
                   item.is_public
                     ? "Share to other apps"
                     : "Make content public to share"
                 }
               >
-                <MoreHorizontal className="w-4 h-4 mr-1" />
+                <Share2 className="w-4 h-4 mr-1" />
                 More
-              </button>
+              </Button>
             </div>
           </div>
 
