@@ -163,14 +163,20 @@ export const useTextToSpeech = (options: UseTextToSpeechOptions = {}) => {
     }
 
     try {
-      // Check if there's something actually speaking
-      if (window.speechSynthesis.speaking && !window.speechSynthesis.paused) {
-        window.speechSynthesis.pause();
+      const synth = window.speechSynthesis;
+
+      // Check if there's something actually speaking and not paused
+      if (synth.speaking && !synth.paused) {
+        console.log("Pausing speech synthesis");
+        synth.pause();
         setIsPaused(true);
         setIsPlaying(false);
+      } else {
+        console.warn("No active speech to pause - speaking:", synth.speaking, "paused:", synth.paused);
       }
     } catch (error) {
-      console.error("Error pausing speech:", error);
+      const errorMsg = error instanceof Error ? error.message : String(error);
+      console.error("Error pausing speech:", errorMsg);
     }
   }, [isSupported]);
 
@@ -181,14 +187,20 @@ export const useTextToSpeech = (options: UseTextToSpeechOptions = {}) => {
     }
 
     try {
+      const synth = window.speechSynthesis;
+
       // Check if speech is paused
-      if (window.speechSynthesis.paused) {
-        window.speechSynthesis.resume();
+      if (synth.paused && synth.speaking) {
+        console.log("Resuming paused speech synthesis");
+        synth.resume();
         setIsPaused(false);
         setIsPlaying(true);
+      } else {
+        console.warn("No paused speech to resume - speaking:", synth.speaking, "paused:", synth.paused);
       }
     } catch (error) {
-      console.error("Error resuming speech:", error);
+      const errorMsg = error instanceof Error ? error.message : String(error);
+      console.error("Error resuming speech:", errorMsg);
     }
   }, [isSupported]);
 
