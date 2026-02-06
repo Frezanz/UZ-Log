@@ -142,34 +142,32 @@ export const ContentModal: React.FC<ContentModalProps> = ({
         }
       }
 
-      // Handle audio upload
-      if (recordedAudioBlob && formData.type === "voice") {
+      // Handle voice attachment upload for text-based content
+      if (recordedVoiceBlob && (formData.type === "text" || formData.type === "code" || formData.type === "prompt" || formData.type === "script")) {
         setIsUploading(true);
         try {
-          const audioFile = new File([recordedAudioBlob], "recording.webm", {
+          const voiceFile = new File([recordedVoiceBlob], "voice.webm", {
             type: "audio/webm",
           });
 
-          let fileUrl: string;
+          let voiceUrl: string;
 
           if (isAuthenticated && user) {
             // Upload to Supabase for authenticated users
-            fileUrl = await uploadFile(audioFile, user.id);
+            voiceUrl = await uploadFile(voiceFile, user.id);
           } else {
             // Store as base64 for guest users
-            fileUrl = await uploadGuestFile(audioFile);
+            voiceUrl = await uploadGuestFile(voiceFile);
           }
 
           dataToSave = {
             ...dataToSave,
-            file_url: fileUrl,
-            file_size: `${(audioFile.size / 1024 / 1024).toFixed(2)} MB`,
-            title: dataToSave.title || "Voice Recording",
+            voice_url: voiceUrl,
           };
         } catch (error) {
           const errorMsg =
             error instanceof Error ? error.message : "Upload failed";
-          toast.error(`Audio upload failed: ${errorMsg}`);
+          toast.error(`Voice attachment upload failed: ${errorMsg}`);
           setIsUploading(false);
           setIsLoading(false);
           return;
