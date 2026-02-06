@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { getPublicContent } from "@/lib/api";
+import { getGuestContentById } from "@/lib/localStorage";
 import { ContentItem } from "@/types/content";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Copy } from "lucide-react";
