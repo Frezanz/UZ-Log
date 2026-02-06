@@ -939,6 +939,16 @@ export default function Index() {
         onConfirm={handleBulkDelete}
         title={`${selectedItems.length} Item${selectedItems.length !== 1 ? "s" : ""}`}
       />
+
+      <DuplicateModal
+        isOpen={showDuplicateModal}
+        onClose={() => {
+          setShowDuplicateModal(false);
+          setDetectedDuplicates([]);
+        }}
+        duplicates={detectedDuplicates}
+        onMerge={handleMergeDuplicates}
+      />
     </div>
   );
 }
