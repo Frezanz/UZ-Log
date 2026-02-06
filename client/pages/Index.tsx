@@ -414,7 +414,7 @@ export default function Index() {
                     </div>
 
                     {showSortBy && (
-                      <div className="flex flex-wrap gap-1 justify-center animate-in fade-in duration-200">
+                      <div className="flex flex-wrap gap-0.5 justify-center animate-in fade-in duration-200">
                         {(
                           ["newest", "oldest", "a-z", "word-count"] as const
                         ).map((option) => (
@@ -474,7 +474,7 @@ export default function Index() {
                       </div>
 
                       {showCategories && (
-                        <div className="flex flex-wrap gap-1 justify-center animate-in fade-in duration-200">
+                        <div className="flex flex-wrap gap-0.5 justify-center animate-in fade-in duration-200">
                           {categories.map((cat) => (
                             <Button
                               key={cat}
@@ -529,7 +529,7 @@ export default function Index() {
                       </div>
 
                       {showTags && (
-                        <div className="flex flex-wrap gap-1 justify-center animate-in fade-in duration-200">
+                        <div className="flex flex-wrap gap-0.5 justify-center animate-in fade-in duration-200">
                           {tags.slice(0, 10).map((tag) => (
                             <Button
                               key={tag}
