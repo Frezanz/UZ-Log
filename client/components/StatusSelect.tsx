@@ -150,7 +150,7 @@ export const StatusDropdown: React.FC<StatusDropdownProps> = ({
           e.stopPropagation();
           !disabled && setIsOpen(!isOpen);
         }}
-        className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-medium transition-all h-6 ${
+        className={`inline-flex items-center gap-1 px-2 py-0.5 text-[10px] font-medium transition-all h-6 ${
           config?.color ||
           "bg-gray-100 dark:bg-gray-950 text-gray-700 dark:text-gray-300"
         } ${disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer hover:opacity-90"} ${
