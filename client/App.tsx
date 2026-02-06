@@ -58,6 +58,7 @@ const App = () => (
                 <Route path="/" element={<Index />} />
                 <Route path="/settings" element={<Settings />} />
                 <Route path="/share/:id" element={<Share />} />
+                <Route path="/s/:token" element={<SharedContent />} />
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                 <Route path="*" element={<NotFound />} />
               </Routes>
