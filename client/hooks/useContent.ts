@@ -47,6 +47,34 @@ export const useContent = () => {
         content = filterGuestContent(filters);
       }
 
+      // Clean up expired auto-delete items
+      const now = new Date();
+      const itemsToDelete: string[] = [];
+
+      content = content.filter((item) => {
+        if (item.auto_delete_at && item.auto_delete_enabled) {
+          const deleteTime = new Date(item.auto_delete_at);
+          if (deleteTime <= now) {
+            itemsToDelete.push(item.id);
+            return false;
+          }
+        }
+        return true;
+      });
+
+      // Delete expired items
+      for (const id of itemsToDelete) {
+        try {
+          if (isAuthenticated) {
+            await deleteContent(id);
+          } else {
+            deleteGuestContent(id);
+          }
+        } catch (err) {
+          console.error("Error deleting expired item:", err);
+        }
+      }
+
       setItems(content);
     } catch (err) {
       const message =
