@@ -7,6 +7,7 @@ import { Header } from "@/components/Header";
 import { SearchBar } from "@/components/SearchBar";
 import { ContentCard } from "@/components/ContentCard";
 import { ContentModal } from "@/components/modals/ContentModal";
+import { ContentViewer } from "@/components/modals/ContentViewer";
 import { ShareModal } from "@/components/modals/ShareModal";
 import { DeleteModal } from "@/components/modals/DeleteModal";
 import { Button } from "@/components/ui/button";
