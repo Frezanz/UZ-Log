@@ -39,9 +39,10 @@ export default function Share() {
   }, [id]);
 
   const handleCopy = async () => {
-    if (content?.content) {
+    const textToCopy = content?.content || content?.file_url;
+    if (textToCopy) {
       try {
-        await copyToClipboard(content.content);
+        await copyToClipboard(textToCopy);
         toast.success('Copied to clipboard!');
       } catch {
         toast.error('Failed to copy');
