@@ -82,7 +82,9 @@ export const ImageViewer: React.FC<ImageViewerProps> = ({
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 z-10 p-2 rounded-full hover:bg-white/20 transition-colors"
+          className={`absolute top-4 right-4 z-10 p-2 rounded-full hover:bg-white/20 transition-all duration-300 ${
+            showUI ? "opacity-100" : "opacity-0 pointer-events-none"
+          }`}
           title="Close"
         >
           <X className="w-6 h-6 text-white" />
