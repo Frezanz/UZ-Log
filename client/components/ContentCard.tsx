@@ -201,10 +201,10 @@ export const ContentCard: React.FC<ContentCardProps> = ({
             size="sm"
             onClick={handleCopy}
             title="Copy content"
-            className="flex-1"
+            className="flex-1 h-7"
           >
-            <Copy className="w-3 h-3" />
-            <span className="hidden sm:inline">Copy</span>
+            <Copy className="w-2.5 h-2.5" />
+            <span className="hidden sm:inline text-xs">Copy</span>
           </Button>
         )}
 
@@ -214,10 +214,10 @@ export const ContentCard: React.FC<ContentCardProps> = ({
             size="sm"
             onClick={() => onDownload?.(item)}
             title="Download"
-            className="flex-1"
+            className="flex-1 h-7"
           >
-            <Download className="w-3 h-3" />
-            <span className="hidden sm:inline">Download</span>
+            <Download className="w-2.5 h-2.5" />
+            <span className="hidden sm:inline text-xs">Download</span>
           </Button>
         )}
 
@@ -226,10 +226,10 @@ export const ContentCard: React.FC<ContentCardProps> = ({
           size="sm"
           onClick={() => onShare(item)}
           title="Share"
-          className="flex-1"
+          className="flex-1 h-7"
         >
-          <Share className="w-3 h-3" />
-          <span className="hidden sm:inline">Share</span>
+          <Share className="w-2.5 h-2.5" />
+          <span className="hidden sm:inline text-xs">Share</span>
         </Button>
 
         <Button
@@ -237,10 +237,10 @@ export const ContentCard: React.FC<ContentCardProps> = ({
           size="sm"
           onClick={() => onEdit(item)}
           title="Edit"
-          className="flex-1"
+          className="flex-1 h-7"
         >
-          <Edit className="w-3 h-3" />
-          <span className="hidden sm:inline">Edit</span>
+          <Edit className="w-2.5 h-2.5" />
+          <span className="hidden sm:inline text-xs">Edit</span>
         </Button>
 
         <Button
@@ -248,10 +248,10 @@ export const ContentCard: React.FC<ContentCardProps> = ({
           size="sm"
           onClick={() => onDelete(item)}
           title="Delete"
-          className="flex-1 hover:bg-destructive/10 hover:text-destructive"
+          className="flex-1 h-7 hover:bg-destructive/10 hover:text-destructive"
         >
-          <Trash2 className="w-3 h-3" />
-          <span className="hidden sm:inline">Delete</span>
+          <Trash2 className="w-2.5 h-2.5" />
+          <span className="hidden sm:inline text-xs">Delete</span>
         </Button>
       </div>
     </div>
