@@ -8,7 +8,7 @@ import {
   Share,
   Edit,
   Trash2,
-  Copy as DuplicateIcon,
+  Copy2,
   FileText,
   Code,
   Image,
