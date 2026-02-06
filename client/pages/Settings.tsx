@@ -434,53 +434,164 @@ export default function Settings() {
 
           {/* About Tab */}
           <TabsContent value="about" className="space-y-4">
-            <div className="bg-card border border-border rounded-lg p-6 space-y-4">
+            <div className="bg-card border border-border rounded-lg p-6 space-y-6">
               <div>
-                <h3 className="font-semibold text-foreground mb-2">
+                <h3 className="font-semibold text-foreground mb-3">
                   About UZ-log
                 </h3>
+                <div className="space-y-3 text-sm text-muted-foreground leading-relaxed">
+                  <p>
+                    UZ-log is a powerful, all-in-one personal content vault designed to help you store, organize, manage, and share all types of digital content in a secure cloud environment. Created with the modern digital creator in mind, UZ-log serves as your personal knowledge management system, serving as a central hub for everything from code snippets and notes to media files and research materials.
+                  </p>
+                  <p>
+                    Whether you're a software developer saving code snippets, a content creator managing resources, a student organizing notes, or a professional building a knowledge base, UZ-log provides the tools to keep everything organized and accessible across all your devices.
+                  </p>
+                </div>
+              </div>
+
+              <div>
+                <h3 className="font-semibold text-foreground mb-3">Core Mission</h3>
                 <p className="text-sm text-muted-foreground leading-relaxed">
-                  UZ-log is a personal content vault with multi-device sync,
-                  user authentication, and public sharing capabilities.
+                  To empower individuals to build and maintain their personal digital knowledge base with an intuitive, secure, and feature-rich platform. UZ-log believes that everyone should have easy access to their accumulated knowledge, insights, and resources, anytime and anywhere.
                 </p>
               </div>
 
               <div>
-                <h3 className="font-semibold text-foreground mb-3">Features</h3>
-                <ul className="text-sm text-muted-foreground space-y-2">
-                  <li className="flex gap-2">
-                    <span>✓</span>
-                    <span>
-                      Store 9 content types (text, code, image, video, file,
-                      link, prompt, script, book)
-                    </span>
-                  </li>
-                  <li className="flex gap-2">
-                    <span>✓</span>
-                    <span>Real-time full-text search</span>
-                  </li>
-                  <li className="flex gap-2">
-                    <span>✓</span>
-                    <span>Tags and category filtering</span>
-                  </li>
-                  <li className="flex gap-2">
-                    <span>✓</span>
-                    <span>Cloud storage with public sharing</span>
-                  </li>
-                  <li className="flex gap-2">
-                    <span>✓</span>
-                    <span>Dark mode support</span>
-                  </li>
-                  <li className="flex gap-2">
-                    <span>✓</span>
-                    <span>Responsive design</span>
-                  </li>
+                <h3 className="font-semibold text-foreground mb-3">Key Features</h3>
+                <div className="space-y-3">
+                  <div className="space-y-2">
+                    <p className="font-medium text-foreground text-sm">Diverse Content Types</p>
+                    <p className="text-sm text-muted-foreground">
+                      Store 9 different types of content: Text (notes, articles), Code (snippets, algorithms), Scripts (Bash, Python, automation), Prompts (AI templates), Links (bookmarks), Images (screenshots, graphics), Videos (tutorials, recordings), Files (documents, archives), and Books (references, reading notes). Each content type is optimized with relevant fields and features.
+                    </p>
+                  </div>
+
+                  <div className="space-y-2">
+                    <p className="font-medium text-foreground text-sm">Intelligent Search & Discovery</p>
+                    <p className="text-sm text-muted-foreground">
+                      Find what you need instantly with our full-text search engine that searches across titles, content, tags, categories, and descriptions. Advanced filtering options let you narrow results by category, tags, content type, and sort by relevance, date, or alphabetical order.
+                    </p>
+                  </div>
+
+                  <div className="space-y-2">
+                    <p className="font-medium text-foreground text-sm">Smart Organization System</p>
+                    <p className="text-sm text-muted-foreground">
+                      Organize your content using a two-level system: Categories for broad organization (Work, Learning, Ideas) and Tags for specific attributes (urgent, reviewed, favorite). This hierarchical approach ensures your vault remains organized no matter how much content you accumulate.
+                    </p>
+                  </div>
+
+                  <div className="space-y-2">
+                    <p className="font-medium text-foreground text-sm">Secure Cloud Storage</p>
+                    <p className="text-sm text-muted-foreground">
+                      Your content is stored securely on cloud infrastructure with robust encryption, automatic backups, and redundancy measures. All data transmission is secure, and your information is protected with industry-standard security practices.
+                    </p>
+                  </div>
+
+                  <div className="space-y-2">
+                    <p className="font-medium text-foreground text-sm">Public Sharing Capabilities</p>
+                    <p className="text-sm text-muted-foreground">
+                      Make any content public with a single click and share it via unique, unguessable links. Share code snippets, guides, resources, or insights with others without requiring them to have a UZ-log account. Shared content is read-only for protection.
+                    </p>
+                  </div>
+
+                  <div className="space-y-2">
+                    <p className="font-medium text-foreground text-sm">Multi-Device Synchronization</p>
+                    <p className="text-sm text-muted-foreground">
+                      Access your entire vault from desktop, tablet, or mobile devices. All changes sync automatically across all your devices within seconds. Start working on one device and continue seamlessly on another without any manual syncing required.
+                    </p>
+                  </div>
+
+                  <div className="space-y-2">
+                    <p className="font-medium text-foreground text-sm">User Authentication & Privacy</p>
+                    <p className="text-sm text-muted-foreground">
+                      Secure sign-in with email-based authentication keeps your personal vault private. Only you can access your content unless you explicitly choose to share it publicly. Your data is yours alone, stored securely and never shared with third parties.
+                    </p>
+                  </div>
+
+                  <div className="space-y-2">
+                    <p className="font-medium text-foreground text-sm">Dark Mode Support</p>
+                    <p className="text-sm text-muted-foreground">
+                      Comfortable viewing in low-light environments with our beautifully designed dark theme. Your theme preference is automatically saved and applied across all devices for a consistent experience.
+                    </p>
+                  </div>
+
+                  <div className="space-y-2">
+                    <p className="font-medium text-foreground text-sm">Fully Responsive Design</p>
+                    <p className="text-sm text-muted-foreground">
+                      UZ-log is built with mobile-first design principles. Whether you're on a large desktop monitor or a small smartphone screen, the interface adapts seamlessly to provide an optimal experience on any device size.
+                    </p>
+                  </div>
+
+                  <div className="space-y-2">
+                    <p className="font-medium text-foreground text-sm">File Management</p>
+                    <p className="text-sm text-muted-foreground">
+                      Upload and manage files of any type. Download files back to your computer anytime. Built-in support for images, videos, documents, and archives ensures you can store any digital content type you need.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <h3 className="font-semibold text-foreground mb-3">Technology Stack</h3>
+                <p className="text-sm text-muted-foreground mb-3">
+                  UZ-log is built with modern, reliable technologies:
+                </p>
+                <div className="bg-secondary/30 border border-border rounded-lg p-4">
+                  <ul className="text-sm text-muted-foreground space-y-2 list-disc list-inside">
+                    <li><span className="font-medium">Frontend:</span> React 18 with React Router for smooth, responsive user interfaces</li>
+                    <li><span className="font-medium">Backend:</span> Express.js server for reliable API handling and business logic</li>
+                    <li><span className="font-medium">Database:</span> Supabase for secure cloud storage with real-time capabilities</li>
+                    <li><span className="font-medium">Styling:</span> TailwindCSS 3 with Radix UI components for beautiful, accessible design</li>
+                    <li><span className="font-medium">Type Safety:</span> Full TypeScript implementation across frontend and backend</li>
+                    <li><span className="font-medium">Build Tool:</span> Vite for fast development and optimized production builds</li>
+                    <li><span className="font-medium">Testing:</span> Vitest for comprehensive test coverage</li>
+                    <li><span className="font-medium">Validation:</span> Zod for runtime data validation and type safety</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div>
+                <h3 className="font-semibold text-foreground mb-3">Perfect For</h3>
+                <ul className="text-sm text-muted-foreground space-y-2 list-disc list-inside">
+                  <li><span className="font-medium">Software Developers</span> - Store and reference code snippets, algorithms, and technical solutions</li>
+                  <li><span className="font-medium">Students & Learners</span> - Organize notes, research, links, and learning resources by subject</li>
+                  <li><span className="font-medium">Content Creators</span> - Manage ideas, prompts, references, and creative resources</li>
+                  <li><span className="font-medium">Professionals</span> - Build a personal knowledge base of business practices, templates, and references</li>
+                  <li><span className="font-medium">Researchers</span> - Store papers, links, notes, and findings organized by topic</li>
+                  <li><span className="font-medium">Anyone</span> - Building a personal knowledge base for career growth and skill development</li>
                 </ul>
               </div>
 
               <div>
-                <h3 className="font-semibold text-foreground mb-2">Version</h3>
-                <p className="text-sm text-muted-foreground">1.0.0</p>
+                <h3 className="font-semibold text-foreground mb-3">Why Choose UZ-log?</h3>
+                <div className="space-y-3 text-sm text-muted-foreground">
+                  <p>
+                    <span className="font-medium text-foreground">All-in-One Solution:</span> Unlike scattered notes apps, code repositories, and bookmark managers, UZ-log consolidates everything in one organized place.
+                  </p>
+                  <p>
+                    <span className="font-medium text-foreground">Privacy-First Design:</span> Your content is yours. We don't use your data for any purposes, and you maintain complete control over what's private and what's shared.
+                  </p>
+                  <p>
+                    <span className="font-medium text-foreground">Intuitive Interface:</span> Clean, modern design that's easy to learn and use. Get started in minutes without a steep learning curve.
+                  </p>
+                  <p>
+                    <span className="font-medium text-foreground">Always Accessible:</span> Cloud-based with automatic sync means your knowledge is always available wherever you are, on any device.
+                  </p>
+                  <p>
+                    <span className="font-medium text-foreground">Powerful Organization:</span> Smart categorization and tagging system keeps your vault organized even with thousands of items.
+                  </p>
+                  <p>
+                    <span className="font-medium text-foreground">Community Sharing:</span> Share your knowledge easily with others through public links, building connections and helping your community.
+                  </p>
+                </div>
+              </div>
+
+              <div className="bg-secondary/50 border border-border rounded-lg p-4">
+                <p className="font-medium text-foreground mb-2">Version</p>
+                <p className="text-sm text-muted-foreground mb-3">1.0.0</p>
+                <p className="text-xs text-muted-foreground">
+                  UZ-log continues to evolve with new features and improvements. Your feedback helps shape the future of the platform.
+                </p>
               </div>
             </div>
           </TabsContent>
