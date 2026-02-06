@@ -29,12 +29,12 @@ export const DeleteModal: React.FC<DeleteModalProps> = ({
     setIsLoading(true);
     try {
       await onConfirm();
-      toast.success('Content deleted');
+      toast.success('Content deleted successfully');
       onClose();
     } catch (error) {
       console.error('Delete error:', error);
-      toast.error('Failed to delete content');
-    } finally {
+      const errorMessage = error instanceof Error ? error.message : 'Failed to delete content';
+      toast.error(errorMessage);
       setIsLoading(false);
     }
   };
