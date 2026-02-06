@@ -730,6 +730,22 @@ export default function Index() {
             </div>
           )}
 
+          {/* Duplicate Detection Button */}
+          {isAuthenticated && items.length >= 2 && (
+            <div className="flex justify-center pt-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleDetectDuplicates}
+                disabled={isDuplicateDetecting}
+                className="h-7 px-3 text-xs gap-2"
+              >
+                <Copy className="w-3 h-3" />
+                {isDuplicateDetecting ? "Detecting..." : "Detect Duplicates"}
+              </Button>
+            </div>
+          )}
+
           {/* Results Info */}
           {displayItems.length > 0 && (
             <p className="text-xs text-muted-foreground">
