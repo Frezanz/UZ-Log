@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { ContentItem, ContentType } from "@/types/content";
 import { Button } from "@/components/ui/button";
 import {
@@ -24,6 +24,8 @@ import {
 import { toast } from "sonner";
 import { copyToClipboard } from "@/lib/utils";
 import { TextToSpeechButton } from "@/components/TextToSpeechButton";
+import { SyntaxErrorDisplay } from "@/components/SyntaxErrorDisplay";
+import { analyzeSyntax } from "@/lib/syntaxChecker";
 
 interface ContentViewerProps {
   isOpen: boolean;
@@ -66,6 +68,17 @@ export const ContentViewer: React.FC<ContentViewerProps> = ({
   onDelete,
 }) => {
   const [copied, setCopied] = useState(false);
+
+  // Analyze syntax for code/text content
+  const syntaxAnalysis = useMemo(() => {
+    if (!content || !content.content) return null;
+
+    const codeTypes: ContentType[] = ["code", "script", "text", "prompt"];
+    if (codeTypes.includes(content.type)) {
+      return analyzeSyntax(content.content);
+    }
+    return null;
+  }, [content]);
 
   if (!content) return null;
 
