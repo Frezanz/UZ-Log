@@ -485,6 +485,7 @@ export default function Index() {
               <ContentCard
                 key={item.id}
                 item={item}
+                onView={handleOpenView}
                 onEdit={handleOpenEdit}
                 onDelete={handleOpenDelete}
                 onShare={handleOpenShare}
