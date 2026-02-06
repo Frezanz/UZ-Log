@@ -163,9 +163,12 @@ export const ContentCard: React.FC<ContentCardProps> = ({
 
       {/* Metadata */}
       <div className="px-4 py-2 border-t border-border bg-secondary/30 text-xs text-muted-foreground space-y-1">
-        <div className="flex justify-between items-center">
-          <span>{createdDate}</span>
-          {wordCount > 0 && <span>{wordCount} words</span>}
+        <div className="flex justify-between items-center flex-wrap gap-2">
+          <div className="flex flex-col gap-0.5">
+            <span className="font-medium text-foreground">{uploaderName}</span>
+            <span>{createdDate} at {createdTime}</span>
+          </div>
+          {wordCount > 0 && <span className="whitespace-nowrap">{wordCount} words</span>}
         </div>
         {item.tags && item.tags.length > 0 && (
           <div className="flex gap-1 flex-wrap">
