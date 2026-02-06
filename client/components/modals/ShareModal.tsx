@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useAuth } from "@/context/AuthContext";
-import { ContentItem } from "@/types/content";
+import { ContentItem, ShareLink } from "@/types/content";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -10,9 +10,10 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Copy, Check, Share2, AlertCircle, MoreHorizontal } from "lucide-react";
+import { Copy, Check, Share2, AlertCircle, MoreHorizontal, Lock, Trash2, Plus, Clock } from "lucide-react";
 import { toast } from "sonner";
 import { copyToClipboard } from "@/lib/utils";
+import { createShareLink, getShareLinks, deleteShareLink } from "@/lib/api";
 
 interface ShareModalProps {
   isOpen: boolean;
