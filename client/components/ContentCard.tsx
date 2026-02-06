@@ -98,7 +98,7 @@ export const ContentCard: React.FC<ContentCardProps> = ({
       onClick={() => onView?.(item)}
     >
       {/* Type Badge */}
-      <div className="px-3 pt-2 flex items-center justify-between gap-1.5">
+      <div className="px-3 pt-2 flex items-center justify-between gap-1.5" onClick={(e) => e.stopPropagation()}>
         <span
           className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-medium ${typeColors[item.type]}`}
         >
