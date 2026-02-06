@@ -564,7 +564,7 @@ export default function Index() {
                     </div>
                   )}
 
-              <div className="flex gap-1 pt-1">
+              <div className="flex gap-0.5 pt-0.5">
                 <Button
                   variant="ghost"
                   size="sm"
