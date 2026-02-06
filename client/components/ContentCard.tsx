@@ -116,7 +116,7 @@ export const ContentCard: React.FC<ContentCardProps> = ({
       </div>
 
       {/* Content Preview */}
-      <div className="flex-1 px-4 py-3 min-h-[80px]">
+      <div className={`flex-1 px-4 py-3 ${item.type === "link" ? "min-h-0" : "min-h-[80px]"}`}>
         <h3 className="font-semibold text-foreground mb-1.5 line-clamp-2 text-sm">
           {item.title}
         </h3>
