@@ -3,6 +3,7 @@ import { ContentItem, ContentType } from "@/types/content";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { FileUpload } from "@/components/FileUpload";
+import { AudioRecorder } from "@/components/AudioRecorder";
 import { uploadFile } from "@/lib/api";
 import { uploadGuestFile } from "@/lib/localStorage";
 import { useAuth } from "@/context/AuthContext";
