@@ -210,6 +210,15 @@ export const ContentCard: React.FC<ContentCardProps> = ({
             )}
           </div>
         )}
+        {item.auto_delete_enabled && item.auto_delete_at && (
+          <div className="text-[10px] text-orange-600 dark:text-orange-400 font-medium">
+            Will auto-delete: {new Date(item.auto_delete_at).toLocaleDateString()} at{" "}
+            {new Date(item.auto_delete_at).toLocaleTimeString(undefined, {
+              hour: "2-digit",
+              minute: "2-digit",
+            })}
+          </div>
+        )}
       </div>
 
       {/* Actions - Always visible on mobile, hover on desktop */}
