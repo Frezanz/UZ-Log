@@ -71,7 +71,7 @@ export const ControlToggle: React.FC<ControlToggleProps> = ({
           }}
         >
           <div className="bg-secondary/30 border border-border rounded-lg p-4 space-y-4">
-            <slot />
+            {children}
           </div>
         </div>
       )}
