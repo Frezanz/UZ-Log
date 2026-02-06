@@ -12,10 +12,12 @@ import { ContentViewer } from "@/components/modals/ContentViewer";
 import { ShareModal } from "@/components/modals/ShareModal";
 import { DeleteModal } from "@/components/modals/DeleteModal";
 import { AutoDeleteModal } from "@/components/modals/AutoDeleteModal";
+import { DuplicateModal } from "@/components/modals/DuplicateModal";
 import { Button } from "@/components/ui/button";
-import { ChevronDown, Plus } from "lucide-react";
+import { ChevronDown, Plus, Copy } from "lucide-react";
 import { toast } from "sonner";
-import { getAllPublicContent } from "@/lib/api";
+import { getAllPublicContent, mergeContent } from "@/lib/api";
+import { detectDuplicates, mergeContentItems, DuplicatePair } from "@/lib/duplicateDetector";
 
 export default function Index() {
   const navigate = useNavigate();
