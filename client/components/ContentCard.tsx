@@ -333,22 +333,6 @@ export const ContentCard: React.FC<ContentCardProps> = ({
           <CopyPlus className="w-2.5 h-2.5" />
           <span className="hidden sm:inline text-xs">Duplicate</span>
         </Button>
-
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={(e) => {
-            e.stopPropagation();
-            setIsLiked(!isLiked);
-          }}
-          title={isLiked ? "Unlike" : "Like"}
-          className={`flex-1 h-7 ${
-            isLiked ? "text-red-500 dark:text-red-400" : ""
-          }`}
-        >
-          <Heart className={`w-2.5 h-2.5 ${isLiked ? "fill-current" : ""}`} />
-          <span className="hidden sm:inline text-xs">Like</span>
-        </Button>
       </div>
     </div>
   );
