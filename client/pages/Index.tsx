@@ -46,6 +46,8 @@ export default function Index() {
   // Modal states
   const [showContentModal, setShowContentModal] = useState(false);
   const [editingItem, setEditingItem] = useState<ContentItem | undefined>();
+  const [showViewer, setShowViewer] = useState(false);
+  const [viewingItem, setViewingItem] = useState<ContentItem | null>(null);
   const [showShareModal, setShowShareModal] = useState(false);
   const [shareItem, setShareItem] = useState<ContentItem | null>(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
