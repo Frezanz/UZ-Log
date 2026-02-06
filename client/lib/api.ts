@@ -652,3 +652,102 @@ export const getBacklinksForContent = async (
 
   return linksWithSource;
 };
+
+// ============ Share Links ============
+export const createShareLink = async (
+  contentId: string,
+  options?: {
+    password?: string;
+    expiresIn?: number; // Days until expiration
+  },
+): Promise<ShareLink> => {
+  const supabase = getSupabase();
+  const user = await getCurrentUser();
+
+  if (!user) throw new Error("User not authenticated");
+
+  // Generate a unique token
+  const token = Math.random().toString(36).substring(2, 15) +
+    Math.random().toString(36).substring(2, 15);
+
+  let expiresAt: string | null = null;
+  if (options?.expiresIn) {
+    const expirationDate = new Date();
+    expirationDate.setDate(expirationDate.getDate() + options.expiresIn);
+    expiresAt = expirationDate.toISOString();
+  }
+
+  const { data, error } = await supabase
+    .from("share_links")
+    .insert({
+      content_id: contentId,
+      token,
+      password: options?.password || null,
+      expires_at: expiresAt,
+      user_id: user.id,
+    })
+    .select()
+    .single();
+
+  if (error) throw error;
+  return data;
+};
+
+export const getShareLinks = async (contentId: string): Promise<ShareLink[]> => {
+  const supabase = getSupabase();
+  const user = await getCurrentUser();
+
+  if (!user) throw new Error("User not authenticated");
+
+  const { data, error } = await supabase
+    .from("share_links")
+    .select("*")
+    .eq("content_id", contentId)
+    .eq("user_id", user.id);
+
+  if (error) throw error;
+  return data || [];
+};
+
+export const deleteShareLink = async (linkId: string): Promise<void> => {
+  const supabase = getSupabase();
+  const { error } = await supabase
+    .from("share_links")
+    .delete()
+    .eq("id", linkId);
+
+  if (error) throw error;
+};
+
+export const getSharedContent = async (
+  token: string,
+  password?: string,
+): Promise<ContentItem> => {
+  const supabase = getSupabase();
+
+  // Get share link
+  const { data: shareLink, error: linkError } = await supabase
+    .from("share_links")
+    .select("*")
+    .eq("token", token)
+    .single();
+
+  if (linkError) throw new Error("Share link not found");
+
+  // Check if link has expired
+  if (shareLink.expires_at) {
+    const expirationDate = new Date(shareLink.expires_at);
+    if (new Date() > expirationDate) {
+      throw new Error("Share link has expired");
+    }
+  }
+
+  // Check password if required
+  if (shareLink.password && shareLink.password !== password) {
+    throw new Error("Invalid password");
+  }
+
+  // Get the content
+  const content = await getPublicContent(shareLink.content_id);
+  return content;
+};
