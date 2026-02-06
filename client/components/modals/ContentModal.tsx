@@ -46,14 +46,15 @@ export const ContentModal: React.FC<ContentModalProps> = ({
   const { user, isAuthenticated } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [recordedAudioBlob, setRecordedAudioBlob] = useState<Blob | null>(null);
-  const [recordedAudioUrl, setRecordedAudioUrl] = useState<string | null>(null);
-  const [recordedAudioDuration, setRecordedAudioDuration] = useState(0);
+  const [recordedVoiceBlob, setRecordedVoiceBlob] = useState<Blob | null>(null);
+  const [recordedVoiceUrl, setRecordedVoiceUrl] = useState<string | null>(null);
+  const [recordedVoiceDuration, setRecordedVoiceDuration] = useState(0);
   const [isUploading, setIsUploading] = useState(false);
   const [showContentType, setShowContentType] = useState(false);
   const [showTitle, setShowTitle] = useState(false);
   const [showCategory, setShowCategory] = useState(false);
   const [showTags, setShowTags] = useState(false);
+  const [showVoice, setShowVoice] = useState(false);
   const [formData, setFormData] = useState<Partial<ContentItem>>(
     initialData || {
       type: "text",
