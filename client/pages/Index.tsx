@@ -390,8 +390,8 @@ export default function Index() {
           {showFilters && (
             <div className="bg-secondary/30 border border-border rounded-lg p-3 space-y-3 animate-in fade-in duration-200">
               {/* Sort Options */}
-              <div className="text-center space-y-2">
-                    <h3 className="text-sm font-medium text-foreground">
+              <div className="text-center space-y-1">
+                    <h3 className="text-xs font-medium text-foreground">
                       Sort By
                     </h3>
                     <div className="flex justify-center">
