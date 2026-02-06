@@ -4,7 +4,7 @@ import { useAuth } from "@/context/AuthContext";
 import { useTheme } from "@/hooks/useTheme";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ArrowLeft, Mail, Github, FileText, Moon, Sun } from "lucide-react";
+import { ArrowLeft, Mail, Instagram, Youtube, FileText, Moon, Sun } from "lucide-react";
 
 export default function Settings() {
   const navigate = useNavigate();
@@ -380,16 +380,31 @@ export default function Settings() {
               </a>
 
               <a
-                href="https://github.com"
+                href="https://www.instagram.com/frezanz?igsh=NnM1MmJqOW5vNmky"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-3 p-3 rounded-lg border border-border hover:bg-secondary transition-colors"
               >
-                <Github className="w-5 h-5 text-primary flex-shrink-0" />
+                <Instagram className="w-5 h-5 text-primary flex-shrink-0" />
                 <div>
-                  <p className="font-medium text-foreground text-sm">GitHub</p>
+                  <p className="font-medium text-foreground text-sm">Instagram</p>
                   <p className="text-xs text-muted-foreground">
-                    Open source repository
+                    @frezanz
+                  </p>
+                </div>
+              </a>
+
+              <a
+                href="https://youtube.com/@frezanzzz?si=qWfgz5qt421TIK74"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-3 p-3 rounded-lg border border-border hover:bg-secondary transition-colors"
+              >
+                <Youtube className="w-5 h-5 text-primary flex-shrink-0" />
+                <div>
+                  <p className="font-medium text-foreground text-sm">YouTube</p>
+                  <p className="text-xs text-muted-foreground">
+                    @frezanzzz
                   </p>
                 </div>
               </a>
