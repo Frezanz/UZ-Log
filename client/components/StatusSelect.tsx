@@ -142,17 +142,19 @@ export const StatusDropdown: React.FC<StatusDropdownProps> = ({
         }`}
         title="Click to change status"
         disabled={disabled}
+        aria-expanded={isOpen}
+        aria-haspopup="listbox"
       >
         <Icon className="w-2.5 h-2.5" />
         <span>{config?.label || "Unknown"}</span>
-        {!disabled && (
-          <ChevronDown className={`w-2 h-2 transition-transform ${isOpen ? "rotate-180" : ""}`} />
-        )}
       </button>
 
       {/* Dropdown Menu */}
       {isOpen && !disabled && (
-        <div className="absolute top-full mt-1 left-0 z-50 bg-popover border border-border rounded-lg shadow-lg py-1 min-w-[120px]">
+        <div
+          className="absolute top-full mt-1 left-0 z-50 bg-popover border border-border rounded-lg shadow-lg py-1 min-w-[140px]"
+          role="listbox"
+        >
           {Object.entries(statusConfig).map(([key, cfg]) => {
             const StatusIcon = cfg.icon;
             const isSelected = key === safeStatus;
@@ -165,10 +167,12 @@ export const StatusDropdown: React.FC<StatusDropdownProps> = ({
                     ? "bg-primary/10 text-primary font-medium"
                     : "text-foreground hover:bg-secondary"
                 }`}
+                role="option"
+                aria-selected={isSelected}
               >
                 <StatusIcon className="w-3 h-3" />
                 <span className="flex-1">{cfg.label}</span>
-                {isSelected && <Check className="w-3 h-3" />}
+                {isSelected && <Check className="w-3 h-3 ml-auto" />}
               </button>
             );
           })}
