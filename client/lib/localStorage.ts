@@ -1,10 +1,17 @@
 import { ContentItem } from "@/types/content";
 
 const STORAGE_KEY = "uz-log-guest-content";
+let idCounter = 0;
 
-// Generate a simple UUID
+// Generate a truly unique UUID
 const generateId = (): string => {
-  return `local-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+  // Use crypto.randomUUID if available, otherwise fallback to custom generation
+  if (typeof crypto !== "undefined" && crypto.randomUUID) {
+    return `local-${crypto.randomUUID()}`;
+  }
+  // Fallback: timestamp + counter + random
+  idCounter++;
+  return `local-${Date.now()}-${idCounter}-${Math.random().toString(36).substr(2, 15)}`;
 };
 
 // Get all guest content from localStorage
