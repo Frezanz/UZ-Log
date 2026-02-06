@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { ContentItem, ContentType } from "@/types/content";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -17,6 +17,8 @@ import {
 } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
+import { SyntaxErrorDisplay } from "@/components/SyntaxErrorDisplay";
+import { analyzeSyntax } from "@/lib/syntaxChecker";
 
 interface ContentModalProps {
   isOpen: boolean;
@@ -206,6 +208,17 @@ export const ContentModal: React.FC<ContentModalProps> = ({
     setFormData({ ...formData, tags });
   };
 
+  // Analyze syntax for code/text content
+  const syntaxAnalysis = useMemo(() => {
+    if (!formData.content) return null;
+
+    const codeTypes: ContentType[] = ["code", "script", "text", "prompt"];
+    if (codeTypes.includes(formData.type)) {
+      return analyzeSyntax(formData.content);
+    }
+    return null;
+  }, [formData.content, formData.type]);
+
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
@@ -334,22 +347,27 @@ export const ContentModal: React.FC<ContentModalProps> = ({
           ) : formData.type !== "file" &&
             formData.type !== "image" &&
             formData.type !== "video" ? (
-            <div>
-              <label className="text-sm font-medium text-foreground mb-2 block">
-                Content
-              </label>
-              <textarea
-                value={formData.content || ""}
-                onChange={(e) =>
-                  setFormData({ ...formData, content: e.target.value })
-                }
-                placeholder="Enter your content here..."
-                className="w-full min-h-[500px] px-3 py-2 rounded border border-border bg-background text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary resize-vertical"
-              />
-              {formData.content && (
-                <p className="text-xs text-muted-foreground mt-1">
-                  {formData.content.split(/\s+/).length} words
-                </p>
+            <div className="space-y-3">
+              <div>
+                <label className="text-sm font-medium text-foreground mb-2 block">
+                  Content
+                </label>
+                <textarea
+                  value={formData.content || ""}
+                  onChange={(e) =>
+                    setFormData({ ...formData, content: e.target.value })
+                  }
+                  placeholder="Enter your content here..."
+                  className="w-full min-h-[500px] px-3 py-2 rounded border border-border bg-background text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary resize-vertical"
+                />
+                {formData.content && (
+                  <p className="text-xs text-muted-foreground mt-1">
+                    {formData.content.split(/\s+/).length} words
+                  </p>
+                )}
+              </div>
+              {syntaxAnalysis && (
+                <SyntaxErrorDisplay result={syntaxAnalysis} compact={true} />
               )}
             </div>
           ) : null}
