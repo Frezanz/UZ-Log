@@ -5,6 +5,7 @@ import { useContent } from "@/hooks/useContent";
 import { ContentItem, FilterState } from "@/types/content";
 import { Header } from "@/components/Header";
 import { SearchBar } from "@/components/SearchBar";
+import { ControlToggle } from "@/components/ControlToggle";
 import { ContentCard } from "@/components/ContentCard";
 import { ContentModal } from "@/components/modals/ContentModal";
 import { ContentViewer } from "@/components/modals/ContentViewer";
