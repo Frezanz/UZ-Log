@@ -34,23 +34,40 @@ export const TextToSpeechButton: React.FC<TextToSpeechButtonProps> = ({
 
   const handleClick = () => {
     try {
+      // Check browser support first
+      if (!isSupported) {
+        toast.error("Text-to-speech is not supported in your browser");
+        return;
+      }
+
       if (!text || text.trim() === "") {
         toast.error("No content to read");
         return;
       }
 
+      // Warn if text is very long (may cause issues on some browsers)
+      if (text.length > 5000) {
+        console.warn(
+          `Text is very long (${text.length} chars). Speech synthesis may not work properly.`,
+        );
+      }
+
       if (isPlaying || isPaused) {
         if (isPaused) {
           resume();
+          toast.success("Resuming playback...");
         } else {
           pause();
+          toast.info("Playback paused");
         }
       } else {
         speak(text);
       }
     } catch (error) {
       console.error("Text-to-speech error:", error);
-      toast.error("Failed to play audio");
+      const errorMsg =
+        error instanceof Error ? error.message : "Failed to play audio";
+      toast.error(errorMsg);
     }
   };
 
