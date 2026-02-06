@@ -62,6 +62,26 @@ export const ShareModal: React.FC<ShareModalProps> = ({
     }
   };
 
+  const handleNativeShare = async () => {
+    if (!navigator.share) {
+      toast.error("Web Share API not supported on this device");
+      return;
+    }
+
+    try {
+      await navigator.share({
+        title: item.title,
+        text: `Check out this content on UZ-log: ${item.title}`,
+        url: shareUrl,
+      });
+    } catch (error) {
+      if (error instanceof Error && error.message !== "Share cancelled") {
+        console.error("Share error:", error);
+        toast.error("Failed to share");
+      }
+    }
+  };
+
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-md">
