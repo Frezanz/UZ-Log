@@ -390,8 +390,8 @@ export default function Index() {
           {showFilters && (
             <div className="bg-secondary/30 border border-border rounded-lg p-2 space-y-2 animate-in fade-in duration-200">
               {/* Sort Options */}
-              <div className="text-center space-y-1">
-                    <h3 className="text-xs font-medium text-foreground">
+              <div className="text-center space-y-0.5">
+                    <h3 className="text-xs font-medium text-foreground leading-tight">
                       Sort By
                     </h3>
                     <div className="flex justify-center">
@@ -448,8 +448,8 @@ export default function Index() {
 
                   {/* Category Filter */}
                   {categories.length > 0 && (
-                    <div className="text-center space-y-1">
-                      <h3 className="text-xs font-medium text-foreground">
+                    <div className="text-center space-y-0.5">
+                      <h3 className="text-xs font-medium text-foreground leading-tight">
                         Categories
                       </h3>
                       <div className="flex justify-center">
@@ -507,8 +507,8 @@ export default function Index() {
 
                   {/* Tag Filter */}
                   {tags.length > 0 && (
-                    <div className="text-center space-y-1">
-                      <h3 className="text-xs font-medium text-foreground">
+                    <div className="text-center space-y-0.5">
+                      <h3 className="text-xs font-medium text-foreground leading-tight">
                         Tags
                       </h3>
                       <div className="flex justify-center">
