@@ -371,7 +371,13 @@ export default function Index() {
           {/* Control Toggle: Filter | Chevron | New Content */}
           <ControlToggle
             isExpanded={showActions}
-            onToggle={setShowActions}
+            onToggle={(expanded) => {
+              setShowActions(expanded);
+              // Close nested filters when collapsing main toggle
+              if (!expanded) {
+                setShowFilters(false);
+              }
+            }}
             onFilterClick={() => setShowFilters(!showFilters)}
             onNewContentClick={() => {
               setEditingItem(undefined);
