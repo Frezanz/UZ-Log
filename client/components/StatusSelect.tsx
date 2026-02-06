@@ -7,7 +7,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Check, Clock, CheckCircle2 } from "lucide-react";
+import { Check, Clock, CheckCircle2, EyeOff } from "lucide-react";
 
 interface StatusSelectProps {
   value?: ContentStatus;
@@ -30,6 +30,11 @@ const statusConfig = {
     label: "Completed",
     icon: Check,
     color: "bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-300",
+  },
+  hidden: {
+    label: "Hidden",
+    icon: EyeOff,
+    color: "bg-gray-100 dark:bg-gray-950 text-gray-700 dark:text-gray-300",
   },
 };
 
