@@ -118,16 +118,21 @@ export const useContent = () => {
   const removeContent = useCallback(
     async (id: string) => {
       try {
+        console.log('removeContent called for:', id);
         if (isAuthenticated) {
+          console.log('Deleting authenticated content');
           await deleteContent(id);
         } else {
+          console.log('Deleting guest content');
           deleteGuestContent(id);
         }
 
         setItems(items.filter((item) => item.id !== id));
+        console.log('Content removed from state');
       } catch (err) {
         const message =
           err instanceof Error ? err.message : "Failed to delete content";
+        console.error('removeContent error:', message);
         throw new Error(message);
       }
     },
