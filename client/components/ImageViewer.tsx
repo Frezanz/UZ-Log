@@ -275,18 +275,6 @@ export const ImageViewer: React.FC<ImageViewerProps> = ({
           </div>
         </div>
       </div>
-
-      {/* Keyboard support - ESC to close */}
-      {isOpen && (
-        <div
-          onKeyDown={(e) => {
-            if (e.key === "Escape") {
-              onClose();
-            }
-          }}
-          tabIndex={-1}
-        />
-      )}
     </div>
   );
 };
