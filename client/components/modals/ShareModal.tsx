@@ -216,13 +216,21 @@ export const ShareModal: React.FC<ShareModalProps> = ({
 
           {/* Info */}
           <div className="bg-card border border-border rounded p-3">
-            <div className="flex gap-2">
-              <Share2 className="w-4 h-4 text-muted-foreground flex-shrink-0 mt-0.5" />
-              <p className="text-xs text-muted-foreground">
-                {item.is_public
-                  ? "This content is public. Anyone with the link can view it."
-                  : "Make content public to enable sharing."}
-              </p>
+            <div className="flex flex-col gap-2">
+              <div className="flex gap-2">
+                <Share2 className="w-4 h-4 text-muted-foreground flex-shrink-0 mt-0.5" />
+                <p className="text-xs text-muted-foreground">
+                  {item.is_public
+                    ? "This content is public. Anyone with the link can view it."
+                    : "Make content public to enable sharing."}
+                </p>
+              </div>
+              {window.self !== window.top && (
+                <p className="text-[10px] text-muted-foreground italic mt-1 border-t border-border pt-2">
+                  Tip: Some share features are blocked in previews. Open the app
+                  directly to use the native share menu.
+                </p>
+              )}
             </div>
           </div>
         </div>
