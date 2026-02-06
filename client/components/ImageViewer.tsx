@@ -20,6 +20,7 @@ export const ImageViewer: React.FC<ImageViewerProps> = ({
   onDownload,
 }) => {
   const [isLiked, setIsLiked] = useState(false);
+  const [showUI, setShowUI] = useState(true);
 
   // Handle ESC key to close viewer
   React.useEffect(() => {
