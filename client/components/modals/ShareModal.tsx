@@ -63,6 +63,12 @@ export const ShareModal: React.FC<ShareModalProps> = ({
   };
 
   const handleNativeShare = async () => {
+    // Check if content is public
+    if (!item.is_public) {
+      toast.error("Make content public to share");
+      return;
+    }
+
     if (!navigator.share) {
       toast.error("Web Share API not supported on this device");
       return;
@@ -75,9 +81,18 @@ export const ShareModal: React.FC<ShareModalProps> = ({
         url: shareUrl,
       });
     } catch (error) {
-      if (error instanceof Error && error.message !== "Share cancelled") {
+      if (error instanceof Error) {
+        // Ignore user cancellation
+        if (error.name === "AbortError" || error.message.includes("cancelled")) {
+          return;
+        }
+        // Handle permission denied or other errors
+        if (error.name === "NotAllowedError" || error.message.includes("Permission")) {
+          toast.error("Share permission denied. Try copying the link instead.");
+          return;
+        }
         console.error("Share error:", error);
-        toast.error("Failed to share");
+        toast.error("Failed to share. Try copying the link instead.");
       }
     }
   };
