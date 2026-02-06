@@ -63,8 +63,20 @@ export const StatusSelect: React.FC<StatusSelectProps> = ({
   );
 };
 
-export const StatusBadge: React.FC<{ status: ContentStatus }> = ({ status }) => {
-  const config = statusConfig[status];
+export const StatusBadge: React.FC<{ status?: ContentStatus }> = ({ status = "active" }) => {
+  // Default to "active" if status is undefined
+  const safeStatus = (status || "active") as ContentStatus;
+  const config = statusConfig[safeStatus];
+
+  // Fallback in case config is still undefined
+  if (!config) {
+    return (
+      <span className="inline-flex items-center gap-1 px-2 py-1 rounded text-[10px] font-medium bg-gray-100 dark:bg-gray-950 text-gray-700 dark:text-gray-300">
+        Unknown
+      </span>
+    );
+  }
+
   const Icon = config.icon;
 
   return (
