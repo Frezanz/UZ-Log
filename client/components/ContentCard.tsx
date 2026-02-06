@@ -62,6 +62,7 @@ export const ContentCard: React.FC<ContentCardProps> = ({
   onEdit,
   onDelete,
   onShare,
+  onStatusChange,
   onDownload,
 }) => {
   const [showActions, setShowActions] = useState(false);
