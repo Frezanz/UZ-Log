@@ -131,6 +131,16 @@ export default function Index() {
     }
   };
 
+  const handleOpenView = (item: ContentItem) => {
+    setViewingItem(item);
+    setShowViewer(true);
+  };
+
+  const handleCloseViewer = () => {
+    setShowViewer(false);
+    setViewingItem(null);
+  };
+
   const handleOpenEdit = (item: ContentItem) => {
     setEditingItem(item);
     setShowContentModal(true);
