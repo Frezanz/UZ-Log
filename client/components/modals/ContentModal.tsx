@@ -95,10 +95,9 @@ export const ContentModal: React.FC<ContentModalProps> = ({
       !formData.title?.trim() &&
       !formData.content?.trim() &&
       !selectedFile &&
-      !recordedAudioBlob &&
       !initialData?.file_url // Allow saving if there's already a file (edit mode)
     ) {
-      toast.error("Please enter a title, content, upload a file, or record audio");
+      toast.error("Please enter a title, content, or upload a file");
       return;
     }
 
