@@ -188,6 +188,19 @@ export const ContentViewer: React.FC<ContentViewerProps> = ({
               <div className="flex items-center gap-2 text-xs text-muted-foreground">
                 <span>Tap the code above to select and copy it</span>
               </div>
+              {content.voice_url && (
+                <div className="bg-secondary/30 rounded-lg p-4">
+                  <p className="text-sm font-medium text-foreground mb-3">Voice Attachment</p>
+                  <audio
+                    controls
+                    className="w-full"
+                    controlsList="nodownload"
+                  >
+                    <source src={content.voice_url} type="audio/webm" />
+                    Your browser does not support the audio element.
+                  </audio>
+                </div>
+              )}
             </div>
           )}
 
