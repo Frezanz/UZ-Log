@@ -4,6 +4,7 @@ import { getPublicContent } from "@/lib/api";
 import { getGuestContentById } from "@/lib/localStorage";
 import { ContentItem } from "@/types/content";
 import { Button } from "@/components/ui/button";
+import { ContentViewer } from "@/components/modals/ContentViewer";
 import { ArrowLeft, Copy } from "lucide-react";
 import { toast } from "sonner";
 import { copyToClipboard } from "@/lib/utils";
