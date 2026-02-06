@@ -21,6 +21,7 @@ import {
   BookOpen,
   HardDrive,
   Cloud,
+  Mic,
 } from "lucide-react";
 import { toast } from "sonner";
 import { copyToClipboard } from "@/lib/utils";
