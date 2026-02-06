@@ -18,7 +18,6 @@ export const ImageViewer: React.FC<ImageViewerProps> = ({
   image,
   onShare,
   onDownload,
-  onEdit,
 }) => {
   const [isLiked, setIsLiked] = useState(false);
 
