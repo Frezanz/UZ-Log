@@ -586,6 +586,17 @@ export default function Index() {
         }
         title={deleteItem?.title || "Content"}
       />
+
+      <AutoDeleteModal
+        isOpen={showAutoDeleteModal}
+        onClose={() => {
+          setShowAutoDeleteModal(false);
+          setAutoDeleteItem(null);
+          setPendingStatusId(null);
+        }}
+        onConfirm={handleAutoDeleteConfirm}
+        itemTitle={autoDeleteItem?.title || "Item"}
+      />
     </div>
   );
 }
