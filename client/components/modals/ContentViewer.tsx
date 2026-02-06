@@ -91,8 +91,9 @@ export const ContentViewer: React.FC<ContentViewerProps> = ({
         isOpen={isOpen}
         onClose={onClose}
         image={content}
-        onShare={onDelete ? undefined : undefined}
+        onShare={onShare}
         onEdit={onEdit}
+        onDelete={onDelete}
       />
     );
   }
