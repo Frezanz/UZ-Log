@@ -208,20 +208,18 @@ export default function Index() {
 
   // Bulk Operations
   const handleSelectItem = (id: string) => {
-    const newSelected = new Set(selectedItems);
-    if (newSelected.has(id)) {
-      newSelected.delete(id);
+    if (selectedItems.includes(id)) {
+      setSelectedItems(selectedItems.filter((item) => item !== id));
     } else {
-      newSelected.add(id);
+      setSelectedItems([...selectedItems, id]);
     }
-    setSelectedItems(newSelected);
   };
 
   const handleSelectAll = () => {
-    if (selectedItems.size === displayItems.length) {
-      setSelectedItems(new Set());
+    if (selectedItems.length === displayItems.length) {
+      setSelectedItems([]);
     } else {
-      setSelectedItems(new Set(displayItems.map((item) => item.id)));
+      setSelectedItems(displayItems.map((item) => item.id));
     }
   };
 
