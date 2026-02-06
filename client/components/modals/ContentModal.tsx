@@ -357,6 +357,61 @@ export const ContentModal: React.FC<ContentModalProps> = ({
             </TabsList>
 
             <TabsContent value="metadata" className="space-y-3 mt-3">
+              {/* Voice Attachment for text-based content */}
+              {(formData.type === "text" ||
+                formData.type === "code" ||
+                formData.type === "prompt" ||
+                formData.type === "script") && (
+                <div>
+                  <div className="text-center space-y-2">
+                    <label className="text-sm font-medium text-foreground block">
+                      Add Voice Attachment
+                    </label>
+                    <div className="flex justify-center">
+                      <button
+                        onClick={() => setShowVoice(!showVoice)}
+                        className="text-muted-foreground hover:text-foreground transition-colors duration-200 focus:outline-none p-2 active:bg-transparent active:text-foreground"
+                        title={showVoice ? "Hide voice" : "Show voice"}
+                      >
+                        <ChevronDown
+                          className="w-5 h-5 transition-transform duration-200"
+                          style={{
+                            transform: showVoice
+                              ? "rotate(180deg)"
+                              : "rotate(0deg)",
+                          }}
+                        />
+                      </button>
+                    </div>
+                  </div>
+
+                  {showVoice && (
+                    <div className="animate-in fade-in duration-200">
+                      <AudioRecorder
+                        onAudioRecorded={(blob, duration) => {
+                          setRecordedVoiceBlob(blob);
+                          setRecordedVoiceDuration(duration);
+                          const url = URL.createObjectURL(blob);
+                          setRecordedVoiceUrl(url);
+                        }}
+                        onAudioRemove={() => {
+                          setRecordedVoiceBlob(null);
+                          setRecordedVoiceUrl(null);
+                          setRecordedVoiceDuration(0);
+                        }}
+                        recordedAudioUrl={recordedVoiceUrl || undefined}
+                        recordedDuration={recordedVoiceDuration}
+                      />
+                      {!isAuthenticated && (
+                        <p className="text-xs text-amber-600 dark:text-amber-400 mt-2">
+                          Note: Voice attachment is stored locally in your browser. Sign in to upload to cloud storage.
+                        </p>
+                      )}
+                    </div>
+                  )}
+                </div>
+              )}
+
               {/* Category - Collapsible */}
               <div className="text-center space-y-2">
                 <label className="text-sm font-medium text-foreground block">
