@@ -279,6 +279,7 @@ export default function Index() {
                     setEditingItem(undefined);
                     setShowContentModal(true);
                   }}
+                  variant="outline"
                   className="flex-1 sm:flex-none"
                 >
                   <Plus className="w-4 h-4 mr-2" />
