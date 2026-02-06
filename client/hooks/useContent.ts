@@ -219,6 +219,7 @@ export const useContent = () => {
     editContent,
     removeContent,
     togglePublic,
+    changeStatus,
     refreshContent: fetchContent,
     getCategories,
     getTags,
