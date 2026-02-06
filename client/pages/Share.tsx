@@ -15,6 +15,7 @@ export default function Share() {
   const [content, setContent] = useState<ContentItem | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [showViewer, setShowViewer] = useState(false);
 
   useEffect(() => {
     const fetchContent = async () => {
