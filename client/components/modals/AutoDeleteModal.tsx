@@ -102,7 +102,7 @@ export const AutoDeleteModal: React.FC<AutoDeleteModalProps> = ({
                 <button
                   key={option.label}
                   onClick={() => handleOptionChange(option.hours!)}
-                  className={`p-3 rounded-lg border-2 transition-all text-left ${
+                  className={`p-3 border-2 transition-all text-left ${
                     selectedHours === option.hours && !showNoDelete
                       ? "border-primary bg-primary/10"
                       : "border-border hover:border-foreground/30"
