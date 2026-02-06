@@ -180,10 +180,15 @@ export const ContentViewer: React.FC<ContentViewerProps> = ({
 
           {/* Prompt Viewer */}
           {content.type === "prompt" && content.content && (
-            <div className="bg-secondary/30 rounded-lg p-4 max-h-[60vh] overflow-auto">
-              <pre className="font-sans whitespace-pre-wrap break-words text-foreground text-sm leading-relaxed">
-                {content.content}
-              </pre>
+            <div className="space-y-3">
+              <div className="bg-secondary/30 rounded-lg p-4 max-h-[60vh] overflow-auto select-text">
+                <pre className="font-sans whitespace-pre-wrap break-words text-foreground text-sm leading-relaxed select-all cursor-text">
+                  {content.content}
+                </pre>
+              </div>
+              <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                <span>Tap the prompt above to select and copy it</span>
+              </div>
             </div>
           )}
 
