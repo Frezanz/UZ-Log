@@ -88,6 +88,14 @@ export const updateGuestContent = (
     ...items[itemIndex],
     ...updates,
     status: updates.status || items[itemIndex].status || "active",
+    auto_delete_at:
+      updates.auto_delete_at !== undefined
+        ? updates.auto_delete_at
+        : items[itemIndex].auto_delete_at,
+    auto_delete_enabled:
+      updates.auto_delete_enabled !== undefined
+        ? updates.auto_delete_enabled
+        : items[itemIndex].auto_delete_enabled,
     updated_at: new Date().toISOString(),
     word_count: updates.content
       ? updates.content.split(/\s+/).length
