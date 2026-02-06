@@ -198,7 +198,7 @@ export const ImageViewer: React.FC<ImageViewerProps> = ({
           </div>
 
           {/* Action Section - Instagram Style */}
-          <div className="px-4 py-4 border-t border-border space-y-3 flex-shrink-0">
+          <div className="px-3 py-3 border-t border-border space-y-2 flex-shrink-0">
             {/* Like Button */}
             <button
               onClick={() => setIsLiked(!isLiked)}
