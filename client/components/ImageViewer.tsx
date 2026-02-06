@@ -108,7 +108,7 @@ export const ImageViewer: React.FC<ImageViewerProps> = ({
 
         {/* Details Section - Instagram/Facebook Style, Flexible Scrolling */}
         <div
-          className="w-full lg:w-96 bg-card border-t lg:border-t-0 lg:border-l border-border flex flex-col overflow-hidden"
+          className="w-full lg:w-96 bg-card border-t lg:border-t-0 lg:border-l border-border flex flex-col overflow-y-auto"
           onClick={(e) => e.stopPropagation()}
         >
           {/* Header with User Info */}
