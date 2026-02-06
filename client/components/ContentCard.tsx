@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { ContentItem } from "@/types/content";
 import { Button } from "@/components/ui/button";
-import { StatusBadge } from "@/components/StatusSelect";
+import { StatusBadge, StatusDropdown } from "@/components/StatusSelect";
 import {
   Copy,
   Download,
