@@ -108,7 +108,7 @@ export const ContentCard: React.FC<ContentCardProps> = ({
         onClick={(e) => e.stopPropagation()}
       >
         <span
-          className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-medium ${typeColors[item.type]}`}
+          className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-medium ml-2 ${typeColors[item.type]}`}
         >
           {typeIcons[item.type]}
           {item.type.charAt(0).toUpperCase() + item.type.slice(1)}
