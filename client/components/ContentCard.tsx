@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { ContentItem } from "@/types/content";
+import { ContentItem, ContentType } from "@/types/content";
 import { Button } from "@/components/ui/button";
 import { StatusBadge, StatusDropdown } from "@/components/StatusSelect";
+import { TextToSpeechButton } from "@/components/TextToSpeechButton";
 import {
   Copy,
   Download,
@@ -38,7 +39,7 @@ interface ContentCardProps {
   onDownload?: (item: ContentItem) => void;
 }
 
-const typeIcons = {
+const typeIcons: Record<ContentType, React.ReactNode> = {
   text: <FileText className="w-3 h-3" />,
   code: <Code className="w-3 h-3" />,
   image: <Image className="w-3 h-3" />,
@@ -50,7 +51,7 @@ const typeIcons = {
   book: <BookOpen className="w-3 h-3" />,
 };
 
-const typeColors = {
+const typeColors: Record<ContentType, string> = {
   text: "bg-blue-50 dark:bg-blue-950 text-blue-700 dark:text-blue-300",
   code: "bg-purple-50 dark:bg-purple-950 text-purple-700 dark:text-purple-300",
   image: "bg-green-50 dark:bg-green-950 text-green-700 dark:text-green-300",
@@ -184,6 +185,14 @@ export const ContentCard: React.FC<ContentCardProps> = ({
             </span>
           </div>
         )}
+
+        {item.voice_url && (
+          <div className="mt-1">
+            <span className="inline-block text-[10px] bg-teal-100 dark:bg-teal-900 text-teal-700 dark:text-teal-300 px-1.5 py-0.5 rounded font-medium">
+              Has Voice
+            </span>
+          </div>
+        )}
       </div>
 
       {/* Metadata */}
@@ -230,7 +239,7 @@ export const ContentCard: React.FC<ContentCardProps> = ({
 
       {/* Actions - Always visible on mobile, hover on desktop */}
       <div
-        className={`px-3 py-1 border-t border-border bg-secondary/50 flex gap-1 transition-opacity duration-200 opacity-100 sm:opacity-0 sm:group-hover:opacity-100`}
+        className={`px-3 py-1 border-t border-border bg-secondary/50 flex gap-1 transition-opacity duration-200 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 flex-wrap`}
         onClick={(e) => e.stopPropagation()}
       >
         {(item.content || item.file_url) && (
@@ -245,6 +254,22 @@ export const ContentCard: React.FC<ContentCardProps> = ({
             <span className="hidden sm:inline text-xs">Copy</span>
           </Button>
         )}
+
+        {item.content &&
+          (item.type === "text" ||
+            item.type === "code" ||
+            item.type === "prompt" ||
+            item.type === "script") && (
+            <div className="flex-1 h-7 flex items-center justify-center">
+              <TextToSpeechButton
+                text={item.content}
+                contentType={item.type}
+                variant="ghost"
+                size="sm"
+                showLabel={false}
+              />
+            </div>
+          )}
 
         {item.file_url && item.type !== "image" && (
           <Button

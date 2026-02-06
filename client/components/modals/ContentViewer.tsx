@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { ContentItem } from "@/types/content";
+import { ContentItem, ContentType } from "@/types/content";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -23,6 +23,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { copyToClipboard } from "@/lib/utils";
+import { TextToSpeechButton } from "@/components/TextToSpeechButton";
 
 interface ContentViewerProps {
   isOpen: boolean;
@@ -32,7 +33,7 @@ interface ContentViewerProps {
   onDelete?: (item: ContentItem) => void;
 }
 
-const typeIcons = {
+const typeIcons: Record<ContentType, React.ReactNode> = {
   text: <FileText className="w-4 h-4" />,
   code: <Code className="w-4 h-4" />,
   image: <ImageIcon className="w-4 h-4" />,
@@ -44,7 +45,7 @@ const typeIcons = {
   book: <BookOpen className="w-4 h-4" />,
 };
 
-const typeColors = {
+const typeColors: Record<ContentType, string> = {
   text: "bg-blue-50 dark:bg-blue-950 text-blue-700 dark:text-blue-300",
   code: "bg-purple-50 dark:bg-purple-950 text-purple-700 dark:text-purple-300",
   image: "bg-green-50 dark:bg-green-950 text-green-700 dark:text-green-300",
@@ -151,37 +152,101 @@ export const ContentViewer: React.FC<ContentViewerProps> = ({
 
           {/* Text Viewer */}
           {content.type === "text" && content.content && (
-            <div className="bg-secondary/30 rounded-lg p-4 max-h-[60vh] overflow-auto">
-              <pre className="font-sans whitespace-pre-wrap break-words text-foreground text-sm leading-relaxed">
-                {content.content}
-              </pre>
+            <div className="space-y-3">
+              <div className="bg-secondary/30 rounded-lg p-4 max-h-[60vh] overflow-auto">
+                <pre className="font-sans whitespace-pre-wrap break-words text-foreground text-sm leading-relaxed cursor-text select-text">
+                  {content.content}
+                </pre>
+              </div>
+              <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                <span>Select the text above to copy it</span>
+              </div>
+              {content.voice_url && (
+                <div className="bg-secondary/30 rounded-lg p-4">
+                  <p className="text-sm font-medium text-foreground mb-3">
+                    Voice Attachment
+                  </p>
+                  <audio controls className="w-full" controlsList="nodownload">
+                    <source src={content.voice_url} type="audio/webm" />
+                    Your browser does not support the audio element.
+                  </audio>
+                </div>
+              )}
             </div>
           )}
 
           {/* Code Viewer */}
           {content.type === "code" && content.content && (
-            <div className="bg-secondary/30 rounded-lg p-4 max-h-[60vh] overflow-auto">
-              <pre className="font-mono text-xs text-foreground leading-relaxed whitespace-pre-wrap break-words">
-                {content.content}
-              </pre>
+            <div className="space-y-3">
+              <div className="bg-secondary/30 rounded-lg p-4 max-h-[60vh] overflow-auto">
+                <pre className="font-mono text-xs text-foreground leading-relaxed whitespace-pre-wrap break-words cursor-text select-text">
+                  {content.content}
+                </pre>
+              </div>
+              <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                <span>Select the code above to copy it</span>
+              </div>
+              {content.voice_url && (
+                <div className="bg-secondary/30 rounded-lg p-4">
+                  <p className="text-sm font-medium text-foreground mb-3">
+                    Voice Attachment
+                  </p>
+                  <audio controls className="w-full" controlsList="nodownload">
+                    <source src={content.voice_url} type="audio/webm" />
+                    Your browser does not support the audio element.
+                  </audio>
+                </div>
+              )}
             </div>
           )}
 
           {/* Prompt Viewer */}
           {content.type === "prompt" && content.content && (
-            <div className="bg-secondary/30 rounded-lg p-4 max-h-[60vh] overflow-auto">
-              <pre className="font-sans whitespace-pre-wrap break-words text-foreground text-sm leading-relaxed">
-                {content.content}
-              </pre>
+            <div className="space-y-3">
+              <div className="bg-secondary/30 rounded-lg p-4 max-h-[60vh] overflow-auto">
+                <pre className="font-sans whitespace-pre-wrap break-words text-foreground text-sm leading-relaxed cursor-text select-text">
+                  {content.content}
+                </pre>
+              </div>
+              <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                <span>Select the prompt above to copy it</span>
+              </div>
+              {content.voice_url && (
+                <div className="bg-secondary/30 rounded-lg p-4">
+                  <p className="text-sm font-medium text-foreground mb-3">
+                    Voice Attachment
+                  </p>
+                  <audio controls className="w-full" controlsList="nodownload">
+                    <source src={content.voice_url} type="audio/webm" />
+                    Your browser does not support the audio element.
+                  </audio>
+                </div>
+              )}
             </div>
           )}
 
           {/* Script Viewer */}
           {content.type === "script" && content.content && (
-            <div className="bg-secondary/30 rounded-lg p-4 max-h-[60vh] overflow-auto">
-              <pre className="font-mono text-xs text-foreground leading-relaxed whitespace-pre-wrap break-words">
-                {content.content}
-              </pre>
+            <div className="space-y-3">
+              <div className="bg-secondary/30 rounded-lg p-4 max-h-[60vh] overflow-auto">
+                <pre className="font-mono text-xs text-foreground leading-relaxed whitespace-pre-wrap break-words cursor-text select-text">
+                  {content.content}
+                </pre>
+              </div>
+              <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                <span>Select the script above to copy it</span>
+              </div>
+              {content.voice_url && (
+                <div className="bg-secondary/30 rounded-lg p-4">
+                  <p className="text-sm font-medium text-foreground mb-3">
+                    Voice Attachment
+                  </p>
+                  <audio controls className="w-full" controlsList="nodownload">
+                    <source src={content.voice_url} type="audio/webm" />
+                    Your browser does not support the audio element.
+                  </audio>
+                </div>
+              )}
             </div>
           )}
 
@@ -270,6 +335,19 @@ export const ContentViewer: React.FC<ContentViewerProps> = ({
               {copied ? "Copied!" : "Copy"}
             </Button>
           )}
+          {content.content &&
+            (content.type === "text" ||
+              content.type === "code" ||
+              content.type === "prompt" ||
+              content.type === "script") && (
+              <TextToSpeechButton
+                text={content.content}
+                contentType={content.type}
+                variant="outline"
+                size="sm"
+                showLabel={true}
+              />
+            )}
           {content.file_url && content.type !== "image" && (
             <Button variant="outline" onClick={handleDownload} size="sm">
               <Download className="w-4 h-4 mr-2" />

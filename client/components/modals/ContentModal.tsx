@@ -3,6 +3,7 @@ import { ContentItem, ContentType } from "@/types/content";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { FileUpload } from "@/components/FileUpload";
+import { AudioRecorder } from "@/components/AudioRecorder";
 import { uploadFile } from "@/lib/api";
 import { uploadGuestFile } from "@/lib/localStorage";
 import { useAuth } from "@/context/AuthContext";
@@ -45,11 +46,15 @@ export const ContentModal: React.FC<ContentModalProps> = ({
   const { user, isAuthenticated } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [recordedVoiceBlob, setRecordedVoiceBlob] = useState<Blob | null>(null);
+  const [recordedVoiceUrl, setRecordedVoiceUrl] = useState<string | null>(null);
+  const [recordedVoiceDuration, setRecordedVoiceDuration] = useState(0);
   const [isUploading, setIsUploading] = useState(false);
   const [showContentType, setShowContentType] = useState(false);
   const [showTitle, setShowTitle] = useState(false);
   const [showCategory, setShowCategory] = useState(false);
   const [showTags, setShowTags] = useState(false);
+  const [showVoice, setShowVoice] = useState(false);
   const [formData, setFormData] = useState<Partial<ContentItem>>(
     initialData || {
       type: "text",
@@ -77,6 +82,9 @@ export const ContentModal: React.FC<ContentModalProps> = ({
         },
       );
       setSelectedFile(null);
+      setRecordedVoiceBlob(null);
+      setRecordedVoiceUrl(null);
+      setRecordedVoiceDuration(0);
       setIsLoading(false);
       setIsUploading(false);
     }
@@ -134,9 +142,52 @@ export const ContentModal: React.FC<ContentModalProps> = ({
         }
       }
 
+      // Handle voice attachment upload for text-based content
+      if (
+        recordedVoiceBlob &&
+        (formData.type === "text" ||
+          formData.type === "code" ||
+          formData.type === "prompt" ||
+          formData.type === "script")
+      ) {
+        setIsUploading(true);
+        try {
+          const voiceFile = new File([recordedVoiceBlob], "voice.webm", {
+            type: "audio/webm",
+          });
+
+          let voiceUrl: string;
+
+          if (isAuthenticated && user) {
+            // Upload to Supabase for authenticated users
+            voiceUrl = await uploadFile(voiceFile, user.id);
+          } else {
+            // Store as base64 for guest users
+            voiceUrl = await uploadGuestFile(voiceFile);
+          }
+
+          dataToSave = {
+            ...dataToSave,
+            voice_url: voiceUrl,
+          };
+        } catch (error) {
+          const errorMsg =
+            error instanceof Error ? error.message : "Upload failed";
+          toast.error(`Voice attachment upload failed: ${errorMsg}`);
+          setIsUploading(false);
+          setIsLoading(false);
+          return;
+        } finally {
+          setIsUploading(false);
+        }
+      }
+
       await onSave(dataToSave);
       toast.success(initialData ? "Content updated" : "Content created");
       setSelectedFile(null);
+      setRecordedVoiceBlob(null);
+      setRecordedVoiceUrl(null);
+      setRecordedVoiceDuration(0);
       onClose();
     } catch (error) {
       console.error("Save error:", error);
@@ -311,6 +362,62 @@ export const ContentModal: React.FC<ContentModalProps> = ({
             </TabsList>
 
             <TabsContent value="metadata" className="space-y-3 mt-3">
+              {/* Voice Attachment for text-based content */}
+              {(formData.type === "text" ||
+                formData.type === "code" ||
+                formData.type === "prompt" ||
+                formData.type === "script") && (
+                <div>
+                  <div className="text-center space-y-2">
+                    <label className="text-sm font-medium text-foreground block">
+                      Add Voice Attachment
+                    </label>
+                    <div className="flex justify-center">
+                      <button
+                        onClick={() => setShowVoice(!showVoice)}
+                        className="text-muted-foreground hover:text-foreground transition-colors duration-200 focus:outline-none p-2 active:bg-transparent active:text-foreground"
+                        title={showVoice ? "Hide voice" : "Show voice"}
+                      >
+                        <ChevronDown
+                          className="w-5 h-5 transition-transform duration-200"
+                          style={{
+                            transform: showVoice
+                              ? "rotate(180deg)"
+                              : "rotate(0deg)",
+                          }}
+                        />
+                      </button>
+                    </div>
+                  </div>
+
+                  {showVoice && (
+                    <div className="animate-in fade-in duration-200">
+                      <AudioRecorder
+                        onAudioRecorded={(blob, duration) => {
+                          setRecordedVoiceBlob(blob);
+                          setRecordedVoiceDuration(duration);
+                          const url = URL.createObjectURL(blob);
+                          setRecordedVoiceUrl(url);
+                        }}
+                        onAudioRemove={() => {
+                          setRecordedVoiceBlob(null);
+                          setRecordedVoiceUrl(null);
+                          setRecordedVoiceDuration(0);
+                        }}
+                        recordedAudioUrl={recordedVoiceUrl || undefined}
+                        recordedDuration={recordedVoiceDuration}
+                      />
+                      {!isAuthenticated && (
+                        <p className="text-xs text-amber-600 dark:text-amber-400 mt-2">
+                          Note: Voice attachment is stored locally in your
+                          browser. Sign in to upload to cloud storage.
+                        </p>
+                      )}
+                    </div>
+                  )}
+                </div>
+              )}
+
               {/* Category - Collapsible */}
               <div className="text-center space-y-2">
                 <label className="text-sm font-medium text-foreground block">
