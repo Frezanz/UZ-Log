@@ -698,7 +698,7 @@ export default function Index() {
                     type="checkbox"
                     checked={selectedItems.includes(item.id)}
                     onChange={() => handleSelectItem(item.id)}
-                    className="absolute top-3 left-5 z-20 w-3 h-3 rounded border border-border cursor-pointer bg-background hover:bg-secondary transition-colors accent-primary"
+                    className="absolute top-2.5 left-5 z-20 w-3 h-3 rounded border border-border cursor-pointer bg-background hover:bg-secondary transition-colors accent-primary"
                     title="Select item"
                   />
                   <ContentCard
