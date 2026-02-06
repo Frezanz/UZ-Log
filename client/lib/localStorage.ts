@@ -11,7 +11,12 @@ const generateId = (): string => {
 export const getGuestContent = (): ContentItem[] => {
   try {
     const data = localStorage.getItem(STORAGE_KEY);
-    return data ? JSON.parse(data) : [];
+    const items = data ? JSON.parse(data) : [];
+    // Ensure all items have a status
+    return items.map((item: ContentItem) => ({
+      ...item,
+      status: item.status || "active",
+    }));
   } catch (error) {
     console.error("Failed to read guest content from localStorage:", error);
     return [];
