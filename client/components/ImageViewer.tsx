@@ -67,13 +67,6 @@ export const ImageViewer: React.FC<ImageViewerProps> = ({
     }
   };
 
-  const handleEdit = () => {
-    if (onEdit) {
-      onEdit(image);
-      onClose();
-    }
-  };
-
   return (
     <div
       className={`fixed inset-0 z-50 bg-black/95 transition-opacity duration-200 ${
