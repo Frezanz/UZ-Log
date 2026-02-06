@@ -115,20 +115,6 @@ export const ContentCard: React.FC<ContentCardProps> = ({
           {item.type.charAt(0).toUpperCase() + item.type.slice(1)}
         </span>
         <div className="flex items-center gap-0.5">
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              setIsLiked(!isLiked);
-            }}
-            className={`p-1 rounded transition-colors ${
-              isLiked
-                ? "text-red-500 dark:text-red-400"
-                : "text-muted-foreground hover:text-foreground"
-            }`}
-            title={isLiked ? "Unlike" : "Like"}
-          >
-            <Heart className={`w-3.5 h-3.5 ${isLiked ? "fill-current" : ""}`} />
-          </button>
           {item.user_id === "guest" ? (
             <span className="text-[10px] font-medium text-amber-700 dark:text-amber-300 bg-amber-100 dark:bg-amber-950 px-1.5 py-0.5 rounded inline-flex items-center gap-0.5">
               <HardDrive className="w-2.5 h-2.5" />
