@@ -62,15 +62,40 @@ export const ShareModal: React.FC<ShareModalProps> = ({
     }
   };
 
-  const handleNativeShare = () => {
+  const handleNativeShare = async () => {
     // Check if content is public
     if (!item.is_public) {
       toast.error("Make content public to share");
       return;
     }
 
-    // Toggle fallback menu
-    setShowMoreMenu(!showMoreMenu);
+    // Check if Web Share API is available
+    if (!navigator.share) {
+      toast.error("Web Share API not supported on this device");
+      return;
+    }
+
+    try {
+      await navigator.share({
+        title: item.title,
+        text: `Check out this content on UZ-log: ${item.title}`,
+        url: shareUrl,
+      });
+    } catch (error) {
+      // Silently ignore AbortError (user cancelled) and NotAllowedError
+      if (error instanceof Error) {
+        if (error.name === "AbortError") {
+          // User cancelled the share dialog - this is normal
+          return;
+        }
+        if (error.name === "NotAllowedError") {
+          // Permission denied - silently ignore, user can use other share methods
+          return;
+        }
+      }
+      // Log other errors for debugging
+      console.error("Share error:", error);
+    }
   };
 
   return (
