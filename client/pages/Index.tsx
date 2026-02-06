@@ -64,7 +64,7 @@ export default function Index() {
   const [showTags, setShowTags] = useState(false);
 
   // Bulk selection states
-  const [selectedItems, setSelectedItems] = useState<Set<string>>(new Set());
+  const [selectedItems, setSelectedItems] = useState<string[]>([]);
   const [showBulkDeleteModal, setShowBulkDeleteModal] = useState(false);
 
   // Load public content for anonymous users (if Supabase is available)
