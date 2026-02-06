@@ -50,8 +50,10 @@ export const useTextToSpeech = (options: UseTextToSpeechOptions = {}) => {
         return;
       }
 
-      // Cancel any ongoing speech
+      // Cancel any ongoing speech - suppress errors during cancel
+      suppressErrorRef.current = true;
       window.speechSynthesis.cancel();
+      suppressErrorRef.current = false;
 
       const utterance = new SpeechSynthesisUtterance(text);
 
