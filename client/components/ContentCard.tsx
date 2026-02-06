@@ -89,9 +89,10 @@ export const ContentCard: React.FC<ContentCardProps> = ({
 
   return (
     <div
-      className="group border border-border rounded-lg bg-card hover:shadow-md hover:border-foreground/20 transition-all duration-200 overflow-hidden flex flex-col h-full"
+      className="group border border-border rounded-lg bg-card hover:shadow-md hover:border-foreground/20 transition-all duration-200 overflow-hidden flex flex-col h-full cursor-pointer"
       onMouseEnter={() => setShowActions(true)}
       onMouseLeave={() => setShowActions(false)}
+      onClick={() => onView?.(item)}
     >
       {/* Type Badge */}
       <div className="px-3 pt-2 flex items-center justify-between gap-1.5">
