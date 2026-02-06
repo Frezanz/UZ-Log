@@ -73,7 +73,12 @@ export const TextToSpeechButton: React.FC<TextToSpeechButtonProps> = ({
 
   const handleStop = (e: React.MouseEvent) => {
     e.stopPropagation();
-    stop();
+    try {
+      stop();
+      toast.info("Playback stopped");
+    } catch (error) {
+      console.error("Error stopping playback:", error);
+    }
   };
 
   return (
