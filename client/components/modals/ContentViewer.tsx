@@ -26,6 +26,7 @@ import { copyToClipboard } from "@/lib/utils";
 import { TextToSpeechButton } from "@/components/TextToSpeechButton";
 import { SyntaxErrorDisplay } from "@/components/SyntaxErrorDisplay";
 import { analyzeSyntax } from "@/lib/syntaxChecker";
+import { ImageViewer } from "@/components/ImageViewer";
 
 interface ContentViewerProps {
   isOpen: boolean;
@@ -68,6 +69,7 @@ export const ContentViewer: React.FC<ContentViewerProps> = ({
   onDelete,
 }) => {
   const [copied, setCopied] = useState(false);
+  const [showImageViewer, setShowImageViewer] = useState(false);
 
   // Analyze syntax for code/text content
   const syntaxAnalysis = useMemo(() => {
@@ -81,6 +83,19 @@ export const ContentViewer: React.FC<ContentViewerProps> = ({
   }, [content]);
 
   if (!content) return null;
+
+  // Handle image viewing - open fullscreen viewer instead of dialog
+  if (content.type === "image" && content.file_url) {
+    return (
+      <ImageViewer
+        isOpen={isOpen}
+        onClose={onClose}
+        image={content}
+        onShare={onDelete ? undefined : undefined}
+        onEdit={onEdit}
+      />
+    );
+  }
 
   const handleCopy = async () => {
     try {
