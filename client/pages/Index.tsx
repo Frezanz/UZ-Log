@@ -258,6 +258,69 @@ export default function Index() {
     }
   };
 
+  // Detect duplicates
+  const handleDetectDuplicates = () => {
+    if (items.length < 2) {
+      toast.error("Need at least 2 items to detect duplicates");
+      return;
+    }
+
+    setIsDuplicateDetecting(true);
+    try {
+      const duplicates = detectDuplicates(items, 0.7);
+      if (duplicates.length === 0) {
+        toast.info("No duplicates found!");
+        setIsDuplicateDetecting(false);
+        return;
+      }
+      setDetectedDuplicates(duplicates);
+      setShowDuplicateModal(true);
+      toast.success(`Found ${duplicates.length} potential duplicate(s)`);
+    } catch (error) {
+      console.error("Error detecting duplicates:", error);
+      toast.error("Failed to detect duplicates");
+    } finally {
+      setIsDuplicateDetecting(false);
+    }
+  };
+
+  // Handle merge of duplicates
+  const handleMergeDuplicates = async (primaryId: string, duplicateId: string) => {
+    const primaryItem = items.find((item) => item.id === primaryId);
+    const duplicateItem = items.find((item) => item.id === duplicateId);
+
+    if (!primaryItem || !duplicateItem) {
+      toast.error("Items not found");
+      return;
+    }
+
+    try {
+      const mergedData = mergeContentItems(primaryItem, duplicateItem, {
+        keepPrimaryTitle: true,
+        mergeTags: true,
+        mergeCategories: true,
+      });
+
+      await mergeContent(primaryId, duplicateId, mergedData);
+      toast.success("Content merged successfully");
+
+      // Remove merged duplicates from the list and refresh
+      const newDuplicates = detectedDuplicates.filter(
+        (pair) =>
+          (pair.item1.id !== primaryId && pair.item1.id !== duplicateId) ||
+          (pair.item2.id !== primaryId && pair.item2.id !== duplicateId),
+      );
+      setDetectedDuplicates(newDuplicates);
+
+      if (newDuplicates.length === 0) {
+        setShowDuplicateModal(false);
+      }
+    } catch (error) {
+      console.error("Error merging content:", error);
+      toast.error("Failed to merge content");
+    }
+  };
+
   const handleDuplicate = async (item: ContentItem) => {
     try {
       await duplicateItem(item.id);
