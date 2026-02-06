@@ -384,10 +384,11 @@ export default function Index() {
               setShowContentModal(true);
             }}
             isFilterActive={showFilters}
-          >
-            {/* Filters Section - Nested inside ControlToggle children */}
-            {showFilters && (
-              <div className="space-y-4">
+          />
+
+          {/* Filter Panel - Only shows when showFilters is true */}
+          {showFilters && (
+            <div className="bg-secondary/30 border border-border rounded-lg p-4 space-y-4 animate-in fade-in duration-200">
                   {/* Sort Options */}
                   <div className="text-center space-y-2">
                     <h3 className="text-sm font-medium text-foreground">
@@ -563,27 +564,26 @@ export default function Index() {
                     </div>
                   )}
 
-                  <div className="flex gap-2 pt-2">
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => {
-                        setDisplayFilters({
-                          searchQuery: "",
-                          categories: [],
-                          types: [],
-                          tags: [],
-                          sortBy: "newest",
-                        });
-                      }}
-                      className="flex-1 sm:flex-none"
-                    >
-                      Reset Filters
-                    </Button>
-                  </div>
-                </div>
-              )}
-            </ControlToggle>
+              <div className="flex gap-2 pt-2">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => {
+                    setDisplayFilters({
+                      searchQuery: "",
+                      categories: [],
+                      types: [],
+                      tags: [],
+                      sortBy: "newest",
+                    });
+                  }}
+                  className="flex-1 sm:flex-none"
+                >
+                  Reset Filters
+                </Button>
+              </div>
+            </div>
+          )}
 
           {/* Results Info */}
           {displayItems.length > 0 && (
