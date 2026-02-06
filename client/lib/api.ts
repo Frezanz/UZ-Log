@@ -751,3 +751,30 @@ export const getSharedContent = async (
   const content = await getPublicContent(shareLink.content_id);
   return content;
 };
+
+// ============ Content Merge (Duplicate Management) ============
+export const mergeContent = async (
+  primaryContentId: string,
+  duplicateContentId: string,
+  mergedData: Partial<ContentItem>,
+): Promise<ContentItem> => {
+  const supabase = getSupabase();
+
+  // Update primary content with merged data
+  const { data: updated, error: updateError } = await supabase
+    .from("content")
+    .update({
+      ...mergedData,
+      updated_at: new Date().toISOString(),
+    })
+    .eq("id", primaryContentId)
+    .select()
+    .single();
+
+  if (updateError) throw updateError;
+
+  // Delete the duplicate content
+  await deleteContent(duplicateContentId);
+
+  return updated;
+};
