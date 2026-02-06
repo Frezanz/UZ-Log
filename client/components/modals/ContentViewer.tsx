@@ -246,6 +246,32 @@ export const ContentViewer: React.FC<ContentViewerProps> = ({
             </div>
           )}
 
+          {/* Voice/Audio Viewer */}
+          {content.type === "voice" && content.file_url && (
+            <div className="bg-secondary/30 rounded-lg p-4">
+              <div className="flex flex-col gap-3">
+                <div>
+                  <p className="font-medium text-foreground text-sm mb-2">
+                    Voice Recording
+                  </p>
+                  {content.file_size && (
+                    <p className="text-xs text-muted-foreground mb-2">
+                      Size: {content.file_size}
+                    </p>
+                  )}
+                </div>
+                <audio
+                  controls
+                  className="w-full"
+                  controlsList="nodownload"
+                >
+                  <source src={content.file_url} type="audio/webm" />
+                  Your browser does not support the audio element.
+                </audio>
+              </div>
+            </div>
+          )}
+
           {/* Content Metadata */}
           <div className="grid grid-cols-2 gap-3 text-sm">
             {content.category && (
