@@ -255,6 +255,11 @@ export const ContentModal: React.FC<ContentModalProps> = ({
                 onFileRemove={() => setSelectedFile(null)}
                 isUploading={isUploading}
               />
+              {!isAuthenticated && (
+                <p className="text-xs text-amber-600 dark:text-amber-400 mt-2">
+                  Note: Files are stored locally in your browser. Sign in to upload to cloud storage.
+                </p>
+              )}
             </div>
           )}
 
