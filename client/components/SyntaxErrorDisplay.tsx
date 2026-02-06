@@ -28,7 +28,7 @@ export const SyntaxErrorDisplay: React.FC<SyntaxErrorDisplayProps> = ({
   return (
     <div
       className={cn(
-        "rounded-lg border overflow-hidden",
+        "border overflow-hidden",
         hasErrors
           ? "bg-red-50 dark:bg-red-950/30 border-red-200 dark:border-red-800"
           : "bg-green-50 dark:bg-green-950/30 border-green-200 dark:border-green-800",
