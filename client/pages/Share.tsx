@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { getPublicContent } from "@/lib/api";
+import { getGuestContentById } from "@/lib/localStorage";
 import { ContentItem } from "@/types/content";
 import { Button } from "@/components/ui/button";
+import { ContentViewer } from "@/components/modals/ContentViewer";
 import { ArrowLeft, Copy } from "lucide-react";
 import { toast } from "sonner";
 import { copyToClipboard } from "@/lib/utils";
@@ -13,6 +15,7 @@ export default function Share() {
   const [content, setContent] = useState<ContentItem | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [showViewer, setShowViewer] = useState(false);
 
   useEffect(() => {
     const fetchContent = async () => {
@@ -24,8 +27,26 @@ export default function Share() {
 
       try {
         setIsLoading(true);
-        const data = await getPublicContent(id);
-        setContent(data);
+
+        // Try to get guest content first (from localStorage)
+        const guestContent = getGuestContentById(id);
+        if (guestContent && guestContent.is_public) {
+          setContent(guestContent);
+          return;
+        }
+
+        // If not a guest local ID, try Supabase public content
+        try {
+          const data = await getPublicContent(id);
+          setContent(data);
+        } catch (supabaseErr) {
+          // If both sources fail
+          if (!guestContent) {
+            throw new Error("Content not found");
+          }
+          // If guest content exists but not public
+          throw new Error("Content is not public");
+        }
       } catch (err) {
         const message =
           err instanceof Error ? err.message : "Content not found";
@@ -195,15 +216,20 @@ export default function Share() {
             </div>
           )}
         </div>
-        {/* Copy Button */}
-        (content.content || content.file_url) && (
-        <div className="flex justify-center mb-8">
-          <Button onClick={handleCopy} className="gap-2">
-            <Copy className="w-4 h-4" />
-            Copy to Clipboard
+        {/* Action Buttons */}
+        <div className="flex justify-center gap-3 mb-8 flex-wrap">
+          <Button onClick={() => setShowViewer(true)} variant="outline">
+            View Full Content
           </Button>
+          {(content.content || content.file_url) && (
+            <Button onClick={handleCopy} className="gap-2">
+              <Copy className="w-4 h-4" />
+              Copy to Clipboard
+            </Button>
+          )}
         </div>
-        ){/* Footer Info */}
+
+        {/* Footer Info */}
         <div className="text-center text-sm text-muted-foreground border-t border-border pt-6">
           <p>
             Shared via{" "}
@@ -211,6 +237,13 @@ export default function Share() {
           </p>
         </div>
       </main>
+
+      {/* Content Viewer Modal */}
+      <ContentViewer
+        isOpen={showViewer}
+        onClose={() => setShowViewer(false)}
+        content={content}
+      />
     </div>
   );
 }

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { ContentItem } from "@/types/content";
 import { Button } from "@/components/ui/button";
+import { StatusBadge, StatusDropdown } from "@/components/StatusSelect";
 import {
   Copy,
   Download,
@@ -24,9 +25,14 @@ import { copyToClipboard } from "@/lib/utils";
 
 interface ContentCardProps {
   item: ContentItem;
+  onView?: (item: ContentItem) => void;
   onEdit: (item: ContentItem) => void;
   onDelete: (item: ContentItem) => void;
   onShare: (item: ContentItem) => void;
+  onStatusChange?: (
+    id: string,
+    status: "active" | "pending" | "completed",
+  ) => void;
   onDownload?: (item: ContentItem) => void;
 }
 
@@ -57,9 +63,11 @@ const typeColors = {
 
 export const ContentCard: React.FC<ContentCardProps> = ({
   item,
+  onView,
   onEdit,
   onDelete,
   onShare,
+  onStatusChange,
   onDownload,
 }) => {
   const [showActions, setShowActions] = useState(false);
@@ -84,9 +92,10 @@ export const ContentCard: React.FC<ContentCardProps> = ({
 
   return (
     <div
-      className="group border border-border rounded-lg bg-card hover:shadow-md hover:border-foreground/20 transition-all duration-200 overflow-hidden flex flex-col h-full"
+      className="group border border-border rounded-lg bg-card hover:shadow-md hover:border-foreground/20 transition-all duration-200 overflow-hidden flex flex-col h-full cursor-pointer"
       onMouseEnter={() => setShowActions(true)}
       onMouseLeave={() => setShowActions(false)}
+      onClick={() => onView?.(item)}
     >
       {/* Type Badge */}
       <div className="px-3 pt-2 flex items-center justify-between gap-1.5">
@@ -113,6 +122,10 @@ export const ContentCard: React.FC<ContentCardProps> = ({
               Public
             </span>
           )}
+          <StatusDropdown
+            status={item.status}
+            onChange={(newStatus) => onStatusChange?.(item.id, newStatus)}
+          />
         </div>
       </div>
 

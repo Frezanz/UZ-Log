@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { FileUpload } from "@/components/FileUpload";
 import { uploadFile } from "@/lib/api";
+import { uploadGuestFile } from "@/lib/localStorage";
 import { useAuth } from "@/context/AuthContext";
 import { ChevronDown } from "lucide-react";
 import {
@@ -57,6 +58,7 @@ export const ContentModal: React.FC<ContentModalProps> = ({
       category: "",
       tags: [],
       is_public: false,
+      status: "active",
     },
   );
 
@@ -71,6 +73,7 @@ export const ContentModal: React.FC<ContentModalProps> = ({
           category: "",
           tags: [],
           is_public: false,
+          status: "active",
         },
       );
       setSelectedFile(null);
@@ -101,21 +104,31 @@ export const ContentModal: React.FC<ContentModalProps> = ({
           formData.type === "image" ||
           formData.type === "video")
       ) {
-        if (!isAuthenticated || !user) {
-          toast.error("Please sign in to upload files");
-          setIsLoading(false);
-          return;
-        }
-
         setIsUploading(true);
         try {
-          const fileUrl = await uploadFile(selectedFile, user.id);
+          let fileUrl: string;
+
+          if (isAuthenticated && user) {
+            // Upload to Supabase for authenticated users
+            fileUrl = await uploadFile(selectedFile, user.id);
+          } else {
+            // Store as base64 for guest users
+            fileUrl = await uploadGuestFile(selectedFile);
+          }
+
           dataToSave = {
             ...dataToSave,
             file_url: fileUrl,
             file_size: `${(selectedFile.size / 1024 / 1024).toFixed(2)} MB`,
             title: dataToSave.title || selectedFile.name,
           };
+        } catch (error) {
+          const errorMsg =
+            error instanceof Error ? error.message : "Upload failed";
+          toast.error(`File upload failed: ${errorMsg}`);
+          setIsUploading(false);
+          setIsLoading(false);
+          return;
         } finally {
           setIsUploading(false);
         }
@@ -243,6 +256,12 @@ export const ContentModal: React.FC<ContentModalProps> = ({
                 onFileRemove={() => setSelectedFile(null)}
                 isUploading={isUploading}
               />
+              {!isAuthenticated && (
+                <p className="text-xs text-amber-600 dark:text-amber-400 mt-2">
+                  Note: Files are stored locally in your browser. Sign in to
+                  upload to cloud storage.
+                </p>
+              )}
             </div>
           )}
 

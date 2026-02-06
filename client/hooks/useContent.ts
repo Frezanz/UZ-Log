@@ -7,6 +7,7 @@ import {
   updateContent,
   deleteContent,
   shareContent,
+  toggleStatus,
 } from "@/lib/api";
 import {
   getGuestContent,
@@ -166,6 +167,31 @@ export const useContent = () => {
     [items, isAuthenticated],
   );
 
+  const changeStatus = useCallback(
+    async (id: string, status: "active" | "pending" | "completed") => {
+      try {
+        let updated: ContentItem;
+        if (isAuthenticated) {
+          updated = await toggleStatus(id, status);
+        } else {
+          updated = updateGuestContent(id, { status });
+        }
+
+        setItems((prev) =>
+          prev.map((item) => (item.id === id ? updated : item)),
+        );
+        toast.success(`Status changed to ${status}`);
+        return updated;
+      } catch (err) {
+        const message =
+          err instanceof Error ? err.message : "Failed to update status";
+        toast.error(message);
+        throw new Error(message);
+      }
+    },
+    [items, isAuthenticated],
+  );
+
   // Get unique categories and tags from current items
   const getCategories = useCallback(() => {
     const categories = new Set<string>();
@@ -193,6 +219,7 @@ export const useContent = () => {
     editContent,
     removeContent,
     togglePublic,
+    changeStatus,
     refreshContent: fetchContent,
     getCategories,
     getTags,

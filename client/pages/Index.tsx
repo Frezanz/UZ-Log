@@ -7,6 +7,7 @@ import { Header } from "@/components/Header";
 import { SearchBar } from "@/components/SearchBar";
 import { ContentCard } from "@/components/ContentCard";
 import { ContentModal } from "@/components/modals/ContentModal";
+import { ContentViewer } from "@/components/modals/ContentViewer";
 import { ShareModal } from "@/components/modals/ShareModal";
 import { DeleteModal } from "@/components/modals/DeleteModal";
 import { Button } from "@/components/ui/button";
@@ -26,6 +27,7 @@ export default function Index() {
     editContent,
     removeContent,
     togglePublic,
+    changeStatus,
     getCategories,
     getTags,
   } = useContent();
@@ -44,6 +46,8 @@ export default function Index() {
   // Modal states
   const [showContentModal, setShowContentModal] = useState(false);
   const [editingItem, setEditingItem] = useState<ContentItem | undefined>();
+  const [showViewer, setShowViewer] = useState(false);
+  const [viewingItem, setViewingItem] = useState<ContentItem | null>(null);
   const [showShareModal, setShowShareModal] = useState(false);
   const [shareItem, setShareItem] = useState<ContentItem | null>(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -125,6 +129,16 @@ export default function Index() {
     } catch (error) {
       throw error;
     }
+  };
+
+  const handleOpenView = (item: ContentItem) => {
+    setViewingItem(item);
+    setShowViewer(true);
+  };
+
+  const handleCloseViewer = () => {
+    setShowViewer(false);
+    setViewingItem(null);
   };
 
   const handleOpenEdit = (item: ContentItem) => {
@@ -471,9 +485,11 @@ export default function Index() {
               <ContentCard
                 key={item.id}
                 item={item}
+                onView={handleOpenView}
                 onEdit={handleOpenEdit}
                 onDelete={handleOpenDelete}
                 onShare={handleOpenShare}
+                onStatusChange={changeStatus}
                 onDownload={handleDownload}
               />
             ))}
@@ -512,6 +528,14 @@ export default function Index() {
         onClose={handleModalClose}
         onSave={handleSaveContent}
         initialData={editingItem}
+      />
+
+      <ContentViewer
+        isOpen={showViewer}
+        onClose={handleCloseViewer}
+        content={viewingItem}
+        onEdit={handleOpenEdit}
+        onDelete={handleOpenDelete}
       />
 
       <ShareModal

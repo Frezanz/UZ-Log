@@ -11,10 +11,27 @@ const generateId = (): string => {
 export const getGuestContent = (): ContentItem[] => {
   try {
     const data = localStorage.getItem(STORAGE_KEY);
-    return data ? JSON.parse(data) : [];
+    const items = data ? JSON.parse(data) : [];
+    // Ensure all items have a status
+    return items.map((item: ContentItem) => ({
+      ...item,
+      status: item.status || "active",
+    }));
   } catch (error) {
     console.error("Failed to read guest content from localStorage:", error);
     return [];
+  }
+};
+
+// Get a single guest content item by ID
+export const getGuestContentById = (id: string): ContentItem | null => {
+  try {
+    const items = getGuestContent();
+    const item = items.find((item) => item.id === id);
+    return item ? { ...item, status: item.status || "active" } : null;
+  } catch (error) {
+    console.error("Failed to retrieve guest content by ID:", error);
+    return null;
   }
 };
 
@@ -40,6 +57,7 @@ export const createGuestContent = (
     id: generateId(),
     user_id: "guest",
     uploader_name: "Anonymous",
+    status: content.status || "active",
     created_at: now,
     updated_at: now,
     word_count: content.content ? content.content.split(/\s+/).length : 0,
@@ -67,6 +85,7 @@ export const updateGuestContent = (
   const updated: ContentItem = {
     ...items[itemIndex],
     ...updates,
+    status: updates.status || items[itemIndex].status || "active",
     updated_at: new Date().toISOString(),
     word_count: updates.content
       ? updates.content.split(/\s+/).length
@@ -168,4 +187,31 @@ export const clearGuestContent = (): void => {
   } catch (error) {
     console.error("Failed to clear guest content:", error);
   }
+};
+
+// Upload file for guest users (store as base64)
+export const uploadGuestFile = async (file: File): Promise<string> => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+
+    reader.onload = (e) => {
+      const base64 = e.target?.result as string;
+      if (base64) {
+        resolve(base64);
+      } else {
+        reject(new Error("Failed to read file"));
+      }
+    };
+
+    reader.onerror = () => {
+      reject(new Error("Failed to read file"));
+    };
+
+    reader.readAsDataURL(file);
+  });
+};
+
+// Get file size in MB
+export const getFileSizeMB = (file: File): string => {
+  return (file.size / 1024 / 1024).toFixed(2);
 };

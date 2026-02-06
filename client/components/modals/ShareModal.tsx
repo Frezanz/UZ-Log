@@ -103,18 +103,19 @@ export const ShareModal: React.FC<ShareModalProps> = ({
         </DialogHeader>
 
         <div className="space-y-4">
-          {/* Storage Type Warning */}
+          {/* Storage Type Info */}
           {isLocalContent && (
-            <div className="p-3 rounded-lg border border-amber-200/50 bg-amber-50/50 dark:bg-amber-950/20 dark:border-amber-900/50">
+            <div className="p-3 rounded-lg border border-blue-200/50 bg-blue-50/50 dark:bg-blue-950/20 dark:border-blue-900/50">
               <div className="flex gap-2">
-                <AlertCircle className="w-4 h-4 text-amber-600 dark:text-amber-500 flex-shrink-0 mt-0.5" />
+                <AlertCircle className="w-4 h-4 text-blue-600 dark:text-blue-500 flex-shrink-0 mt-0.5" />
                 <div>
-                  <p className="text-xs font-medium text-amber-900 dark:text-amber-200">
+                  <p className="text-xs font-medium text-blue-900 dark:text-blue-200">
                     Local Browser Storage
                   </p>
-                  <p className="text-xs text-amber-800 dark:text-amber-300 mt-1">
-                    This content is stored locally in your browser. Sign in to
-                    sync across devices and share publicly on the cloud.
+                  <p className="text-xs text-blue-800 dark:text-blue-300 mt-1">
+                    This content is stored locally in your browser. You can
+                    share it via link right now, or sign in to sync across
+                    devices and use cloud storage.
                   </p>
                 </div>
               </div>
