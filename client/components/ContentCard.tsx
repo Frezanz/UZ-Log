@@ -25,7 +25,7 @@ import { copyToClipboard } from "@/lib/utils";
 interface ContentCardProps {
   item: ContentItem;
   onEdit: (item: ContentItem) => void;
-  onDelete: (id: string) => void;
+  onDelete: (item: ContentItem) => void;
   onShare: (item: ContentItem) => void;
   onDownload?: (item: ContentItem) => void;
 }
