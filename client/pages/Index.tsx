@@ -26,6 +26,7 @@ export default function Index() {
     editContent,
     removeContent,
     togglePublic,
+    changeStatus,
     getCategories,
     getTags,
   } = useContent();
