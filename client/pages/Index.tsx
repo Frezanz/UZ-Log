@@ -29,6 +29,7 @@ export default function Index() {
     removeContent,
     togglePublic,
     changeStatus,
+    duplicateItem,
     getCategories,
     getTags,
   } = useContent();
