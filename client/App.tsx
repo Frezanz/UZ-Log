@@ -12,6 +12,7 @@ import { ErrorBoundary } from "@/components/ErrorBoundary";
 import Index from "./pages/Index";
 import Login from "./pages/Login";
 import Share from "./pages/Share";
+import SharedContent from "./pages/SharedContent";
 import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
 
