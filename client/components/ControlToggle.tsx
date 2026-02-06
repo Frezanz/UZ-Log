@@ -68,32 +68,6 @@ export const ControlToggle: React.FC<ControlToggleProps> = ({
         )}
       </div>
 
-      {/* Expanded Content Area - Only shows if children exist */}
-      {children && (
-        <div
-          className="animate-in fade-in duration-200 origin-top"
-          style={{
-            animation: "fadeIn 0.2s ease-out",
-          }}
-        >
-          <div className="bg-secondary/30 border border-border rounded-lg p-4 space-y-4">
-            {children}
-          </div>
-        </div>
-      )}
-
-      <style>{`
-        @keyframes fadeIn {
-          from {
-            opacity: 0;
-            transform: scaleY(0.95);
-          }
-          to {
-            opacity: 1;
-            transform: scaleY(1);
-          }
-        }
-      `}</style>
     </div>
   );
 };
