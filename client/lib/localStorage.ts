@@ -82,15 +82,15 @@ export const updateGuestContent = (
 // Delete guest content item
 export const deleteGuestContent = (id: string): void => {
   try {
-    console.log('deleteGuestContent called for:', id);
+    console.log("deleteGuestContent called for:", id);
     const items = getGuestContent();
-    console.log('Current items in localStorage:', items.length);
+    console.log("Current items in localStorage:", items.length);
     const filtered = items.filter((item) => item.id !== id);
-    console.log('Items after filtering:', filtered.length);
+    console.log("Items after filtering:", filtered.length);
     saveGuestContent(filtered);
-    console.log('localStorage updated successfully');
+    console.log("localStorage updated successfully");
   } catch (error) {
-    console.error('Error in deleteGuestContent:', error);
+    console.error("Error in deleteGuestContent:", error);
     throw error;
   }
 };

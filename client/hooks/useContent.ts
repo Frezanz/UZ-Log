@@ -118,24 +118,27 @@ export const useContent = () => {
   const removeContent = useCallback(
     async (id: string) => {
       try {
-        console.log('removeContent called for:', id);
+        console.log("removeContent called for:", id);
         if (isAuthenticated) {
-          console.log('Deleting authenticated content');
+          console.log("Deleting authenticated content");
           await deleteContent(id);
         } else {
-          console.log('Deleting guest content');
+          console.log("Deleting guest content");
           deleteGuestContent(id);
           // Small delay to ensure localStorage is synced
-          await new Promise(resolve => setTimeout(resolve, 100));
+          await new Promise((resolve) => setTimeout(resolve, 100));
         }
 
         const updatedItems = items.filter((item) => item.id !== id);
         setItems(updatedItems);
-        console.log('Content removed from state, remaining items:', updatedItems.length);
+        console.log(
+          "Content removed from state, remaining items:",
+          updatedItems.length,
+        );
       } catch (err) {
         const message =
           err instanceof Error ? err.message : "Failed to delete content";
-        console.error('removeContent error:', message);
+        console.error("removeContent error:", message);
         throw new Error(message);
       }
     },

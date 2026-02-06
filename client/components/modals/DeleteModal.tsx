@@ -1,14 +1,14 @@
-import React, { useState } from 'react';
-import { Button } from '@/components/ui/button';
+import React, { useState } from "react";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog';
-import { AlertTriangle } from 'lucide-react';
-import { toast } from 'sonner';
+} from "@/components/ui/dialog";
+import { AlertTriangle } from "lucide-react";
+import { toast } from "sonner";
 
 interface DeleteModalProps {
   isOpen: boolean;
@@ -29,11 +29,12 @@ export const DeleteModal: React.FC<DeleteModalProps> = ({
     setIsLoading(true);
     try {
       await onConfirm();
-      toast.success('Content deleted successfully');
+      toast.success("Content deleted successfully");
       onClose();
     } catch (error) {
-      console.error('Delete error:', error);
-      const errorMessage = error instanceof Error ? error.message : 'Failed to delete content';
+      console.error("Delete error:", error);
+      const errorMessage =
+        error instanceof Error ? error.message : "Failed to delete content";
       toast.error(errorMessage);
     } finally {
       setIsLoading(false);
@@ -49,7 +50,8 @@ export const DeleteModal: React.FC<DeleteModalProps> = ({
             <DialogTitle>Delete Content</DialogTitle>
           </div>
           <DialogDescription>
-            Are you sure you want to delete "{title}"? This action cannot be undone.
+            Are you sure you want to delete "{title}"? This action cannot be
+            undone.
           </DialogDescription>
         </DialogHeader>
 
@@ -68,7 +70,7 @@ export const DeleteModal: React.FC<DeleteModalProps> = ({
             disabled={isLoading}
             className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
           >
-            {isLoading ? 'Deleting...' : 'Delete'}
+            {isLoading ? "Deleting..." : "Delete"}
           </Button>
         </div>
       </DialogContent>

@@ -69,7 +69,8 @@ export const ContentCard: React.FC<ContentCardProps> = ({
     hour: "2-digit",
     minute: "2-digit",
   });
-  const uploaderName = item.uploader_name || (item.user_id === "guest" ? "Anonymous" : "Unknown");
+  const uploaderName =
+    item.uploader_name || (item.user_id === "guest" ? "Anonymous" : "Unknown");
   const preview = item.content?.slice(0, 120)?.trim() || "No preview available";
 
   const handleCopy = async () => {
@@ -116,8 +117,12 @@ export const ContentCard: React.FC<ContentCardProps> = ({
       </div>
 
       {/* Content Preview */}
-      <div className={`flex-1 px-3 ${item.type === "link" ? "py-0.5 min-h-0" : "py-2 min-h-[60px]"}`}>
-        <h3 className={`font-semibold text-foreground line-clamp-2 ${item.type === "link" ? "mb-0.5 text-xs" : "mb-1.5 text-sm"}`}>
+      <div
+        className={`flex-1 px-3 ${item.type === "link" ? "py-0.5 min-h-0" : "py-2 min-h-[60px]"}`}
+      >
+        <h3
+          className={`font-semibold text-foreground line-clamp-2 ${item.type === "link" ? "mb-0.5 text-xs" : "mb-1.5 text-sm"}`}
+        >
           {item.title}
         </h3>
 
@@ -166,10 +171,16 @@ export const ContentCard: React.FC<ContentCardProps> = ({
       <div className="px-3 py-1.5 border-t border-border bg-secondary/30 text-xs text-muted-foreground space-y-0.5">
         <div className="flex justify-between items-center flex-wrap gap-1">
           <div className="flex flex-col gap-0">
-            <span className="font-medium text-foreground text-[11px]">{uploaderName}</span>
-            <span className="text-[10px]">{createdDate} at {createdTime}</span>
+            <span className="font-medium text-foreground text-[11px]">
+              {uploaderName}
+            </span>
+            <span className="text-[10px]">
+              {createdDate} at {createdTime}
+            </span>
           </div>
-          {wordCount > 0 && <span className="whitespace-nowrap">{wordCount} words</span>}
+          {wordCount > 0 && (
+            <span className="whitespace-nowrap">{wordCount} words</span>
+          )}
         </div>
         {item.tags && item.tags.length > 0 && (
           <div className="flex gap-0.5 flex-wrap">

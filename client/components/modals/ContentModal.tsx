@@ -174,16 +174,12 @@ export const ContentModal: React.FC<ContentModalProps> = ({
               <button
                 onClick={() => setShowTitle(!showTitle)}
                 className="text-muted-foreground hover:text-foreground transition-colors duration-200 focus:outline-none p-2 active:bg-transparent active:text-foreground"
-                title={
-                  showTitle ? "Hide title" : "Show title"
-                }
+                title={showTitle ? "Hide title" : "Show title"}
               >
                 <ChevronDown
                   className="w-5 h-5 transition-transform duration-200"
                   style={{
-                    transform: showTitle
-                      ? "rotate(180deg)"
-                      : "rotate(0deg)",
+                    transform: showTitle ? "rotate(180deg)" : "rotate(0deg)",
                   }}
                 />
               </button>
@@ -274,9 +270,7 @@ export const ContentModal: React.FC<ContentModalProps> = ({
                   <button
                     onClick={() => setShowCategory(!showCategory)}
                     className="text-muted-foreground hover:text-foreground transition-colors duration-200 focus:outline-none p-2 active:bg-transparent active:text-foreground"
-                    title={
-                      showCategory ? "Hide category" : "Show category"
-                    }
+                    title={showCategory ? "Hide category" : "Show category"}
                   >
                     <ChevronDown
                       className="w-5 h-5 transition-transform duration-200"
@@ -311,16 +305,12 @@ export const ContentModal: React.FC<ContentModalProps> = ({
                   <button
                     onClick={() => setShowTags(!showTags)}
                     className="text-muted-foreground hover:text-foreground transition-colors duration-200 focus:outline-none p-2 active:bg-transparent active:text-foreground"
-                    title={
-                      showTags ? "Hide tags" : "Show tags"
-                    }
+                    title={showTags ? "Hide tags" : "Show tags"}
                   >
                     <ChevronDown
                       className="w-5 h-5 transition-transform duration-200"
                       style={{
-                        transform: showTags
-                          ? "rotate(180deg)"
-                          : "rotate(0deg)",
+                        transform: showTags ? "rotate(180deg)" : "rotate(0deg)",
                       }}
                     />
                   </button>
