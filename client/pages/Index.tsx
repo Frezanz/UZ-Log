@@ -714,6 +714,7 @@ export default function Index() {
         content={viewingItem}
         onEdit={handleOpenEdit}
         onDelete={handleOpenDelete}
+        onShare={handleOpenShare}
       />
 
       <ShareModal
