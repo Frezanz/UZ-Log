@@ -346,9 +346,23 @@ export default function Index() {
       )}
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 pt-20 sm:pt-24">
+      <main className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 ${isAuthenticated ? "pt-20 sm:pt-24" : "pt-20 sm:pt-24"}`}>
         {/* Top Bar: Search and Actions */}
-        <div className="space-y-4 mb-6">
+        <div
+          className={`space-y-4 mb-6 fixed left-0 right-0 z-30 px-4 sm:px-6 lg:px-8 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 py-6 transition-all duration-300 ease-in-out ${
+            isHeaderHidden
+              ? "-translate-y-full shadow-none"
+              : "translate-y-0 shadow-sm border-b border-border"
+          }`}
+          style={{
+            width: "100%",
+            marginLeft: "-50vw",
+            marginRight: "-50vw",
+            left: "50%",
+            right: "50%",
+            top: isAuthenticated ? "56px" : "56px", // Positioned below the header
+          }}
+        >
           <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
             <SearchBar
               value={displayFilters.searchQuery}
