@@ -313,6 +313,36 @@ export const ContentModal: React.FC<ContentModalProps> = ({
             </div>
           )}
 
+          {/* Audio Recorder for voice type */}
+          {formData.type === "voice" && (
+            <div>
+              <label className="text-sm font-medium text-foreground mb-2 block">
+                Record Voice or Upload Audio
+              </label>
+              <AudioRecorder
+                onAudioRecorded={(blob, duration) => {
+                  setRecordedAudioBlob(blob);
+                  setRecordedAudioDuration(duration);
+                  const url = URL.createObjectURL(blob);
+                  setRecordedAudioUrl(url);
+                }}
+                onAudioRemove={() => {
+                  setRecordedAudioBlob(null);
+                  setRecordedAudioUrl(null);
+                  setRecordedAudioDuration(0);
+                }}
+                recordedAudioUrl={recordedAudioUrl || undefined}
+                recordedDuration={recordedAudioDuration}
+              />
+              {!isAuthenticated && (
+                <p className="text-xs text-amber-600 dark:text-amber-400 mt-2">
+                  Note: Audio is stored locally in your browser. Sign in to
+                  upload to cloud storage.
+                </p>
+              )}
+            </div>
+          )}
+
           {/* Content */}
           {formData.type === "link" ? (
             <div>
