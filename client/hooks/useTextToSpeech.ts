@@ -29,13 +29,29 @@ export const useTextToSpeech = (options: UseTextToSpeechOptions = {}) => {
         return;
       }
 
+      // Validate text
+      if (!text || text.trim().length === 0) {
+        console.warn("Cannot speak: text is empty");
+        return;
+      }
+
       // Cancel any ongoing speech
       window.speechSynthesis.cancel();
 
       const utterance = new SpeechSynthesisUtterance(text);
-      utterance.rate = rate;
-      utterance.pitch = pitch;
-      utterance.volume = volume;
+
+      // Set rate (0.1 to 10, default 1)
+      utterance.rate = Math.max(0.1, Math.min(10, rate));
+
+      // Set pitch (0 to 2, default 1) - but some browsers don't support this well
+      try {
+        utterance.pitch = Math.max(0, Math.min(2, pitch));
+      } catch (error) {
+        console.warn("Pitch setting not supported by this browser");
+      }
+
+      // Set volume (0 to 1, default 1)
+      utterance.volume = Math.max(0, Math.min(1, volume));
 
       utterance.onstart = () => {
         setIsPlaying(true);
@@ -49,15 +65,37 @@ export const useTextToSpeech = (options: UseTextToSpeechOptions = {}) => {
         setIsSpeaking(false);
       };
 
-      utterance.onerror = (event) => {
-        console.error("Speech synthesis error:", event);
+      utterance.onerror = (event: SpeechSynthesisErrorEvent) => {
+        const errorDetails = {
+          error: event.error,
+          message: `Speech synthesis error: ${event.error}`,
+        };
+        console.error("Speech synthesis error:", errorDetails);
+
+        // Log more details for debugging
+        if (event.error === "network-error") {
+          console.warn("Network error - check internet connection");
+        } else if (event.error === "synthesis-unavailable") {
+          console.warn("Speech synthesis not available");
+        } else if (event.error === "synthesis-in-progress") {
+          console.warn("Speech synthesis already in progress");
+        }
+
         setIsPlaying(false);
         setIsPaused(false);
         setIsSpeaking(false);
       };
 
       utteranceRef.current = utterance;
-      window.speechSynthesis.speak(utterance);
+
+      try {
+        window.speechSynthesis.speak(utterance);
+      } catch (error) {
+        console.error("Error calling speak:", error);
+        setIsPlaying(false);
+        setIsPaused(false);
+        setIsSpeaking(false);
+      }
     },
     [isSupported, rate, pitch, volume],
   );
