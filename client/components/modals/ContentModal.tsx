@@ -35,6 +35,7 @@ const contentTypes: ContentType[] = [
   "prompt",
   "script",
   "book",
+  "voice",
 ];
 
 export const ContentModal: React.FC<ContentModalProps> = ({
