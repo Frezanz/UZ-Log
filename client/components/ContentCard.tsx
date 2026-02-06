@@ -206,7 +206,8 @@ export const ContentCard: React.FC<ContentCardProps> = ({
         {(item.type === "text" ||
           item.type === "code" ||
           item.type === "prompt" ||
-          item.type === "script") && (
+          item.type === "script" ||
+          item.type === "link") && (
           <Button
             variant="ghost"
             size="sm"
