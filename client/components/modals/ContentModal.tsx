@@ -260,7 +260,7 @@ export const ContentModal: React.FC<ContentModalProps> = ({
                   <button
                     key={type}
                     onClick={() => setFormData({ ...formData, type })}
-                    className={`px-3 py-2 rounded border text-sm font-medium transition-colors ${
+                    className={`px-3 py-2  border text-sm font-medium transition-colors ${
                       formData.type === type
                         ? "bg-primary text-primary-foreground border-primary"
                         : "border-border bg-card text-foreground hover:bg-secondary"
@@ -358,7 +358,7 @@ export const ContentModal: React.FC<ContentModalProps> = ({
                     setFormData({ ...formData, content: e.target.value })
                   }
                   placeholder="Enter your content here..."
-                  className="w-full min-h-[500px] px-3 py-2 rounded border border-border bg-background text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary resize-vertical"
+                  className="w-full min-h-[500px] px-3 py-2  border border-border bg-background text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary resize-vertical"
                 />
                 {formData.content && (
                   <p className="text-xs text-muted-foreground mt-1">
@@ -504,7 +504,7 @@ export const ContentModal: React.FC<ContentModalProps> = ({
             </TabsContent>
 
             <TabsContent value="sharing" className="space-y-3 mt-3">
-              <div className="flex items-center justify-between p-3 rounded border border-border bg-secondary/50">
+              <div className="flex items-center justify-between p-3  border border-border bg-secondary/50">
                 <div>
                   <p className="text-sm font-medium text-foreground">Public</p>
                   <p className="text-xs text-muted-foreground">
@@ -517,7 +517,7 @@ export const ContentModal: React.FC<ContentModalProps> = ({
                   onChange={(e) =>
                     setFormData({ ...formData, is_public: e.target.checked })
                   }
-                  className="w-4 h-4 rounded border-border cursor-pointer"
+                  className="w-4 h-4  border-border cursor-pointer"
                 />
               </div>
             </TabsContent>

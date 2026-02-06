@@ -216,7 +216,7 @@ export const ShareModal: React.FC<ShareModalProps> = ({
           </div>
 
           {/* Info */}
-          <div className="bg-card border border-border rounded p-3">
+          <div className="bg-card border border-border p-3">
             <div className="flex flex-col gap-2">
               <div className="flex gap-2">
                 <Share2 className="w-4 h-4 text-muted-foreground flex-shrink-0 mt-0.5" />

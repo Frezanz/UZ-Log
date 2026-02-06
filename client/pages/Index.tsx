@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
 import { useContent } from "@/hooks/useContent";
@@ -69,6 +69,38 @@ export default function Index() {
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
   const [showBulkDeleteModal, setShowBulkDeleteModal] = useState(false);
 
+  // Scroll detection for hiding header and search bar
+  const [isHeaderHidden, setIsHeaderHidden] = useState(false);
+  const lastScrollYRef = useRef(0);
+
+  // Handle scroll to hide/show header and search bar
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      const scrollDifference = currentScrollY - lastScrollYRef.current;
+
+      // Show header when at the top of page
+      if (currentScrollY < 10) {
+        setIsHeaderHidden(false);
+      }
+      // Hide header when scrolling down more than 5px with speed
+      else if (scrollDifference > 5 && currentScrollY > 50) {
+        setIsHeaderHidden(true);
+      }
+      // Show header immediately when scrolling up
+      else if (scrollDifference < -5) {
+        setIsHeaderHidden(false);
+      }
+
+      lastScrollYRef.current = currentScrollY;
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
   // Load public content for anonymous users (if Supabase is available)
   // If not, guests will just see their own localStorage content
   useEffect(() => {
@@ -98,7 +130,8 @@ export default function Index() {
   // Determine which data to display
   // Authenticated users see their Supabase content
   // Guest users see their localStorage content (items is populated from localStorage via useContent hook)
-  const displayItems = items;
+  // Filter out hidden items from display
+  const displayItems = items.filter((item) => item.status !== "hidden");
   const displayLoading = isLoading;
   const displayFilters = filters;
   const setDisplayFilters = setFilters;
@@ -293,7 +326,13 @@ export default function Index() {
 
       {/* Anonymous User Header */}
       {!isAuthenticated && (
-        <header className="sticky top-0 z-40 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+        <header
+          className={`fixed top-0 left-0 right-0 z-40 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 transition-all duration-300 ease-in-out ${
+            isHeaderHidden
+              ? "-translate-y-full shadow-none"
+              : "translate-y-0 shadow-md"
+          }`}
+        >
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex items-center justify-between h-14 sm:h-16">
               <div className="flex items-center gap-2">
@@ -312,7 +351,13 @@ export default function Index() {
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 pt-20 sm:pt-24">
         {/* Top Bar: Search and Actions */}
-        <div className="space-y-4 mb-6">
+        <div
+          className={`space-y-4 mb-6 transition-all duration-300 ease-in-out ${
+            isHeaderHidden
+              ? "-translate-y-full opacity-0 pointer-events-none"
+              : "translate-y-0 opacity-100"
+          }`}
+        >
           <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
             <SearchBar
               value={displayFilters.searchQuery}
@@ -655,7 +700,7 @@ export default function Index() {
                     type="checkbox"
                     checked={selectedItems.includes(item.id)}
                     onChange={() => handleSelectItem(item.id)}
-                    className="absolute top-2 left-2 z-10 w-5 h-5 rounded border border-border cursor-pointer"
+                    className="absolute top-3.5 left-5 z-20 w-3 h-3 rounded border border-border cursor-pointer bg-background hover:bg-secondary transition-colors accent-primary"
                     title="Select item"
                   />
                   <ContentCard

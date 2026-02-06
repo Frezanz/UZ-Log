@@ -154,21 +154,17 @@ export default function Share() {
           )}
         </div>
         {/* Content Display */}
-        <div className="border border-border rounded-lg bg-card p-6 sm:p-8 mb-8">
+        <div className="border border-border  bg-card p-6 sm:p-8 mb-8">
           {content.type === "image" && content.file_url && (
             <img
               src={content.file_url}
               alt={content.title}
-              className="w-full rounded-lg mb-4"
+              className="w-full  mb-4"
             />
           )}
 
           {content.type === "video" && content.file_url && (
-            <video
-              src={content.file_url}
-              controls
-              className="w-full rounded-lg mb-4"
-            />
+            <video src={content.file_url} controls className="w-full  mb-4" />
           )}
 
           {content.type === "code" && (
@@ -202,7 +198,7 @@ export default function Share() {
             <a
               href={content.file_url}
               download={content.title}
-              className="inline-flex items-center px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:opacity-90 transition-opacity"
+              className="inline-flex items-center px-4 py-2 bg-primary text-primary-foreground  hover:opacity-90 transition-opacity"
             >
               Download File
             </a>

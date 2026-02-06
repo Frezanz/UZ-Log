@@ -94,7 +94,6 @@ export const ContentViewer: React.FC<ContentViewerProps> = ({
         onClose={onClose}
         image={content}
         onShare={onShare}
-        onEdit={onEdit}
       />
     );
   }
@@ -137,13 +136,13 @@ export const ContentViewer: React.FC<ContentViewerProps> = ({
         <DialogHeader>
           <div className="flex items-center gap-2 mb-2">
             <span
-              className={`inline-flex items-center gap-1 px-2 py-1 rounded text-xs font-medium ${typeColors[content.type]}`}
+              className={`inline-flex items-center gap-1 px-2 py-1  text-xs font-medium ${typeColors[content.type]}`}
             >
               {typeIcons[content.type]}
               {content.type.charAt(0).toUpperCase() + content.type.slice(1)}
             </span>
             {content.is_public && (
-              <span className="text-xs font-medium text-primary bg-secondary px-2 py-1 rounded">
+              <span className="text-xs font-medium text-primary bg-secondary px-2 py-1 ">
                 Public
               </span>
             )}
@@ -157,18 +156,18 @@ export const ContentViewer: React.FC<ContentViewerProps> = ({
         <div className="space-y-4">
           {/* Image Viewer */}
           {content.type === "image" && content.file_url && (
-            <div className="flex justify-center bg-secondary/50 rounded-lg p-4 max-h-[60vh] overflow-auto">
+            <div className="flex justify-center bg-secondary/50 -lg p-4 max-h-[60vh] overflow-auto">
               <img
                 src={content.file_url}
                 alt={content.title}
-                className="max-w-full max-h-full object-contain rounded"
+                className="max-w-full max-h-full object-contain "
               />
             </div>
           )}
 
           {/* Video Viewer */}
           {content.type === "video" && content.file_url && (
-            <div className="bg-black rounded-lg overflow-hidden">
+            <div className="bg-black -lg overflow-hidden">
               <video
                 controls
                 className="w-full max-h-[60vh]"
@@ -186,7 +185,7 @@ export const ContentViewer: React.FC<ContentViewerProps> = ({
               {syntaxAnalysis && (
                 <SyntaxErrorDisplay result={syntaxAnalysis} compact={true} />
               )}
-              <div className="bg-secondary/30 rounded-lg p-4 max-h-[60vh] overflow-auto">
+              <div className="bg-secondary/30 -lg p-4 max-h-[60vh] overflow-auto">
                 <pre className="font-sans whitespace-pre-wrap break-words text-foreground text-sm leading-relaxed cursor-text select-text">
                   {content.content}
                 </pre>
@@ -195,7 +194,7 @@ export const ContentViewer: React.FC<ContentViewerProps> = ({
                 <span>Select the text above to copy it</span>
               </div>
               {content.voice_url && (
-                <div className="bg-secondary/30 rounded-lg p-4">
+                <div className="bg-secondary/30 -lg p-4">
                   <p className="text-sm font-medium text-foreground mb-3">
                     Voice Attachment
                   </p>
@@ -214,7 +213,7 @@ export const ContentViewer: React.FC<ContentViewerProps> = ({
               {syntaxAnalysis && (
                 <SyntaxErrorDisplay result={syntaxAnalysis} compact={true} />
               )}
-              <div className="bg-secondary/30 rounded-lg p-4 max-h-[60vh] overflow-auto">
+              <div className="bg-secondary/30 -lg p-4 max-h-[60vh] overflow-auto">
                 <pre className="font-mono text-xs text-foreground leading-relaxed whitespace-pre-wrap break-words cursor-text select-text">
                   {content.content}
                 </pre>
@@ -223,7 +222,7 @@ export const ContentViewer: React.FC<ContentViewerProps> = ({
                 <span>Select the code above to copy it</span>
               </div>
               {content.voice_url && (
-                <div className="bg-secondary/30 rounded-lg p-4">
+                <div className="bg-secondary/30 -lg p-4">
                   <p className="text-sm font-medium text-foreground mb-3">
                     Voice Attachment
                   </p>
@@ -242,7 +241,7 @@ export const ContentViewer: React.FC<ContentViewerProps> = ({
               {syntaxAnalysis && (
                 <SyntaxErrorDisplay result={syntaxAnalysis} compact={true} />
               )}
-              <div className="bg-secondary/30 rounded-lg p-4 max-h-[60vh] overflow-auto">
+              <div className="bg-secondary/30 -lg p-4 max-h-[60vh] overflow-auto">
                 <pre className="font-sans whitespace-pre-wrap break-words text-foreground text-sm leading-relaxed cursor-text select-text">
                   {content.content}
                 </pre>
@@ -251,7 +250,7 @@ export const ContentViewer: React.FC<ContentViewerProps> = ({
                 <span>Select the prompt above to copy it</span>
               </div>
               {content.voice_url && (
-                <div className="bg-secondary/30 rounded-lg p-4">
+                <div className="bg-secondary/30 -lg p-4">
                   <p className="text-sm font-medium text-foreground mb-3">
                     Voice Attachment
                   </p>
@@ -270,7 +269,7 @@ export const ContentViewer: React.FC<ContentViewerProps> = ({
               {syntaxAnalysis && (
                 <SyntaxErrorDisplay result={syntaxAnalysis} compact={true} />
               )}
-              <div className="bg-secondary/30 rounded-lg p-4 max-h-[60vh] overflow-auto">
+              <div className="bg-secondary/30 -lg p-4 max-h-[60vh] overflow-auto">
                 <pre className="font-mono text-xs text-foreground leading-relaxed whitespace-pre-wrap break-words cursor-text select-text">
                   {content.content}
                 </pre>
@@ -279,7 +278,7 @@ export const ContentViewer: React.FC<ContentViewerProps> = ({
                 <span>Select the script above to copy it</span>
               </div>
               {content.voice_url && (
-                <div className="bg-secondary/30 rounded-lg p-4">
+                <div className="bg-secondary/30 -lg p-4">
                   <p className="text-sm font-medium text-foreground mb-3">
                     Voice Attachment
                   </p>
@@ -294,7 +293,7 @@ export const ContentViewer: React.FC<ContentViewerProps> = ({
 
           {/* Link Viewer */}
           {content.type === "link" && content.content && (
-            <div className="bg-secondary/30 rounded-lg p-4">
+            <div className="bg-secondary/30 -lg p-4">
               <a
                 href={content.content}
                 target="_blank"
@@ -311,7 +310,7 @@ export const ContentViewer: React.FC<ContentViewerProps> = ({
 
           {/* File Viewer */}
           {content.type === "file" && content.file_url && (
-            <div className="bg-secondary/30 rounded-lg p-4 flex items-center justify-between">
+            <div className="bg-secondary/30 -lg p-4 flex items-center justify-between">
               <div>
                 <p className="font-medium text-foreground text-sm">
                   File available for download
@@ -358,7 +357,7 @@ export const ContentViewer: React.FC<ContentViewerProps> = ({
                   {content.tags.map((tag, i) => (
                     <span
                       key={i}
-                      className="bg-secondary px-2 py-1 rounded text-xs border border-border"
+                      className="bg-secondary px-2 py-1  text-xs border border-border"
                     >
                       #{tag}
                     </span>

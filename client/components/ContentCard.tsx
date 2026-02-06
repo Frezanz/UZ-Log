@@ -8,7 +8,6 @@ import {
   Download,
   Share,
   Edit,
-  Trash2,
   CopyPlus,
   FileText,
   Code,
@@ -21,6 +20,7 @@ import {
   BookOpen,
   HardDrive,
   Cloud,
+  Heart,
 } from "lucide-react";
 import { toast } from "sonner";
 import { copyToClipboard } from "@/lib/utils";
@@ -75,6 +75,7 @@ export const ContentCard: React.FC<ContentCardProps> = ({
   onDownload,
 }) => {
   const [showActions, setShowActions] = useState(false);
+  const [isLiked, setIsLiked] = useState(false);
   const wordCount = item.word_count || 0;
   const createdDate = new Date(item.created_at).toLocaleDateString();
   const createdTime = new Date(item.created_at).toLocaleTimeString(undefined, {
@@ -96,36 +97,36 @@ export const ContentCard: React.FC<ContentCardProps> = ({
 
   return (
     <div
-      className="group border border-border rounded-lg bg-card hover:shadow-md hover:border-foreground/20 transition-all duration-200 overflow-hidden flex flex-col h-full cursor-pointer"
+      className="group border border-border bg-card hover:shadow-md hover:border-foreground/20 transition-all duration-200 overflow-hidden flex flex-col h-full cursor-pointer"
       onMouseEnter={() => setShowActions(true)}
       onMouseLeave={() => setShowActions(false)}
       onClick={() => onView?.(item)}
     >
       {/* Type Badge */}
       <div
-        className="px-3 pt-2 flex items-center justify-between gap-1.5"
+        className="px-3 py-2 pl-10 flex items-center justify-between gap-1.5 h-8"
         onClick={(e) => e.stopPropagation()}
       >
         <span
-          className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-medium ${typeColors[item.type]}`}
+          className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-medium ml-2 ${typeColors[item.type]}`}
         >
           {typeIcons[item.type]}
           {item.type.charAt(0).toUpperCase() + item.type.slice(1)}
         </span>
         <div className="flex items-center gap-0.5">
           {item.user_id === "guest" ? (
-            <span className="text-[10px] font-medium text-amber-700 dark:text-amber-300 bg-amber-100 dark:bg-amber-950 px-1.5 py-0.5 rounded inline-flex items-center gap-0.5">
+            <span className="text-[10px] font-medium text-amber-700 dark:text-amber-300 bg-amber-100 dark:bg-amber-950 px-1.5 py-0.5 inline-flex items-center gap-0.5">
               <HardDrive className="w-2.5 h-2.5" />
               Local
             </span>
           ) : (
-            <span className="text-[10px] font-medium text-blue-700 dark:text-blue-300 bg-blue-100 dark:bg-blue-950 px-1.5 py-0.5 rounded inline-flex items-center gap-0.5">
+            <span className="text-[10px] font-medium text-blue-700 dark:text-blue-300 bg-blue-100 dark:bg-blue-950 px-1.5 py-0.5 inline-flex items-center gap-0.5">
               <Cloud className="w-2.5 h-2.5" />
               Cloud
             </span>
           )}
           {item.is_public && (
-            <span className="text-[10px] font-medium text-primary bg-secondary px-1.5 py-0.5 rounded">
+            <span className="text-[10px] font-medium text-primary bg-secondary px-1.5 py-0.5">
               Public
             </span>
           )}
@@ -215,7 +216,7 @@ export const ContentCard: React.FC<ContentCardProps> = ({
             {item.tags.slice(0, 2).map((tag, i) => (
               <span
                 key={i}
-                className="bg-card px-1 py-0 rounded text-[9px] border border-border"
+                className="bg-card px-1 py-0 text-[9px] border border-border"
               >
                 #{tag}
               </span>
@@ -239,9 +240,25 @@ export const ContentCard: React.FC<ContentCardProps> = ({
 
       {/* Actions - Always visible on mobile, hover on desktop */}
       <div
-        className={`px-3 py-1 border-t border-border bg-secondary/50 flex gap-1 transition-opacity duration-200 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 flex-wrap`}
+        className={`px-3 py-1 border-t border-border bg-secondary/50 flex gap-2 transition-opacity duration-200 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 flex-wrap`}
         onClick={(e) => e.stopPropagation()}
       >
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={(e) => {
+            e.stopPropagation();
+            setIsLiked(!isLiked);
+          }}
+          title={isLiked ? "Unlike" : "Like"}
+          className={`flex-1 h-7 ${
+            isLiked ? "text-red-500 dark:text-red-400" : ""
+          }`}
+        >
+          <Heart className={`w-2.5 h-2.5 ${isLiked ? "fill-current" : ""}`} />
+          <span className="hidden sm:inline text-xs">Like</span>
+        </Button>
+
         {(item.content || item.file_url) && (
           <Button
             variant="ghost"
@@ -315,17 +332,6 @@ export const ContentCard: React.FC<ContentCardProps> = ({
         >
           <CopyPlus className="w-2.5 h-2.5" />
           <span className="hidden sm:inline text-xs">Duplicate</span>
-        </Button>
-
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={() => onDelete(item)}
-          title="Delete"
-          className="flex-1 h-7 hover:bg-destructive/10 hover:text-destructive"
-        >
-          <Trash2 className="w-2.5 h-2.5" />
-          <span className="hidden sm:inline text-xs">Delete</span>
         </Button>
       </div>
     </div>

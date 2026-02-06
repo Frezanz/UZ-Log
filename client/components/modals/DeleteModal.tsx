@@ -55,7 +55,7 @@ export const DeleteModal: React.FC<DeleteModalProps> = ({
           </DialogDescription>
         </DialogHeader>
 
-        <div className="bg-destructive/10 border border-destructive/20 rounded-lg p-3">
+        <div className="bg-destructive/10 border border-destructive/20 p-3">
           <p className="text-sm text-destructive font-medium">
             This will permanently remove the content and all associated data.
           </p>

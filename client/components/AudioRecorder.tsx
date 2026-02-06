@@ -171,7 +171,7 @@ export const AudioRecorder: React.FC<AudioRecorderProps> = ({
 
   if (!isSupported) {
     return (
-      <div className="p-3 bg-amber-50 dark:bg-amber-950 border border-amber-200 dark:border-amber-800 rounded text-xs text-amber-700 dark:text-amber-300">
+      <div className="p-3 bg-amber-50 dark:bg-amber-950 border border-amber-200 dark:border-amber-800  text-xs text-amber-700 dark:text-amber-300">
         Audio recording is not supported in your browser. Please use Chrome,
         Firefox, or Safari.
       </div>
@@ -186,7 +186,7 @@ export const AudioRecorder: React.FC<AudioRecorderProps> = ({
           <div className="flex items-center gap-2">
             {isRecording && (
               <div className="flex items-center gap-2 text-red-600 dark:text-red-400">
-                <div className="w-2 h-2 bg-red-600 dark:bg-red-400 rounded-full animate-pulse" />
+                <div className="w-2 h-2 bg-red-600 dark:bg-red-400 -full animate-pulse" />
                 <span className="text-xs font-medium">Recording...</span>
               </div>
             )}
@@ -222,10 +222,10 @@ export const AudioRecorder: React.FC<AudioRecorderProps> = ({
           </div>
         </div>
       ) : (
-        <div className="space-y-2 p-3 bg-secondary/50 rounded border border-border">
+        <div className="space-y-2 p-3 bg-secondary/50  border border-border">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+              <div className="w-8 h-8 -full bg-primary/10 flex items-center justify-center">
                 <Mic className="w-4 h-4 text-primary" />
               </div>
               <div className="text-sm">

@@ -9,7 +9,7 @@ export type ContentType =
   | "script"
   | "book";
 
-export type ContentStatus = "active" | "pending" | "completed";
+export type ContentStatus = "active" | "pending" | "completed" | "hidden";
 
 export interface ContentItem {
   id: string;

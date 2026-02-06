@@ -7,7 +7,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Check, Clock, CheckCircle2 } from "lucide-react";
+import { Check, Clock, CheckCircle2, EyeOff } from "lucide-react";
 
 interface StatusSelectProps {
   value?: ContentStatus;
@@ -30,6 +30,11 @@ const statusConfig = {
     label: "Completed",
     icon: Check,
     color: "bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-300",
+  },
+  hidden: {
+    label: "Hidden",
+    icon: EyeOff,
+    color: "bg-gray-100 dark:bg-gray-950 text-gray-700 dark:text-gray-300",
   },
 };
 
@@ -145,7 +150,7 @@ export const StatusDropdown: React.FC<StatusDropdownProps> = ({
           e.stopPropagation();
           !disabled && setIsOpen(!isOpen);
         }}
-        className={`inline-flex items-center gap-1 px-2 py-1 rounded text-[10px] font-medium transition-all ${
+        className={`inline-flex items-center gap-1 px-2 py-0.5 text-[10px] font-medium transition-all h-6 ${
           config?.color ||
           "bg-gray-100 dark:bg-gray-950 text-gray-700 dark:text-gray-300"
         } ${disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer hover:opacity-90"} ${
@@ -163,7 +168,7 @@ export const StatusDropdown: React.FC<StatusDropdownProps> = ({
       {/* Dropdown Menu */}
       {isOpen && !disabled && (
         <div
-          className="absolute top-full mt-1 left-0 z-50 bg-popover border border-border rounded-lg shadow-lg py-1 min-w-[140px]"
+          className="absolute top-full mt-1 left-0 z-50 bg-popover border border-border shadow-lg py-1 min-w-[140px]"
           role="listbox"
           onClick={(e) => e.stopPropagation()}
         >

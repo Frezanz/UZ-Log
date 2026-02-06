@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { ContentItem } from "@/types/content";
 import { Button } from "@/components/ui/button";
-import { X, Download, Share, Heart, Edit } from "lucide-react";
+import { X, Download, Share } from "lucide-react";
 import { toast } from "sonner";
 
 interface ImageViewerProps {
@@ -10,7 +10,6 @@ interface ImageViewerProps {
   image: ContentItem | null;
   onShare?: (item: ContentItem) => void;
   onDownload?: (item: ContentItem) => void;
-  onEdit?: (item: ContentItem) => void;
 }
 
 export const ImageViewer: React.FC<ImageViewerProps> = ({
@@ -19,9 +18,8 @@ export const ImageViewer: React.FC<ImageViewerProps> = ({
   image,
   onShare,
   onDownload,
-  onEdit,
 }) => {
-  const [isLiked, setIsLiked] = useState(false);
+  const [showUI, setShowUI] = useState(true);
 
   // Handle ESC key to close viewer
   React.useEffect(() => {
@@ -69,13 +67,6 @@ export const ImageViewer: React.FC<ImageViewerProps> = ({
     }
   };
 
-  const handleEdit = () => {
-    if (onEdit) {
-      onEdit(image);
-      onClose();
-    }
-  };
-
   return (
     <div
       className={`fixed inset-0 z-50 bg-black/95 transition-opacity duration-200 ${
@@ -90,7 +81,9 @@ export const ImageViewer: React.FC<ImageViewerProps> = ({
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 z-10 p-2 rounded-full hover:bg-white/20 transition-colors"
+          className={`absolute top-4 right-4 z-10 p-2 rounded-full hover:bg-white/20 transition-all duration-300 ${
+            showUI ? "opacity-100" : "opacity-0 pointer-events-none"
+          }`}
           title="Close"
         >
           <X className="w-6 h-6 text-white" />
@@ -101,18 +94,23 @@ export const ImageViewer: React.FC<ImageViewerProps> = ({
           <img
             src={image.file_url}
             alt={image.title}
-            className="w-full h-full object-contain"
-            onClick={(e) => e.stopPropagation()}
+            className="w-full h-full object-contain cursor-pointer"
+            onClick={(e) => {
+              e.stopPropagation();
+              setShowUI(!showUI);
+            }}
           />
         </div>
 
         {/* Details Section - Instagram/Facebook Style, Flexible Scrolling */}
         <div
-          className="w-full lg:w-96 bg-card border-t lg:border-t-0 lg:border-l border-border flex flex-col overflow-y-auto"
+          className={`w-full lg:w-96 bg-card border-t lg:border-t-0 lg:border-l border-border flex flex-col overflow-y-auto transition-all duration-300 ${
+            showUI ? "opacity-100" : "opacity-0 pointer-events-none absolute"
+          }`}
           onClick={(e) => e.stopPropagation()}
         >
           {/* Header with User Info */}
-          <div className="px-4 py-3 border-b border-border">
+          <div className="px-3 py-2 border-b border-border">
             <div className="flex items-center justify-between">
               <div>
                 <p className="font-semibold text-foreground text-sm">
@@ -137,8 +135,8 @@ export const ImageViewer: React.FC<ImageViewerProps> = ({
           </div>
 
           {/* Title and Category */}
-          <div className="px-4 py-3 border-b border-border">
-            <h2 className="text-lg font-bold text-foreground mb-2">
+          <div className="px-3 py-2 border-b border-border">
+            <h2 className="text-base font-bold text-foreground mb-1">
               {image.title}
             </h2>
             {image.category && (
@@ -151,7 +149,7 @@ export const ImageViewer: React.FC<ImageViewerProps> = ({
           </div>
 
           {/* Description/Content Area - Flexible Scrolling */}
-          <div className="flex-1 overflow-y-auto px-4 py-4 space-y-4 min-h-0">
+          <div className="flex-1 overflow-y-auto px-3 py-2 space-y-3 min-h-0">
             {/* File Size */}
             {image.file_size && (
               <div className="space-y-1">
@@ -199,56 +197,9 @@ export const ImageViewer: React.FC<ImageViewerProps> = ({
           </div>
 
           {/* Action Section - Instagram Style */}
-          <div className="px-4 py-4 border-t border-border space-y-3 flex-shrink-0">
-            {/* Like Button */}
-            <button
-              onClick={() => setIsLiked(!isLiked)}
-              className={`w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg transition-all duration-200 font-medium ${
-                isLiked
-                  ? "bg-red-500 dark:bg-red-600 text-white shadow-lg"
-                  : "bg-secondary hover:bg-secondary/80 text-foreground"
-              }`}
-            >
-              <Heart className={`w-5 h-5 ${isLiked ? "fill-current" : ""}`} />
-              <span>{isLiked ? "Liked" : "Like Image"}</span>
-            </button>
-
-            {/* Action Buttons Grid */}
-            <div className="grid grid-cols-2 gap-2">
-              <Button
-                variant="outline"
-                onClick={handleDownload}
-                className="flex items-center justify-center gap-2 h-10"
-                title="Download image"
-              >
-                <Download className="w-4 h-4" />
-                <span>Download</span>
-              </Button>
-              <Button
-                variant="outline"
-                onClick={handleShare}
-                className="flex items-center justify-center gap-2 h-10"
-                title="Share image"
-              >
-                <Share className="w-4 h-4" />
-                <span>Share</span>
-              </Button>
-            </div>
-
-            {/* Edit Button - Full Width */}
-            {onEdit && (
-              <Button
-                onClick={handleEdit}
-                className="w-full flex items-center justify-center gap-2 h-10"
-                title="Edit image details"
-              >
-                <Edit className="w-4 h-4" />
-                <span>Edit Details</span>
-              </Button>
-            )}
-
+          <div className="px-3 py-3 border-t border-border flex-shrink-0">
             {/* Click to Close Hint */}
-            <p className="text-center text-xs text-muted-foreground pt-2">
+            <p className="text-center text-xs text-muted-foreground">
               Press ESC or click outside to close
             </p>
           </div>
