@@ -272,6 +272,42 @@ export const useContent = () => {
     return Array.from(tags).sort();
   }, [items]);
 
+  const duplicateItem = useCallback(
+    async (id: string) => {
+      try {
+        let newItem: ContentItem;
+        if (isAuthenticated) {
+          newItem = await duplicateContent(id);
+        } else {
+          // For guest users, manually duplicate from localStorage
+          const original = items.find((i) => i.id === id);
+          if (!original) throw new Error("Item not found");
+
+          const { id: _id, created_at: _ca, updated_at: _ua, ...rest } =
+            original;
+          newItem = await createNewContent({
+            ...rest,
+            title: `${original.title} (copy)`,
+            is_public: false,
+            auto_delete_at: null,
+            auto_delete_enabled: false,
+            status: "active",
+          });
+        }
+
+        setItems((prev) => [newItem, ...prev]);
+        toast.success("Item duplicated successfully!");
+        return newItem;
+      } catch (err) {
+        const message =
+          err instanceof Error ? err.message : "Failed to duplicate item";
+        toast.error(message);
+        throw new Error(message);
+      }
+    },
+    [items, isAuthenticated, createNewContent],
+  );
+
   return {
     items,
     isLoading,
@@ -283,6 +319,7 @@ export const useContent = () => {
     removeContent,
     togglePublic,
     changeStatus,
+    duplicateItem,
     refreshContent: fetchContent,
     getCategories,
     getTags,
