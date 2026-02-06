@@ -73,6 +73,7 @@ export const updateGuestContent = (
   const updated: ContentItem = {
     ...items[itemIndex],
     ...updates,
+    status: updates.status || items[itemIndex].status || "active",
     updated_at: new Date().toISOString(),
     word_count: updates.content
       ? updates.content.split(/\s+/).length
