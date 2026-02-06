@@ -69,9 +69,11 @@ export const ContentViewer: React.FC<ContentViewerProps> = ({
   isOpen,
   onClose,
   content,
+  allContent = [],
   onEdit,
   onDelete,
   onShare,
+  onLinksUpdate,
 }) => {
   const [copied, setCopied] = useState(false);
   const [showImageViewer, setShowImageViewer] = useState(false);
