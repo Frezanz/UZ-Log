@@ -10,6 +10,7 @@ import { ContentModal } from "@/components/modals/ContentModal";
 import { ContentViewer } from "@/components/modals/ContentViewer";
 import { ShareModal } from "@/components/modals/ShareModal";
 import { DeleteModal } from "@/components/modals/DeleteModal";
+import { AutoDeleteModal } from "@/components/modals/AutoDeleteModal";
 import { Button } from "@/components/ui/button";
 import { Plus, Filter, ChevronDown } from "lucide-react";
 import { toast } from "sonner";
@@ -28,6 +29,7 @@ export default function Index() {
     removeContent,
     togglePublic,
     changeStatus,
+    duplicateItem,
     getCategories,
     getTags,
   } = useContent();
@@ -52,11 +54,20 @@ export default function Index() {
   const [shareItem, setShareItem] = useState<ContentItem | null>(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deleteItem, setDeleteItem] = useState<ContentItem | null>(null);
+  const [showAutoDeleteModal, setShowAutoDeleteModal] = useState(false);
+  const [autoDeleteItem, setAutoDeleteItem] = useState<ContentItem | null>(
+    null,
+  );
+  const [pendingStatusId, setPendingStatusId] = useState<string | null>(null);
   const [showFilters, setShowFilters] = useState(false);
   const [showActions, setShowActions] = useState(false);
   const [showSortBy, setShowSortBy] = useState(false);
   const [showCategories, setShowCategories] = useState(false);
   const [showTags, setShowTags] = useState(false);
+
+  // Bulk selection states
+  const [selectedItems, setSelectedItems] = useState<string[]>([]);
+  const [showBulkDeleteModal, setShowBulkDeleteModal] = useState(false);
 
   // Load public content for anonymous users (if Supabase is available)
   // If not, guests will just see their own localStorage content
@@ -163,6 +174,101 @@ export default function Index() {
     }
   };
 
+  const handleStatusChange = async (
+    id: string,
+    status: "active" | "pending" | "completed",
+  ) => {
+    // If changing to completed, show auto-delete modal
+    if (status === "completed") {
+      const item = items.find((i) => i.id === id);
+      if (item) {
+        setAutoDeleteItem(item);
+        setPendingStatusId(id);
+        setShowAutoDeleteModal(true);
+      }
+    } else {
+      // For other status changes, apply immediately
+      await changeStatus(id, status);
+    }
+  };
+
+  const handleAutoDeleteConfirm = async (deleteAtTime: string | null) => {
+    if (pendingStatusId) {
+      await changeStatus(pendingStatusId, "completed", deleteAtTime);
+      setPendingStatusId(null);
+      setAutoDeleteItem(null);
+    }
+  };
+
+  const handleDuplicate = async (item: ContentItem) => {
+    try {
+      await duplicateItem(item.id);
+    } catch (error) {
+      console.error("Error duplicating item:", error);
+    }
+  };
+
+  // Bulk Operations
+  const handleSelectItem = (id: string) => {
+    if (selectedItems.includes(id)) {
+      setSelectedItems(selectedItems.filter((item) => item !== id));
+    } else {
+      setSelectedItems([...selectedItems, id]);
+    }
+  };
+
+  const handleSelectAll = () => {
+    if (selectedItems.length === displayItems.length) {
+      setSelectedItems([]);
+    } else {
+      setSelectedItems(displayItems.map((item) => item.id));
+    }
+  };
+
+  const handleBulkDelete = async () => {
+    for (const id of selectedItems) {
+      try {
+        await removeContent(id);
+      } catch (error) {
+        console.error("Error deleting item:", error);
+      }
+    }
+    setSelectedItems([]);
+    setShowBulkDeleteModal(false);
+    toast.success("Items deleted successfully");
+  };
+
+  const handleBulkStatusChange = async (
+    status: "active" | "pending" | "completed",
+  ) => {
+    for (const id of selectedItems) {
+      try {
+        await changeStatus(id, status);
+      } catch (error) {
+        console.error("Error changing status:", error);
+      }
+    }
+    setSelectedItems([]);
+    toast.success(`Status changed to ${status} for selected items`);
+  };
+
+  const handleBulkShare = async (isPublic: boolean) => {
+    for (const id of selectedItems) {
+      const item = items.find((i) => i.id === id);
+      if (item) {
+        try {
+          await togglePublic(id, isPublic);
+        } catch (error) {
+          console.error("Error sharing item:", error);
+        }
+      }
+    }
+    setSelectedItems([]);
+    toast.success(
+      `Items marked as ${isPublic ? "public" : "private"} successfully`,
+    );
+  };
+
   const handleModalClose = () => {
     setShowContentModal(false);
     setEditingItem(undefined);
@@ -249,6 +355,7 @@ export default function Index() {
                     setEditingItem(undefined);
                     setShowContentModal(true);
                   }}
+                  variant="outline"
                   className="flex-1 sm:flex-none"
                 >
                   <Plus className="w-4 h-4 mr-2" />
@@ -480,19 +587,90 @@ export default function Index() {
             ))}
           </div>
         ) : displayItems.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-            {displayItems.map((item) => (
-              <ContentCard
-                key={item.id}
-                item={item}
-                onView={handleOpenView}
-                onEdit={handleOpenEdit}
-                onDelete={handleOpenDelete}
-                onShare={handleOpenShare}
-                onStatusChange={changeStatus}
-                onDownload={handleDownload}
-              />
-            ))}
+          <div>
+            {/* Bulk Selection Toolbar */}
+            {selectedItems.length > 0 && (
+              <div className="mb-4 p-4 bg-primary/5 border border-primary/20 rounded-lg flex items-center justify-between gap-4 flex-wrap">
+                <div className="flex items-center gap-4">
+                  <input
+                    type="checkbox"
+                    checked={selectedItems.length === displayItems.length}
+                    onChange={handleSelectAll}
+                    className="w-5 h-5 rounded border border-border cursor-pointer"
+                    title="Select all"
+                  />
+                  <span className="text-sm font-medium text-foreground">
+                    {selectedItems.length} item
+                    {selectedItems.length !== 1 ? "s" : ""} selected
+                  </span>
+                </div>
+
+                <div className="flex gap-2 flex-wrap">
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => handleBulkStatusChange("active")}
+                  >
+                    Mark Active
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => handleBulkStatusChange("pending")}
+                  >
+                    Mark Pending
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => handleBulkShare(true)}
+                  >
+                    Make Public
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => handleBulkShare(false)}
+                  >
+                    Make Private
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => setShowBulkDeleteModal(true)}
+                    className="text-destructive hover:text-destructive"
+                  >
+                    Delete
+                  </Button>
+                </div>
+              </div>
+            )}
+
+            {/* Content Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+              {displayItems.map((item) => (
+                <div key={item.id} className="relative">
+                  {/* Selection Checkbox */}
+                  <input
+                    type="checkbox"
+                    checked={selectedItems.includes(item.id)}
+                    onChange={() => handleSelectItem(item.id)}
+                    className="absolute top-2 left-2 z-10 w-5 h-5 rounded border border-border cursor-pointer"
+                    title="Select item"
+                  />
+                  <ContentCard
+                    item={item}
+                    onView={handleOpenView}
+                    onEdit={handleOpenEdit}
+                    onDelete={handleOpenDelete}
+                    onShare={handleOpenShare}
+                    onDuplicate={handleDuplicate}
+                    onStatusChange={handleStatusChange}
+                    onDownload={handleDownload}
+                  />
+                </div>
+              ))}
+            </div>
           </div>
         ) : (
           <div className="flex flex-col items-center justify-center py-12 text-center">
@@ -555,6 +733,24 @@ export default function Index() {
           deleteItem ? handleDelete(deleteItem.id) : Promise.resolve()
         }
         title={deleteItem?.title || "Content"}
+      />
+
+      <AutoDeleteModal
+        isOpen={showAutoDeleteModal}
+        onClose={() => {
+          setShowAutoDeleteModal(false);
+          setAutoDeleteItem(null);
+          setPendingStatusId(null);
+        }}
+        onConfirm={handleAutoDeleteConfirm}
+        itemTitle={autoDeleteItem?.title || "Item"}
+      />
+
+      <DeleteModal
+        isOpen={showBulkDeleteModal}
+        onClose={() => setShowBulkDeleteModal(false)}
+        onConfirm={handleBulkDelete}
+        title={`${selectedItems.length} Item${selectedItems.length !== 1 ? "s" : ""}`}
       />
     </div>
   );

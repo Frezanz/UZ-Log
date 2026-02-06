@@ -141,7 +141,10 @@ export const StatusDropdown: React.FC<StatusDropdownProps> = ({
   return (
     <div className="relative" ref={menuRef}>
       <button
-        onClick={() => !disabled && setIsOpen(!isOpen)}
+        onClick={(e) => {
+          e.stopPropagation();
+          !disabled && setIsOpen(!isOpen);
+        }}
         className={`inline-flex items-center gap-1 px-2 py-1 rounded text-[10px] font-medium transition-all ${
           config?.color ||
           "bg-gray-100 dark:bg-gray-950 text-gray-700 dark:text-gray-300"
@@ -162,6 +165,7 @@ export const StatusDropdown: React.FC<StatusDropdownProps> = ({
         <div
           className="absolute top-full mt-1 left-0 z-50 bg-popover border border-border rounded-lg shadow-lg py-1 min-w-[140px]"
           role="listbox"
+          onClick={(e) => e.stopPropagation()}
         >
           {Object.entries(statusConfig).map(([key, cfg]) => {
             const StatusIcon = cfg.icon;
@@ -169,7 +173,10 @@ export const StatusDropdown: React.FC<StatusDropdownProps> = ({
             return (
               <button
                 key={key}
-                onClick={() => handleStatusSelect(key as ContentStatus)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleStatusSelect(key as ContentStatus);
+                }}
                 className={`w-full text-left px-3 py-2 flex items-center gap-2 text-xs transition-colors ${
                   isSelected
                     ? "bg-primary/10 text-primary font-medium"

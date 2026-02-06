@@ -1,10 +1,17 @@
 import { ContentItem } from "@/types/content";
 
 const STORAGE_KEY = "uz-log-guest-content";
+let idCounter = 0;
 
-// Generate a simple UUID
+// Generate a truly unique UUID
 const generateId = (): string => {
-  return `local-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+  // Use crypto.randomUUID if available, otherwise fallback to custom generation
+  if (typeof crypto !== "undefined" && crypto.randomUUID) {
+    return `local-${crypto.randomUUID()}`;
+  }
+  // Fallback: timestamp + counter + random
+  idCounter++;
+  return `local-${Date.now()}-${idCounter}-${Math.random().toString(36).substr(2, 15)}`;
 };
 
 // Get all guest content from localStorage
@@ -12,10 +19,12 @@ export const getGuestContent = (): ContentItem[] => {
   try {
     const data = localStorage.getItem(STORAGE_KEY);
     const items = data ? JSON.parse(data) : [];
-    // Ensure all items have a status
+    // Ensure all items have a status and auto_delete fields
     return items.map((item: ContentItem) => ({
       ...item,
       status: item.status || "active",
+      auto_delete_at: item.auto_delete_at || null,
+      auto_delete_enabled: item.auto_delete_enabled || false,
     }));
   } catch (error) {
     console.error("Failed to read guest content from localStorage:", error);
@@ -28,7 +37,14 @@ export const getGuestContentById = (id: string): ContentItem | null => {
   try {
     const items = getGuestContent();
     const item = items.find((item) => item.id === id);
-    return item ? { ...item, status: item.status || "active" } : null;
+    return item
+      ? {
+          ...item,
+          status: item.status || "active",
+          auto_delete_at: item.auto_delete_at || null,
+          auto_delete_enabled: item.auto_delete_enabled || false,
+        }
+      : null;
   } catch (error) {
     console.error("Failed to retrieve guest content by ID:", error);
     return null;
@@ -58,6 +74,8 @@ export const createGuestContent = (
     user_id: "guest",
     uploader_name: "Anonymous",
     status: content.status || "active",
+    auto_delete_at: content.auto_delete_at || null,
+    auto_delete_enabled: content.auto_delete_enabled || false,
     created_at: now,
     updated_at: now,
     word_count: content.content ? content.content.split(/\s+/).length : 0,
@@ -86,6 +104,14 @@ export const updateGuestContent = (
     ...items[itemIndex],
     ...updates,
     status: updates.status || items[itemIndex].status || "active",
+    auto_delete_at:
+      updates.auto_delete_at !== undefined
+        ? updates.auto_delete_at
+        : items[itemIndex].auto_delete_at,
+    auto_delete_enabled:
+      updates.auto_delete_enabled !== undefined
+        ? updates.auto_delete_enabled
+        : items[itemIndex].auto_delete_enabled,
     updated_at: new Date().toISOString(),
     word_count: updates.content
       ? updates.content.split(/\s+/).length

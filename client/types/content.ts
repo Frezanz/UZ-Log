@@ -27,6 +27,8 @@ export interface ContentItem {
   updated_at: string;
   word_count?: number;
   uploader_name?: string;
+  auto_delete_at?: string | null;
+  auto_delete_enabled?: boolean;
 }
 
 export interface BookPage {

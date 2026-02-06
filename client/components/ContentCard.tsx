@@ -8,6 +8,7 @@ import {
   Share,
   Edit,
   Trash2,
+  CopyPlus,
   FileText,
   Code,
   Image,
@@ -29,6 +30,7 @@ interface ContentCardProps {
   onEdit: (item: ContentItem) => void;
   onDelete: (item: ContentItem) => void;
   onShare: (item: ContentItem) => void;
+  onDuplicate?: (item: ContentItem) => void;
   onStatusChange?: (
     id: string,
     status: "active" | "pending" | "completed",
@@ -67,6 +69,7 @@ export const ContentCard: React.FC<ContentCardProps> = ({
   onEdit,
   onDelete,
   onShare,
+  onDuplicate,
   onStatusChange,
   onDownload,
 }) => {
@@ -98,7 +101,10 @@ export const ContentCard: React.FC<ContentCardProps> = ({
       onClick={() => onView?.(item)}
     >
       {/* Type Badge */}
-      <div className="px-3 pt-2 flex items-center justify-between gap-1.5">
+      <div
+        className="px-3 pt-2 flex items-center justify-between gap-1.5"
+        onClick={(e) => e.stopPropagation()}
+      >
         <span
           className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-medium ${typeColors[item.type]}`}
         >
@@ -210,11 +216,22 @@ export const ContentCard: React.FC<ContentCardProps> = ({
             )}
           </div>
         )}
+        {item.auto_delete_enabled && item.auto_delete_at && (
+          <div className="text-[10px] text-orange-600 dark:text-orange-400 font-medium">
+            Will auto-delete:{" "}
+            {new Date(item.auto_delete_at).toLocaleDateString()} at{" "}
+            {new Date(item.auto_delete_at).toLocaleTimeString(undefined, {
+              hour: "2-digit",
+              minute: "2-digit",
+            })}
+          </div>
+        )}
       </div>
 
       {/* Actions - Always visible on mobile, hover on desktop */}
       <div
         className={`px-3 py-1 border-t border-border bg-secondary/50 flex gap-1 transition-opacity duration-200 opacity-100 sm:opacity-0 sm:group-hover:opacity-100`}
+        onClick={(e) => e.stopPropagation()}
       >
         {(item.content || item.file_url) && (
           <Button
@@ -262,6 +279,17 @@ export const ContentCard: React.FC<ContentCardProps> = ({
         >
           <Edit className="w-2.5 h-2.5" />
           <span className="hidden sm:inline text-xs">Edit</span>
+        </Button>
+
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => onDuplicate?.(item)}
+          title="Duplicate"
+          className="flex-1 h-7"
+        >
+          <CopyPlus className="w-2.5 h-2.5" />
+          <span className="hidden sm:inline text-xs">Duplicate</span>
         </Button>
 
         <Button

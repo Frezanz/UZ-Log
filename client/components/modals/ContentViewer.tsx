@@ -11,7 +11,6 @@ import {
 import {
   Copy,
   Download,
-  X,
   FileText,
   Code,
   Image as ImageIcon,
@@ -105,35 +104,23 @@ export const ContentViewer: React.FC<ContentViewerProps> = ({
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <div className="flex items-start justify-between gap-4">
-            <div className="flex-1">
-              <div className="flex items-center gap-2 mb-2">
-                <span
-                  className={`inline-flex items-center gap-1 px-2 py-1 rounded text-xs font-medium ${typeColors[content.type]}`}
-                >
-                  {typeIcons[content.type]}
-                  {content.type.charAt(0).toUpperCase() + content.type.slice(1)}
-                </span>
-                {content.is_public && (
-                  <span className="text-xs font-medium text-primary bg-secondary px-2 py-1 rounded">
-                    Public
-                  </span>
-                )}
-              </div>
-              <DialogTitle className="text-2xl">{content.title}</DialogTitle>
-              <DialogDescription className="mt-2 text-xs text-muted-foreground">
-                {content.uploader_name} • {createdDate} at {createdTime}
-              </DialogDescription>
-            </div>
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={onClose}
-              className="flex-shrink-0"
+          <div className="flex items-center gap-2 mb-2">
+            <span
+              className={`inline-flex items-center gap-1 px-2 py-1 rounded text-xs font-medium ${typeColors[content.type]}`}
             >
-              <X className="w-5 h-5" />
-            </Button>
+              {typeIcons[content.type]}
+              {content.type.charAt(0).toUpperCase() + content.type.slice(1)}
+            </span>
+            {content.is_public && (
+              <span className="text-xs font-medium text-primary bg-secondary px-2 py-1 rounded">
+                Public
+              </span>
+            )}
           </div>
+          <DialogTitle className="text-2xl">{content.title}</DialogTitle>
+          <DialogDescription className="mt-2 text-xs text-muted-foreground">
+            {content.uploader_name} • {createdDate} at {createdTime}
+          </DialogDescription>
         </DialogHeader>
 
         <div className="space-y-4">

@@ -8,6 +8,7 @@ import {
   deleteContent,
   shareContent,
   toggleStatus,
+  duplicateContent,
 } from "@/lib/api";
 import {
   getGuestContent,
@@ -47,6 +48,34 @@ export const useContent = () => {
         content = filterGuestContent(filters);
       }
 
+      // Clean up expired auto-delete items
+      const now = new Date();
+      const itemsToDelete: string[] = [];
+
+      content = content.filter((item) => {
+        if (item.auto_delete_at && item.auto_delete_enabled) {
+          const deleteTime = new Date(item.auto_delete_at);
+          if (deleteTime <= now) {
+            itemsToDelete.push(item.id);
+            return false;
+          }
+        }
+        return true;
+      });
+
+      // Delete expired items
+      for (const id of itemsToDelete) {
+        try {
+          if (isAuthenticated) {
+            await deleteContent(id);
+          } else {
+            deleteGuestContent(id);
+          }
+        } catch (err) {
+          console.error("Error deleting expired item:", err);
+        }
+      }
+
       setItems(content);
     } catch (err) {
       const message =
@@ -62,6 +91,29 @@ export const useContent = () => {
   useEffect(() => {
     fetchContent();
   }, [fetchContent]);
+
+  // Periodically check for expired auto-delete items
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const now = new Date();
+      let hasExpired = false;
+
+      items.forEach((item) => {
+        if (item.auto_delete_at && item.auto_delete_enabled) {
+          const deleteTime = new Date(item.auto_delete_at);
+          if (deleteTime <= now) {
+            hasExpired = true;
+          }
+        }
+      });
+
+      if (hasExpired) {
+        fetchContent();
+      }
+    }, 60000); // Check every minute
+
+    return () => clearInterval(interval);
+  }, [items, fetchContent]);
 
   const createNewContent = useCallback(
     async (data: Partial<ContentItem>) => {
@@ -168,13 +220,24 @@ export const useContent = () => {
   );
 
   const changeStatus = useCallback(
-    async (id: string, status: "active" | "pending" | "completed") => {
+    async (
+      id: string,
+      status: "active" | "pending" | "completed",
+      autoDeleteAt?: string | null,
+    ) => {
       try {
         let updated: ContentItem;
+        const updates: Partial<ContentItem> = { status };
+
+        if (autoDeleteAt !== undefined) {
+          updates.auto_delete_at = autoDeleteAt;
+          updates.auto_delete_enabled = !!autoDeleteAt;
+        }
+
         if (isAuthenticated) {
-          updated = await toggleStatus(id, status);
+          updated = await toggleStatus(id, status, autoDeleteAt);
         } else {
-          updated = updateGuestContent(id, { status });
+          updated = updateGuestContent(id, updates);
         }
 
         setItems((prev) =>
@@ -209,6 +272,47 @@ export const useContent = () => {
     return Array.from(tags).sort();
   }, [items]);
 
+  const duplicateItem = useCallback(
+    async (id: string) => {
+      try {
+        let newItem: ContentItem;
+        if (isAuthenticated) {
+          newItem = await duplicateContent(id);
+          // For authenticated users, need to manually add to state
+          setItems((prev) => [newItem, ...prev]);
+        } else {
+          // For guest users, manually duplicate from localStorage
+          const original = items.find((i) => i.id === id);
+          if (!original) throw new Error("Item not found");
+
+          const {
+            id: _id,
+            created_at: _ca,
+            updated_at: _ua,
+            ...rest
+          } = original;
+          // createNewContent already adds to state
+          await createNewContent({
+            ...rest,
+            title: `${original.title} (copy)`,
+            is_public: false,
+            auto_delete_at: null,
+            auto_delete_enabled: false,
+            status: "active",
+          });
+        }
+
+        toast.success("Item duplicated successfully!");
+      } catch (err) {
+        const message =
+          err instanceof Error ? err.message : "Failed to duplicate item";
+        toast.error(message);
+        throw new Error(message);
+      }
+    },
+    [items, isAuthenticated, createNewContent],
+  );
+
   return {
     items,
     isLoading,
@@ -220,6 +324,7 @@ export const useContent = () => {
     removeContent,
     togglePublic,
     changeStatus,
+    duplicateItem,
     refreshContent: fetchContent,
     getCategories,
     getTags,
