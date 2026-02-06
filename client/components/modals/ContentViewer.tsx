@@ -20,6 +20,7 @@ import {
   Zap,
   FileCode,
   BookOpen,
+  Mic,
 } from "lucide-react";
 import { toast } from "sonner";
 import { copyToClipboard } from "@/lib/utils";
