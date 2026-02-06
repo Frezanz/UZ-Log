@@ -198,6 +198,77 @@ export default function Index() {
     }
   };
 
+  const handleDuplicate = async (item: ContentItem) => {
+    try {
+      await duplicateItem(item.id);
+    } catch (error) {
+      console.error("Error duplicating item:", error);
+    }
+  };
+
+  // Bulk Operations
+  const handleSelectItem = (id: string) => {
+    const newSelected = new Set(selectedItems);
+    if (newSelected.has(id)) {
+      newSelected.delete(id);
+    } else {
+      newSelected.add(id);
+    }
+    setSelectedItems(newSelected);
+  };
+
+  const handleSelectAll = () => {
+    if (selectedItems.size === displayItems.length) {
+      setSelectedItems(new Set());
+    } else {
+      setSelectedItems(new Set(displayItems.map((item) => item.id)));
+    }
+  };
+
+  const handleBulkDelete = async () => {
+    for (const id of selectedItems) {
+      try {
+        await removeContent(id);
+      } catch (error) {
+        console.error("Error deleting item:", error);
+      }
+    }
+    setSelectedItems(new Set());
+    setShowBulkDeleteModal(false);
+    toast.success("Items deleted successfully");
+  };
+
+  const handleBulkStatusChange = async (
+    status: "active" | "pending" | "completed",
+  ) => {
+    for (const id of selectedItems) {
+      try {
+        await changeStatus(id, status);
+      } catch (error) {
+        console.error("Error changing status:", error);
+      }
+    }
+    setSelectedItems(new Set());
+    toast.success(`Status changed to ${status} for selected items`);
+  };
+
+  const handleBulkShare = async (isPublic: boolean) => {
+    for (const id of selectedItems) {
+      const item = items.find((i) => i.id === id);
+      if (item) {
+        try {
+          await togglePublic(id, isPublic);
+        } catch (error) {
+          console.error("Error sharing item:", error);
+        }
+      }
+    }
+    setSelectedItems(new Set());
+    toast.success(
+      `Items marked as ${isPublic ? "public" : "private"} successfully`,
+    );
+  };
+
   const handleModalClose = () => {
     setShowContentModal(false);
     setEditingItem(undefined);
