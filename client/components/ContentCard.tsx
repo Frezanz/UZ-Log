@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { ContentItem } from "@/types/content";
+import { ContentItem, ContentType } from "@/types/content";
 import { Button } from "@/components/ui/button";
 import { StatusBadge, StatusDropdown } from "@/components/StatusSelect";
 import { TextToSpeechButton } from "@/components/TextToSpeechButton";
