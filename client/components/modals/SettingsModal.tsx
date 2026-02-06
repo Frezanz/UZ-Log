@@ -64,7 +64,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
               </div>
             </div>
 
-            <div className="bg-card border border-border rounded-lg p-3">
+            <div className="bg-card border border-border -lg p-3">
               <p className="text-xs text-muted-foreground">
                 Dark mode is controlled from the header toggle. Your preference is automatically saved.
               </p>
@@ -109,7 +109,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
 
               <a
                 href="mailto:dupsobon@gmail.com"
-                className="flex items-center gap-3 p-3 rounded-lg border border-border hover:bg-secondary transition-colors"
+                className="flex items-center gap-3 p-3 -lg border border-border hover:bg-secondary transition-colors"
               >
                 <Mail className="w-5 h-5 text-primary flex-shrink-0" />
                 <div>
@@ -122,7 +122,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
                 href="https://github.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-3 p-3 rounded-lg border border-border hover:bg-secondary transition-colors"
+                className="flex items-center gap-3 p-3 -lg border border-border hover:bg-secondary transition-colors"
               >
                 <Github className="w-5 h-5 text-primary flex-shrink-0" />
                 <div>
@@ -131,7 +131,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
                 </div>
               </a>
 
-              <div className="bg-card border border-border rounded-lg p-3">
+              <div className="bg-card border border-border -lg p-3">
                 <p className="text-xs text-muted-foreground">
                   Your feedback helps us improve. Contact us anytime with suggestions or issues.
                 </p>
