@@ -65,6 +65,11 @@ export const ContentCard: React.FC<ContentCardProps> = ({
   const [showActions, setShowActions] = useState(false);
   const wordCount = item.word_count || 0;
   const createdDate = new Date(item.created_at).toLocaleDateString();
+  const createdTime = new Date(item.created_at).toLocaleTimeString(undefined, {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+  const uploaderName = item.uploader_name || (item.user_id === "guest" ? "Anonymous" : "Unknown");
   const preview = item.content?.slice(0, 120)?.trim() || "No preview available";
 
   const handleCopy = async () => {
