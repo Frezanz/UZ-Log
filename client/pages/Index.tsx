@@ -580,7 +580,7 @@ export default function Index() {
                       sortBy: "newest",
                     });
                   }}
-                  className="flex-1 sm:flex-none"
+                  className="flex-1 sm:flex-none h-7 px-2 text-xs"
                 >
                   Reset Filters
                 </Button>
