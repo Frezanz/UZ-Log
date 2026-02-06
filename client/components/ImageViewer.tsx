@@ -151,7 +151,7 @@ export const ImageViewer: React.FC<ImageViewerProps> = ({
           </div>
 
           {/* Description/Content Area - Flexible Scrolling */}
-          <div className="flex-1 overflow-y-auto px-4 py-4 space-y-4 scrollbar-thin scrollbar-thumb-border scrollbar-track-transparent">
+          <div className="flex-1 overflow-y-auto px-4 py-4 space-y-4">
             {/* File Size */}
             {image.file_size && (
               <div className="space-y-1">
