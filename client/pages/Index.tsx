@@ -448,8 +448,8 @@ export default function Index() {
 
                   {/* Category Filter */}
                   {categories.length > 0 && (
-                    <div className="text-center space-y-2">
-                      <h3 className="text-sm font-medium text-foreground">
+                    <div className="text-center space-y-1">
+                      <h3 className="text-xs font-medium text-foreground">
                         Categories
                       </h3>
                       <div className="flex justify-center">
@@ -474,7 +474,7 @@ export default function Index() {
                       </div>
 
                       {showCategories && (
-                        <div className="flex flex-wrap gap-2 justify-center animate-in fade-in duration-200">
+                        <div className="flex flex-wrap gap-1 justify-center animate-in fade-in duration-200">
                           {categories.map((cat) => (
                             <Button
                               key={cat}
@@ -507,8 +507,8 @@ export default function Index() {
 
                   {/* Tag Filter */}
                   {tags.length > 0 && (
-                    <div className="text-center space-y-2">
-                      <h3 className="text-sm font-medium text-foreground">
+                    <div className="text-center space-y-1">
+                      <h3 className="text-xs font-medium text-foreground">
                         Tags
                       </h3>
                       <div className="flex justify-center">
@@ -529,7 +529,7 @@ export default function Index() {
                       </div>
 
                       {showTags && (
-                        <div className="flex flex-wrap gap-2 justify-center animate-in fade-in duration-200">
+                        <div className="flex flex-wrap gap-1 justify-center animate-in fade-in duration-200">
                           {tags.slice(0, 10).map((tag) => (
                             <Button
                               key={tag}
