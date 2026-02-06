@@ -31,15 +31,15 @@ interface ContentCardProps {
 }
 
 const typeIcons = {
-  text: <FileText className="w-4 h-4" />,
-  code: <Code className="w-4 h-4" />,
-  image: <Image className="w-4 h-4" />,
-  video: <Video className="w-4 h-4" />,
-  file: <File className="w-4 h-4" />,
-  link: <LinkIcon className="w-4 h-4" />,
-  prompt: <Zap className="w-4 h-4" />,
-  script: <FileCode className="w-4 h-4" />,
-  book: <BookOpen className="w-4 h-4" />,
+  text: <FileText className="w-3 h-3" />,
+  code: <Code className="w-3 h-3" />,
+  image: <Image className="w-3 h-3" />,
+  video: <Video className="w-3 h-3" />,
+  file: <File className="w-3 h-3" />,
+  link: <LinkIcon className="w-3 h-3" />,
+  prompt: <Zap className="w-3 h-3" />,
+  script: <FileCode className="w-3 h-3" />,
+  book: <BookOpen className="w-3 h-3" />,
 };
 
 const typeColors = {
