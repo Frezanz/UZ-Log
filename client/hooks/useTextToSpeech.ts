@@ -82,46 +82,60 @@ export const useTextToSpeech = (options: UseTextToSpeechOptions = {}) => {
 
       utterance.onerror = (event: SpeechSynthesisErrorEvent) => {
         try {
-          // Safely extract error type
+          // Safely extract error type - handle both string and potential object scenarios
           let errorType = "unknown";
+
           if (event && typeof event === "object") {
-            errorType = String(event.error) || "unknown";
+            // Try to get error property
+            const errorProp = (event as any).error;
+            if (typeof errorProp === "string") {
+              errorType = errorProp;
+            } else if (errorProp) {
+              errorType = String(errorProp);
+            }
           }
 
-          // Remove "SpeechSynthesisErrorEvent" if it somehow got included
-          errorType = errorType.replace(/\[object.*?\]/g, "").trim() || "unknown";
+          // Sanitize error type - remove any [object] strings
+          errorType = errorType
+            .replace(/\[object\s+.*?\]/gi, "unknown")
+            .trim() || "unknown";
 
-          const errorMessage = getErrorMessage(errorType);
+          // Only log if not a suppressed error
+          if (!suppressErrorRef.current) {
+            const errorMessage = getErrorMessage(errorType);
 
-          // Log with explicit string conversion
-          console.error("=== Speech Synthesis Error ===");
-          console.error(`Error Type: ${errorType}`);
-          console.error(`Error Message: ${errorMessage}`);
-          console.error(`Timestamp: ${new Date().toISOString()}`);
-          console.error("===============================");
+            // Log with explicit string conversion
+            console.error("=== Speech Synthesis Error ===");
+            console.error(`Error Type: ${errorType}`);
+            console.error(`Error Message: ${errorMessage}`);
+            console.error(`Timestamp: ${new Date().toISOString()}`);
+            console.error("===============================");
 
-          // Log specific error guidance
-          switch (errorType) {
-            case "network-error":
-              console.warn("Network Error: Check your internet connection and try again");
-              break;
-            case "synthesis-unavailable":
-              console.warn("Unavailable: Speech synthesis is not available - Try a different browser");
-              break;
-            case "synthesis-in-progress":
-              console.warn("In Progress: Wait for current speech to finish before playing new audio");
-              break;
-            case "invalid-argument":
-              console.warn("Invalid Argument: The text or parameters may be invalid");
-              break;
-            case "not-allowed":
-              console.warn("Permission Denied: Check browser permissions for speech synthesis");
-              break;
-            case "audio-busy":
-              console.warn("Audio Busy: Audio device is busy - Try again shortly");
-              break;
-            default:
-              console.warn(`Unknown Error: ${errorType} - Check browser console for details`);
+            // Log specific error guidance only for real errors
+            switch (errorType) {
+              case "network-error":
+                console.warn("Network Error: Check your internet connection and try again");
+                break;
+              case "synthesis-unavailable":
+                console.warn("Unavailable: Speech synthesis is not available - Try a different browser");
+                break;
+              case "synthesis-in-progress":
+                console.debug("In Progress: Waiting for current speech to finish");
+                break;
+              case "invalid-argument":
+                console.warn("Invalid Argument: The text or parameters may be invalid");
+                break;
+              case "not-allowed":
+                console.warn("Permission Denied: Check browser permissions for speech synthesis");
+                break;
+              case "audio-busy":
+                console.warn("Audio Busy: Audio device is busy - Try again shortly");
+                break;
+              default:
+                if (errorType !== "unknown") {
+                  console.warn(`Error: ${errorType}`);
+                }
+            }
           }
         } catch (err) {
           const errMsg = err instanceof Error ? err.message : String(err);
