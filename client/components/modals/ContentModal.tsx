@@ -60,8 +60,32 @@ export const ContentModal: React.FC<ContentModalProps> = ({
     },
   );
 
+  // Sync form data when initialData changes or modal opens
+  useEffect(() => {
+    if (isOpen) {
+      setFormData(
+        initialData || {
+          type: "text",
+          title: "",
+          content: "",
+          category: "",
+          tags: [],
+          is_public: false,
+        },
+      );
+      setSelectedFile(null);
+      setIsLoading(false);
+      setIsUploading(false);
+    }
+  }, [isOpen, initialData]);
+
   const handleSave = async () => {
-    if (!formData.title?.trim() && !formData.content?.trim() && !selectedFile) {
+    if (
+      !formData.title?.trim() &&
+      !formData.content?.trim() &&
+      !selectedFile &&
+      !initialData?.file_url // Allow saving if there's already a file (edit mode)
+    ) {
       toast.error("Please enter a title, content, or upload a file");
       return;
     }
