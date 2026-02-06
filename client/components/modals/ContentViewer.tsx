@@ -291,6 +291,19 @@ export const ContentViewer: React.FC<ContentViewerProps> = ({
               {copied ? "Copied!" : "Copy"}
             </Button>
           )}
+          {content.content &&
+            (content.type === "text" ||
+              content.type === "code" ||
+              content.type === "prompt" ||
+              content.type === "script") && (
+              <TextToSpeechButton
+                text={content.content}
+                contentType={content.type}
+                variant="outline"
+                size="sm"
+                showLabel={true}
+              />
+            )}
           {content.file_url && content.type !== "image" && (
             <Button variant="outline" onClick={handleDownload} size="sm">
               <Download className="w-4 h-4 mr-2" />
