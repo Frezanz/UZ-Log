@@ -7,7 +7,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Check, Clock, CheckCircle2, ChevronDown } from "lucide-react";
+import { Check, Clock, CheckCircle2 } from "lucide-react";
 
 interface StatusSelectProps {
   value?: ContentStatus;
