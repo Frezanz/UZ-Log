@@ -339,8 +339,14 @@ export const shareContent = async (
 export const toggleStatus = async (
   id: string,
   status: "active" | "pending" | "completed",
+  autoDeleteAt?: string | null,
 ): Promise<ContentItem> => {
-  return updateContent(id, { status });
+  const updates: Partial<ContentItem> = { status };
+  if (autoDeleteAt !== undefined) {
+    updates.auto_delete_at = autoDeleteAt;
+    updates.auto_delete_enabled = !!autoDeleteAt;
+  }
+  return updateContent(id, updates);
 };
 
 export const getPublicContent = async (id: string): Promise<ContentItem> => {
