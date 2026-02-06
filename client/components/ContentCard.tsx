@@ -172,17 +172,17 @@ export const ContentCard: React.FC<ContentCardProps> = ({
           {wordCount > 0 && <span className="whitespace-nowrap">{wordCount} words</span>}
         </div>
         {item.tags && item.tags.length > 0 && (
-          <div className="flex gap-1 flex-wrap">
+          <div className="flex gap-0.5 flex-wrap">
             {item.tags.slice(0, 2).map((tag, i) => (
               <span
                 key={i}
-                className="bg-card px-1.5 py-0.5 rounded text-xs border border-border"
+                className="bg-card px-1 py-0 rounded text-[9px] border border-border"
               >
                 #{tag}
               </span>
             ))}
             {item.tags.length > 2 && (
-              <span className="text-xs">+{item.tags.length - 2} more</span>
+              <span className="text-[9px]">+{item.tags.length - 2}</span>
             )}
           </div>
         )}
