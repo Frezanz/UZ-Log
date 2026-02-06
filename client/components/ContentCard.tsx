@@ -284,7 +284,7 @@ export const ContentCard: React.FC<ContentCardProps> = ({
           title="Duplicate"
           className="flex-1 h-7"
         >
-          <Copy2 className="w-2.5 h-2.5" />
+          <Duplicate className="w-2.5 h-2.5" />
           <span className="hidden sm:inline text-xs">Duplicate</span>
         </Button>
 
