@@ -104,7 +104,7 @@ export const ContentCard: React.FC<ContentCardProps> = ({
     >
       {/* Type Badge */}
       <div
-        className="px-3 pt-2 pl-8 flex items-center justify-between gap-1.5"
+        className="px-3 pt-2 pl-7 flex items-center justify-between gap-1.5"
         onClick={(e) => e.stopPropagation()}
       >
         <span
