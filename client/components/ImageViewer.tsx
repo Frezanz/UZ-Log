@@ -214,28 +214,6 @@ export const ImageViewer: React.FC<ImageViewerProps> = ({
               </button>
             </div>
 
-            {/* Action Buttons Grid */}
-            <div className="grid grid-cols-2 gap-2">
-              <Button
-                variant="outline"
-                onClick={handleDownload}
-                className="flex items-center justify-center gap-2 h-9 text-sm"
-                title="Download image"
-              >
-                <Download className="w-3.5 h-3.5" />
-                <span>Download</span>
-              </Button>
-              <Button
-                variant="outline"
-                onClick={handleShare}
-                className="flex items-center justify-center gap-2 h-9 text-sm"
-                title="Share image"
-              >
-                <Share className="w-4 h-4" />
-                <span>Share</span>
-              </Button>
-            </div>
-
             {/* Click to Close Hint */}
             <p className="text-center text-xs text-muted-foreground pt-2">
               Press ESC or click outside to close
