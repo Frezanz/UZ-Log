@@ -95,8 +95,11 @@ export const ImageViewer: React.FC<ImageViewerProps> = ({
           <img
             src={image.file_url}
             alt={image.title}
-            className="w-full h-full object-contain"
-            onClick={(e) => e.stopPropagation()}
+            className="w-full h-full object-contain cursor-pointer"
+            onClick={(e) => {
+              e.stopPropagation();
+              setShowUI(!showUI);
+            }}
           />
         </div>
 
