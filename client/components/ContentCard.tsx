@@ -240,7 +240,7 @@ export const ContentCard: React.FC<ContentCardProps> = ({
 
       {/* Actions - Always visible on mobile, hover on desktop */}
       <div
-        className={`px-3 py-1 border-t border-border bg-secondary/50 flex gap-1 transition-opacity duration-200 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 flex-wrap`}
+        className={`px-3 py-1 border-t border-border bg-secondary/50 flex gap-2 transition-opacity duration-200 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 flex-wrap`}
         onClick={(e) => e.stopPropagation()}
       >
         {(item.content || item.file_url) && (
