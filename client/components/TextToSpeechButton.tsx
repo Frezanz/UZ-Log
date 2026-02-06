@@ -54,14 +54,23 @@ export const TextToSpeechButton: React.FC<TextToSpeechButtonProps> = ({
 
       if (isPlaying || isPaused) {
         if (isPaused) {
+          console.log("Resuming paused speech...");
           resume();
           toast.success("Resuming playback...");
         } else {
+          console.log("Pausing active speech...");
           pause();
           toast.info("Playback paused");
         }
       } else {
+        console.log("Starting new speech with text length:", text.length);
         speak(text);
+        // Give user immediate feedback
+        setTimeout(() => {
+          if (!isPlaying) {
+            console.warn("Speech did not start - this may be a browser limitation");
+          }
+        }, 500);
       }
     } catch (error) {
       console.error("Text-to-speech error:", error);
