@@ -280,6 +280,17 @@ export const ContentCard: React.FC<ContentCardProps> = ({
         <Button
           variant="ghost"
           size="sm"
+          onClick={() => onDuplicate?.(item)}
+          title="Duplicate"
+          className="flex-1 h-7"
+        >
+          <Copy2 className="w-2.5 h-2.5" />
+          <span className="hidden sm:inline text-xs">Duplicate</span>
+        </Button>
+
+        <Button
+          variant="ghost"
+          size="sm"
           onClick={() => onDelete(item)}
           title="Delete"
           className="flex-1 h-7 hover:bg-destructive/10 hover:text-destructive"
