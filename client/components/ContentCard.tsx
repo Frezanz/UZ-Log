@@ -319,16 +319,21 @@ export const ContentCard: React.FC<ContentCardProps> = ({
           <span className="hidden sm:inline text-xs">Duplicate</span>
         </Button>
 
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={() => onDelete(item)}
-          title="Delete"
-          className="flex-1 h-7 hover:bg-destructive/10 hover:text-destructive"
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            setIsLiked(!isLiked);
+          }}
+          className={`flex-1 h-7 flex items-center justify-center gap-1 rounded transition-colors text-xs font-medium ${
+            isLiked
+              ? "text-red-500 dark:text-red-400 hover:bg-red-500/10"
+              : "text-muted-foreground hover:text-foreground hover:bg-secondary"
+          }`}
+          title={isLiked ? "Unlike" : "Like"}
         >
-          <Trash2 className="w-2.5 h-2.5" />
-          <span className="hidden sm:inline text-xs">Delete</span>
-        </Button>
+          <Heart className={`w-2.5 h-2.5 ${isLiked ? "fill-current" : ""}`} />
+          <span className="hidden sm:inline">Like</span>
+        </button>
       </div>
     </div>
   );
