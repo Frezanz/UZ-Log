@@ -51,6 +51,8 @@ export default function Index() {
   const [showFilters, setShowFilters] = useState(false);
   const [showActions, setShowActions] = useState(false);
   const [showSortBy, setShowSortBy] = useState(false);
+  const [showCategories, setShowCategories] = useState(false);
+  const [showTags, setShowTags] = useState(false);
 
   // Load public content for anonymous users (if Supabase is available)
   // If not, guests will just see their own localStorage content
