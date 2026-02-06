@@ -328,8 +328,7 @@ export const ContentModal: React.FC<ContentModalProps> = ({
             </div>
           ) : formData.type !== "file" &&
             formData.type !== "image" &&
-            formData.type !== "video" &&
-            formData.type !== "voice" ? (
+            formData.type !== "video" ? (
             <div>
               <label className="text-sm font-medium text-foreground mb-2 block">
                 Content
