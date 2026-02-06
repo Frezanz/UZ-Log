@@ -414,7 +414,7 @@ export default function Index() {
                     </div>
 
                     {showSortBy && (
-                      <div className="flex flex-wrap gap-2 justify-center animate-in fade-in duration-200">
+                      <div className="flex flex-wrap gap-1 justify-center animate-in fade-in duration-200">
                         {(
                           ["newest", "oldest", "a-z", "word-count"] as const
                         ).map((option) => (
