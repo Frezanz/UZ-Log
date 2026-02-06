@@ -27,14 +27,17 @@ import { TextToSpeechButton } from "@/components/TextToSpeechButton";
 import { SyntaxErrorDisplay } from "@/components/SyntaxErrorDisplay";
 import { analyzeSyntax } from "@/lib/syntaxChecker";
 import { ImageViewer } from "@/components/ImageViewer";
+import { ContentLinks } from "@/components/ContentLinks";
 
 interface ContentViewerProps {
   isOpen: boolean;
   onClose: () => void;
   content: ContentItem | null;
+  allContent?: ContentItem[];
   onEdit?: (item: ContentItem) => void;
   onDelete?: (item: ContentItem) => void;
   onShare?: (item: ContentItem) => void;
+  onLinksUpdate?: () => void;
 }
 
 const typeIcons: Record<ContentType, React.ReactNode> = {
