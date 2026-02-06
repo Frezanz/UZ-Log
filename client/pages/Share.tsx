@@ -25,8 +25,26 @@ export default function Share() {
 
       try {
         setIsLoading(true);
-        const data = await getPublicContent(id);
-        setContent(data);
+
+        // Try to get guest content first (from localStorage)
+        const guestContent = getGuestContentById(id);
+        if (guestContent && guestContent.is_public) {
+          setContent(guestContent);
+          return;
+        }
+
+        // If not a guest local ID, try Supabase public content
+        try {
+          const data = await getPublicContent(id);
+          setContent(data);
+        } catch (supabaseErr) {
+          // If both sources fail
+          if (!guestContent) {
+            throw new Error("Content not found");
+          }
+          // If guest content exists but not public
+          throw new Error("Content is not public");
+        }
       } catch (err) {
         const message =
           err instanceof Error ? err.message : "Content not found";
