@@ -82,19 +82,17 @@ export const ShareModal: React.FC<ShareModalProps> = ({
         url: shareUrl,
       });
     } catch (error) {
-      // Silently ignore AbortError (user cancelled) and NotAllowedError
       if (error instanceof Error) {
         if (error.name === "AbortError") {
-          // User cancelled the share dialog - this is normal
           return;
         }
         if (error.name === "NotAllowedError") {
-          // Permission denied - silently ignore, user can use other share methods
+          toast.error("Share blocked by browser (e.g. iframe restrictions)");
           return;
         }
       }
-      // Log other errors for debugging
       console.error("Share error:", error);
+      toast.error("Failed to open share dialog");
     }
   };
 
@@ -201,8 +199,7 @@ export const ShareModal: React.FC<ShareModalProps> = ({
                 onClick={handleNativeShare}
                 variant="outline"
                 size="sm"
-                className={`w-full ${!item.is_public ? "opacity-50 cursor-not-allowed" : ""}`}
-                disabled={!item.is_public}
+                className={`w-full ${!item.is_public ? "opacity-50" : ""}`}
                 title={
                   item.is_public
                     ? "Share to other apps"
