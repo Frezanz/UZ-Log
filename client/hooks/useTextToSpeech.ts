@@ -15,6 +15,7 @@ const getErrorMessage = (errorType: string): string => {
     "invalid-argument": "Invalid text or parameters",
     "not-allowed": "Permission denied - check browser permissions",
     "audio-busy": "Audio device is busy",
+    "interrupted": "Speech was interrupted (normal when stopping)",
   };
 
   return errorMap[errorType] || `Speech synthesis error: ${errorType || "unknown"}`;
