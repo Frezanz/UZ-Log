@@ -82,9 +82,9 @@ export const ContentModal: React.FC<ContentModalProps> = ({
         },
       );
       setSelectedFile(null);
-      setRecordedAudioBlob(null);
-      setRecordedAudioUrl(null);
-      setRecordedAudioDuration(0);
+      setRecordedVoiceBlob(null);
+      setRecordedVoiceUrl(null);
+      setRecordedVoiceDuration(0);
       setIsLoading(false);
       setIsUploading(false);
     }
