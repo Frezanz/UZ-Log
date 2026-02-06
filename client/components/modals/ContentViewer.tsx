@@ -153,13 +153,13 @@ export const ContentViewer: React.FC<ContentViewerProps> = ({
           {/* Text Viewer */}
           {content.type === "text" && content.content && (
             <div className="space-y-3">
-              <div className="bg-secondary/30 rounded-lg p-4 max-h-[60vh] overflow-auto select-text">
-                <pre className="font-sans whitespace-pre-wrap break-words text-foreground text-sm leading-relaxed select-all cursor-text">
+              <div className="bg-secondary/30 rounded-lg p-4 max-h-[60vh] overflow-auto">
+                <pre className="font-sans whitespace-pre-wrap break-words text-foreground text-sm leading-relaxed cursor-text select-text">
                   {content.content}
                 </pre>
               </div>
               <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                <span>Tap the text above to select and copy it</span>
+                <span>Select the text above to copy it</span>
               </div>
               {content.voice_url && (
                 <div className="bg-secondary/30 rounded-lg p-4">
