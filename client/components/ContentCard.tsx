@@ -142,17 +142,15 @@ export const ContentCard: React.FC<ContentCardProps> = ({
         )}
 
         {item.type === "link" && item.content && (
-          <div className="mt-1">
-            <a
-              href={item.content}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-xs text-primary hover:underline break-all line-clamp-2 inline-block"
-              title={item.content}
-            >
-              {item.content}
-            </a>
-          </div>
+          <a
+            href={item.content}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-[11px] text-primary hover:underline break-all line-clamp-2 inline-block"
+            title={item.content}
+          >
+            {item.content}
+          </a>
         )}
 
         {item.category && (
