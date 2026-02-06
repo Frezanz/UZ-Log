@@ -146,7 +146,10 @@ export const getContent = async (id: string): Promise<ContentItem> => {
     .single();
 
   if (error) throw error;
-  return data;
+  return {
+    ...data,
+    status: data.status || "active",
+  };
 };
 
 export const getAllContent = async (filters?: {
