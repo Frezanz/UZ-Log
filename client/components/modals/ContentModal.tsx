@@ -57,6 +57,7 @@ export const ContentModal: React.FC<ContentModalProps> = ({
       category: "",
       tags: [],
       is_public: false,
+      status: "active",
     },
   );
 
@@ -71,6 +72,7 @@ export const ContentModal: React.FC<ContentModalProps> = ({
           category: "",
           tags: [],
           is_public: false,
+          status: "active",
         },
       );
       setSelectedFile(null);
