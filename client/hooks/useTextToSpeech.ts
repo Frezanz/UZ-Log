@@ -26,6 +26,7 @@ export const useTextToSpeech = (options: UseTextToSpeechOptions = {}) => {
   const [isPaused, setIsPaused] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
   const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
+  const suppressErrorRef = useRef<boolean>(false); // Flag to suppress expected errors
 
   // Check if Web Speech API is supported
   const isSupported = useCallback(() => {
