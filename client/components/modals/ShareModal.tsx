@@ -30,6 +30,7 @@ export const ShareModal: React.FC<ShareModalProps> = ({
   const { isAuthenticated } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [showMoreMenu, setShowMoreMenu] = useState(false);
 
   if (!item) return null;
 
