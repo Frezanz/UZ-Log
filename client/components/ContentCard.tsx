@@ -123,11 +123,11 @@ export const ContentCard: React.FC<ContentCardProps> = ({
 
         {/* Preview for certain types */}
         {item.type === "image" && item.file_url && (
-          <div className="mt-2 mb-2">
+          <div className="mt-1 mb-1">
             <img
               src={item.file_url}
               alt={item.title}
-              className="w-full h-24 object-cover rounded border border-border"
+              className="w-full h-16 object-cover rounded border border-border"
             />
           </div>
         )}
