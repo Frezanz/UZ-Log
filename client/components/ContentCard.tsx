@@ -60,6 +60,7 @@ const typeColors = {
 
 export const ContentCard: React.FC<ContentCardProps> = ({
   item,
+  onView,
   onEdit,
   onDelete,
   onShare,
