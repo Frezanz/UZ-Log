@@ -88,27 +88,27 @@ export const ContentCard: React.FC<ContentCardProps> = ({
       onMouseLeave={() => setShowActions(false)}
     >
       {/* Type Badge */}
-      <div className="px-4 pt-3 flex items-center justify-between gap-2">
+      <div className="px-3 pt-2 flex items-center justify-between gap-1.5">
         <span
           className={`inline-flex items-center gap-1.5 px-2 py-1 rounded text-xs font-medium ${typeColors[item.type]}`}
         >
           {typeIcons[item.type]}
           {item.type.charAt(0).toUpperCase() + item.type.slice(1)}
         </span>
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-0.5">
           {item.user_id === "guest" ? (
-            <span className="text-xs font-medium text-amber-700 dark:text-amber-300 bg-amber-100 dark:bg-amber-950 px-2 py-1 rounded inline-flex items-center gap-1">
+            <span className="text-[10px] font-medium text-amber-700 dark:text-amber-300 bg-amber-100 dark:bg-amber-950 px-1.5 py-0.5 rounded inline-flex items-center gap-0.5">
               <HardDrive className="w-3 h-3" />
               Local
             </span>
           ) : (
-            <span className="text-xs font-medium text-blue-700 dark:text-blue-300 bg-blue-100 dark:bg-blue-950 px-2 py-1 rounded inline-flex items-center gap-1">
+            <span className="text-[10px] font-medium text-blue-700 dark:text-blue-300 bg-blue-100 dark:bg-blue-950 px-1.5 py-0.5 rounded inline-flex items-center gap-0.5">
               <Cloud className="w-3 h-3" />
               Cloud
             </span>
           )}
           {item.is_public && (
-            <span className="text-xs font-medium text-primary bg-secondary px-2 py-1 rounded">
+            <span className="text-[10px] font-medium text-primary bg-secondary px-1.5 py-0.5 rounded">
               Public
             </span>
           )}
@@ -116,7 +116,7 @@ export const ContentCard: React.FC<ContentCardProps> = ({
       </div>
 
       {/* Content Preview */}
-      <div className={`flex-1 px-4 ${item.type === "link" ? "py-1 min-h-0" : "py-3 min-h-[80px]"}`}>
+      <div className={`flex-1 px-3 ${item.type === "link" ? "py-0.5 min-h-0" : "py-2 min-h-[60px]"}`}>
         <h3 className={`font-semibold text-foreground line-clamp-2 ${item.type === "link" ? "mb-0.5 text-xs" : "mb-1.5 text-sm"}`}>
           {item.title}
         </h3>
@@ -154,8 +154,8 @@ export const ContentCard: React.FC<ContentCardProps> = ({
         )}
 
         {item.category && (
-          <div className="mt-2">
-            <span className="inline-block text-xs bg-secondary text-secondary-foreground px-2 py-0.5 rounded">
+          <div className="mt-1">
+            <span className="inline-block text-[10px] bg-secondary text-secondary-foreground px-1.5 py-0.5 rounded">
               {item.category}
             </span>
           </div>
@@ -163,11 +163,11 @@ export const ContentCard: React.FC<ContentCardProps> = ({
       </div>
 
       {/* Metadata */}
-      <div className="px-4 py-2 border-t border-border bg-secondary/30 text-xs text-muted-foreground space-y-1">
+      <div className="px-3 py-1.5 border-t border-border bg-secondary/30 text-xs text-muted-foreground space-y-0.5">
         <div className="flex justify-between items-center flex-wrap gap-2">
-          <div className="flex flex-col gap-0.5">
-            <span className="font-medium text-foreground">{uploaderName}</span>
-            <span>{createdDate} at {createdTime}</span>
+          <div className="flex flex-col gap-0">
+            <span className="font-medium text-foreground text-[11px]">{uploaderName}</span>
+            <span className="text-[10px]">{createdDate} at {createdTime}</span>
           </div>
           {wordCount > 0 && <span className="whitespace-nowrap">{wordCount} words</span>}
         </div>
@@ -190,7 +190,7 @@ export const ContentCard: React.FC<ContentCardProps> = ({
 
       {/* Actions - Always visible on mobile, hover on desktop */}
       <div
-        className={`px-4 py-2 border-t border-border bg-secondary/50 flex gap-1.5 transition-opacity duration-200 opacity-100 sm:opacity-0 sm:group-hover:opacity-100`}
+        className={`px-3 py-1 border-t border-border bg-secondary/50 flex gap-1 transition-opacity duration-200 opacity-100 sm:opacity-0 sm:group-hover:opacity-100`}
       >
         {(item.type === "text" ||
           item.type === "code" ||
