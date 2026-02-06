@@ -13,7 +13,6 @@ import { ShareModal } from "@/components/modals/ShareModal";
 import { DeleteModal } from "@/components/modals/DeleteModal";
 import { AutoDeleteModal } from "@/components/modals/AutoDeleteModal";
 import { Button } from "@/components/ui/button";
-import { Plus, Filter, ChevronDown } from "lucide-react";
 import { toast } from "sonner";
 import { getAllPublicContent } from "@/lib/api";
 
