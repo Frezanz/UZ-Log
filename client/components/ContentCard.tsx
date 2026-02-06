@@ -164,7 +164,7 @@ export const ContentCard: React.FC<ContentCardProps> = ({
 
       {/* Metadata */}
       <div className="px-3 py-1.5 border-t border-border bg-secondary/30 text-xs text-muted-foreground space-y-0.5">
-        <div className="flex justify-between items-center flex-wrap gap-2">
+        <div className="flex justify-between items-center flex-wrap gap-1">
           <div className="flex flex-col gap-0">
             <span className="font-medium text-foreground text-[11px]">{uploaderName}</span>
             <span className="text-[10px]">{createdDate} at {createdTime}</span>
