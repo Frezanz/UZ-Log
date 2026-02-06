@@ -328,7 +328,9 @@ export default function Index() {
       {!isAuthenticated && (
         <header
           className={`fixed top-0 left-0 right-0 z-40 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 transition-all duration-300 ease-in-out ${
-            isHeaderHidden ? "-translate-y-full shadow-none" : "translate-y-0 shadow-md"
+            isHeaderHidden
+              ? "-translate-y-full shadow-none"
+              : "translate-y-0 shadow-md"
           }`}
         >
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

@@ -164,11 +164,7 @@ export default function Share() {
           )}
 
           {content.type === "video" && content.file_url && (
-            <video
-              src={content.file_url}
-              controls
-              className="w-full  mb-4"
-            />
+            <video src={content.file_url} controls className="w-full  mb-4" />
           )}
 
           {content.type === "code" && (
