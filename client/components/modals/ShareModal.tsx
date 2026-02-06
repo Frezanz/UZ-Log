@@ -69,30 +69,31 @@ export const ShareModal: React.FC<ShareModalProps> = ({
       return;
     }
 
-    // Check if Web Share API is available
-    if (!navigator.share) {
-      toast.error("Web Share API not supported on this device");
-      return;
+    // Attempt to use the Web Share API if available
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: item.title,
+          text: `Check out this content on UZ-log: ${item.title}`,
+          url: shareUrl,
+        });
+        return; // Success!
+      } catch (error) {
+        // Silently ignore AbortError (user cancelled)
+        if (error instanceof Error && error.name === "AbortError") {
+          return;
+        }
+        // For other errors (like NotAllowedError in iframes), fall through to fallback
+        console.warn("Native share failed, falling back to copy:", error);
+      }
     }
 
+    // Fallback: If Web Share API is missing or blocked by browser policy
     try {
-      await navigator.share({
-        title: item.title,
-        text: `Check out this content on UZ-log: ${item.title}`,
-        url: shareUrl,
-      });
-    } catch (error) {
-      if (error instanceof Error) {
-        if (error.name === "AbortError") {
-          return;
-        }
-        if (error.name === "NotAllowedError") {
-          toast.error("Share blocked by browser (e.g. iframe restrictions)");
-          return;
-        }
-      }
-      console.error("Share error:", error);
-      toast.error("Failed to open share dialog");
+      await copyToClipboard(shareUrl);
+      toast.info("Native share is restricted here. Link copied to clipboard!");
+    } catch {
+      toast.error("Failed to share or copy link");
     }
   };
 
