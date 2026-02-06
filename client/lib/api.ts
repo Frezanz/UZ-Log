@@ -546,3 +546,109 @@ export const deleteBookPage = async (pageId: string): Promise<void> => {
 
   if (error) throw error;
 };
+
+// ============ Content Links ============
+export const createLink = async (
+  sourceContentId: string,
+  targetContentId: string,
+  linkType: LinkType,
+): Promise<ContentLink> => {
+  const supabase = getSupabase();
+  const user = await getCurrentUser();
+
+  if (!user) throw new Error("User not authenticated");
+
+  const { data, error } = await supabase
+    .from("content_links")
+    .insert({
+      source_content_id: sourceContentId,
+      target_content_id: targetContentId,
+      link_type: linkType,
+      user_id: user.id,
+    })
+    .select()
+    .single();
+
+  if (error) throw error;
+  return data;
+};
+
+export const deleteLink = async (linkId: string): Promise<void> => {
+  const supabase = getSupabase();
+  const { error } = await supabase
+    .from("content_links")
+    .delete()
+    .eq("id", linkId);
+
+  if (error) throw error;
+};
+
+export const getLinksForContent = async (
+  contentId: string,
+): Promise<ContentLinkWithTarget[]> => {
+  const supabase = getSupabase();
+  const user = await getCurrentUser();
+
+  if (!user) throw new Error("User not authenticated");
+
+  // Get all links where this content is the source
+  const { data: links, error } = await supabase
+    .from("content_links")
+    .select("*")
+    .eq("source_content_id", contentId)
+    .eq("user_id", user.id);
+
+  if (error) throw error;
+
+  // Fetch target content for each link
+  const linksWithTarget: ContentLinkWithTarget[] = [];
+  for (const link of links || []) {
+    try {
+      const targetContent = await getContent(link.target_content_id);
+      linksWithTarget.push({
+        ...link,
+        target_content: targetContent,
+      });
+    } catch {
+      // Skip if target content can't be retrieved
+      linksWithTarget.push(link);
+    }
+  }
+
+  return linksWithTarget;
+};
+
+export const getBacklinksForContent = async (
+  contentId: string,
+): Promise<ContentLinkWithTarget[]> => {
+  const supabase = getSupabase();
+  const user = await getCurrentUser();
+
+  if (!user) throw new Error("User not authenticated");
+
+  // Get all links where this content is the target
+  const { data: links, error } = await supabase
+    .from("content_links")
+    .select("*")
+    .eq("target_content_id", contentId)
+    .eq("user_id", user.id);
+
+  if (error) throw error;
+
+  // Fetch source content for each link
+  const linksWithSource: ContentLinkWithTarget[] = [];
+  for (const link of links || []) {
+    try {
+      const sourceContent = await getContent(link.source_content_id);
+      linksWithSource.push({
+        ...link,
+        target_content: sourceContent, // Store source as target for consistency
+      });
+    } catch {
+      // Skip if source content can't be retrieved
+      linksWithSource.push(link);
+    }
+  }
+
+  return linksWithSource;
+};
