@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { ContentItem, ContentType } from "@/types/content";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { FileUpload } from "@/components/FileUpload";
 import { uploadFile } from "@/lib/api";
-import { getCurrentUser } from "@/lib/api";
+import { useAuth } from "@/context/AuthContext";
 import { ChevronDown } from "lucide-react";
 import {
   Dialog,
@@ -41,6 +41,7 @@ export const ContentModal: React.FC<ContentModalProps> = ({
   onSave,
   initialData,
 }) => {
+  const { user, isAuthenticated } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isUploading, setIsUploading] = useState(false);
@@ -59,8 +60,32 @@ export const ContentModal: React.FC<ContentModalProps> = ({
     },
   );
 
+  // Sync form data when initialData changes or modal opens
+  useEffect(() => {
+    if (isOpen) {
+      setFormData(
+        initialData || {
+          type: "text",
+          title: "",
+          content: "",
+          category: "",
+          tags: [],
+          is_public: false,
+        },
+      );
+      setSelectedFile(null);
+      setIsLoading(false);
+      setIsUploading(false);
+    }
+  }, [isOpen, initialData]);
+
   const handleSave = async () => {
-    if (!formData.title?.trim() && !formData.content?.trim() && !selectedFile) {
+    if (
+      !formData.title?.trim() &&
+      !formData.content?.trim() &&
+      !selectedFile &&
+      !initialData?.file_url // Allow saving if there's already a file (edit mode)
+    ) {
       toast.error("Please enter a title, content, or upload a file");
       return;
     }
@@ -76,18 +101,24 @@ export const ContentModal: React.FC<ContentModalProps> = ({
           formData.type === "image" ||
           formData.type === "video")
       ) {
-        setIsUploading(true);
-        const user = await getCurrentUser();
-        if (!user) throw new Error("User not authenticated");
+        if (!isAuthenticated || !user) {
+          toast.error("Please sign in to upload files");
+          setIsLoading(false);
+          return;
+        }
 
-        const fileUrl = await uploadFile(selectedFile, user.id);
-        dataToSave = {
-          ...dataToSave,
-          file_url: fileUrl,
-          file_size: `${(selectedFile.size / 1024 / 1024).toFixed(2)} MB`,
-          title: dataToSave.title || selectedFile.name,
-        };
-        setIsUploading(false);
+        setIsUploading(true);
+        try {
+          const fileUrl = await uploadFile(selectedFile, user.id);
+          dataToSave = {
+            ...dataToSave,
+            file_url: fileUrl,
+            file_size: `${(selectedFile.size / 1024 / 1024).toFixed(2)} MB`,
+            title: dataToSave.title || selectedFile.name,
+          };
+        } finally {
+          setIsUploading(false);
+        }
       }
 
       await onSave(dataToSave);

@@ -203,10 +203,7 @@ export const ContentCard: React.FC<ContentCardProps> = ({
       <div
         className={`px-3 py-1 border-t border-border bg-secondary/50 flex gap-1 transition-opacity duration-200 opacity-100 sm:opacity-0 sm:group-hover:opacity-100`}
       >
-        {(item.type === "text" ||
-          item.type === "code" ||
-          item.type === "prompt" ||
-          item.type === "script") && (
+        {(item.content || item.file_url) && (
           <Button
             variant="ghost"
             size="sm"

@@ -63,38 +63,32 @@ export const ShareModal: React.FC<ShareModalProps> = ({
   };
 
   const handleNativeShare = async () => {
-    // Check if content is public
     if (!item.is_public) {
       toast.error("Make content public to share");
       return;
     }
 
-    // Check if Web Share API is available
-    if (!navigator.share) {
-      toast.error("Web Share API not supported on this device");
-      return;
+    // Capture user gesture immediately
+    if (typeof navigator.share === "function") {
+      try {
+        await navigator.share({
+          title: item.title,
+          text: `Check out this content on UZ-log: ${item.title}`,
+          url: shareUrl,
+        });
+        return;
+      } catch (error: any) {
+        if (error.name === "AbortError") return;
+        console.warn("Native share restricted:", error);
+      }
     }
 
+    // Fallback: Copy to clipboard if API is missing or blocked (e.g. in iframe)
     try {
-      await navigator.share({
-        title: item.title,
-        text: `Check out this content on UZ-log: ${item.title}`,
-        url: shareUrl,
-      });
-    } catch (error) {
-      // Silently ignore AbortError (user cancelled) and NotAllowedError
-      if (error instanceof Error) {
-        if (error.name === "AbortError") {
-          // User cancelled the share dialog - this is normal
-          return;
-        }
-        if (error.name === "NotAllowedError") {
-          // Permission denied - silently ignore, user can use other share methods
-          return;
-        }
-      }
-      // Log other errors for debugging
-      console.error("Share error:", error);
+      await copyToClipboard(shareUrl);
+      toast.success("Link copied! (Native share is blocked in previews)");
+    } catch (err) {
+      toast.error("Failed to copy link");
     }
   };
 
@@ -185,9 +179,14 @@ export const ShareModal: React.FC<ShareModalProps> = ({
                 target="_blank"
                 rel="noopener noreferrer"
                 className={`inline-flex items-center justify-center px-3 py-2 rounded border border-border bg-card hover:bg-secondary transition-colors text-sm font-medium ${
-                  !item.is_public ? "opacity-50 cursor-not-allowed" : ""
+                  !item.is_public ? "opacity-50" : ""
                 }`}
-                onClick={(e) => !item.is_public && e.preventDefault()}
+                onClick={(e) => {
+                  if (!item.is_public) {
+                    e.preventDefault();
+                    toast.error("Make content public to share");
+                  }
+                }}
               >
                 Twitter
               </a>
@@ -198,18 +197,18 @@ export const ShareModal: React.FC<ShareModalProps> = ({
                 Email
               </a>
               <Button
-                onClick={handleNativeShare}
+                type="button"
                 variant="outline"
                 size="sm"
-                className={`w-full ${!item.is_public ? "opacity-50 cursor-not-allowed" : ""}`}
-                disabled={!item.is_public}
+                className="w-full"
+                onClick={handleNativeShare}
                 title={
                   item.is_public
                     ? "Share to other apps"
                     : "Make content public to share"
                 }
               >
-                <MoreHorizontal className="w-4 h-4 mr-1" />
+                <Share2 className="w-4 h-4 mr-1" />
                 More
               </Button>
             </div>
@@ -217,13 +216,21 @@ export const ShareModal: React.FC<ShareModalProps> = ({
 
           {/* Info */}
           <div className="bg-card border border-border rounded p-3">
-            <div className="flex gap-2">
-              <Share2 className="w-4 h-4 text-muted-foreground flex-shrink-0 mt-0.5" />
-              <p className="text-xs text-muted-foreground">
-                {item.is_public
-                  ? "This content is public. Anyone with the link can view it."
-                  : "Make content public to enable sharing."}
-              </p>
+            <div className="flex flex-col gap-2">
+              <div className="flex gap-2">
+                <Share2 className="w-4 h-4 text-muted-foreground flex-shrink-0 mt-0.5" />
+                <p className="text-xs text-muted-foreground">
+                  {item.is_public
+                    ? "This content is public. Anyone with the link can view it."
+                    : "Make content public to enable sharing."}
+                </p>
+              </div>
+              {window.self !== window.top && (
+                <p className="text-[10px] text-muted-foreground italic mt-1 border-t border-border pt-2">
+                  Tip: Some share features are blocked in previews. Open the app
+                  directly to use the native share menu.
+                </p>
+              )}
             </div>
           </div>
         </div>

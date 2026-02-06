@@ -254,10 +254,20 @@ export const updateContent = async (
   updates: Partial<ContentItem>,
 ): Promise<ContentItem> => {
   const supabase = getSupabase();
+
+  // Strip protected fields that shouldn't be updated directly
+  const {
+    id: _id,
+    user_id: _user_id,
+    created_at: _created_at,
+    updated_at: _updated_at,
+    ...updatableFields
+  } = updates;
+
   const { data, error } = await supabase
     .from("content")
     .update({
-      ...updates,
+      ...updatableFields,
       updated_at: new Date().toISOString(),
     })
     .eq("id", id)
