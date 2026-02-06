@@ -136,7 +136,7 @@ export const ContentCard: React.FC<ContentCardProps> = ({
           item.type === "code" ||
           item.type === "prompt" ||
           item.type === "script") && (
-          <p className="text-xs text-muted-foreground line-clamp-2 leading-relaxed">
+          <p className="text-xs text-muted-foreground line-clamp-1 leading-tight">
             {preview}
           </p>
         )}
