@@ -243,6 +243,22 @@ export const ContentCard: React.FC<ContentCardProps> = ({
         className={`px-3 py-1 border-t border-border bg-secondary/50 flex gap-2 transition-opacity duration-200 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 flex-wrap`}
         onClick={(e) => e.stopPropagation()}
       >
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={(e) => {
+            e.stopPropagation();
+            setIsLiked(!isLiked);
+          }}
+          title={isLiked ? "Unlike" : "Like"}
+          className={`flex-1 h-7 ${
+            isLiked ? "text-red-500 dark:text-red-400" : ""
+          }`}
+        >
+          <Heart className={`w-2.5 h-2.5 ${isLiked ? "fill-current" : ""}`} />
+          <span className="hidden sm:inline text-xs">Like</span>
+        </Button>
+
         {(item.content || item.file_url) && (
           <Button
             variant="ghost"
