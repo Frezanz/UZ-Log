@@ -189,7 +189,7 @@ export default function Share() {
         </div>
 
         {/* Copy Button */}
-        {(content.type === 'text' || content.type === 'code' || content.type === 'prompt' || content.type === 'script') && content.content && (
+        {(content.type === 'text' || content.type === 'code' || content.type === 'prompt' || content.type === 'script' || content.type === 'link') && content.content && (
           <div className="flex justify-center mb-8">
             <Button onClick={handleCopy} className="gap-2">
               <Copy className="w-4 h-4" />
