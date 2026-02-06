@@ -22,36 +22,42 @@ export const Header: React.FC = () => {
 
   // Handle scroll to hide/show header like YouTube, Instagram, Facebook
   useEffect(() => {
+    let timeoutId: NodeJS.Timeout;
+
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
       const scrollDifference = currentScrollY - lastScrollYRef.current;
 
-      // Hide header when scrolling down more than 50px
-      if (scrollDifference > 50 && currentScrollY > 100) {
+      // Clear any existing timeout
+      clearTimeout(timeoutId);
+
+      // Show header when at the top
+      if (currentScrollY < 50) {
+        setIsHidden(false);
+      }
+      // Hide header when scrolling down
+      else if (scrollDifference > 10 && currentScrollY > 50) {
         setIsHidden(true);
       }
       // Show header when scrolling up
-      else if (scrollDifference < -50) {
-        setIsHidden(false);
-      }
-      // Show header at the top
-      else if (currentScrollY < 100) {
+      else if (scrollDifference < -10) {
         setIsHidden(false);
       }
 
       lastScrollYRef.current = currentScrollY;
     };
 
-    window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('scroll', handleScroll);
     return () => {
       window.removeEventListener('scroll', handleScroll);
+      clearTimeout(timeoutId);
     };
   }, []);
 
   return (
     <>
-      <header className={`sticky top-0 z-40 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 transition-transform duration-300 ease-in-out ${
-        isHidden ? '-translate-y-full' : 'translate-y-0'
+      <header className={`fixed top-0 left-0 right-0 z-40 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 transition-all duration-300 ease-in-out ${
+        isHidden ? '-translate-y-full shadow-none' : 'translate-y-0 shadow-md'
       }`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-14 sm:h-16">
