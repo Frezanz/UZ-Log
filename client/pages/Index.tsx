@@ -73,6 +73,11 @@ export default function Index() {
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
   const [showBulkDeleteModal, setShowBulkDeleteModal] = useState(false);
 
+  // Duplicate detection states
+  const [showDuplicateModal, setShowDuplicateModal] = useState(false);
+  const [detectedDuplicates, setDetectedDuplicates] = useState<DuplicatePair[]>([]);
+  const [isDuplicateDetecting, setIsDuplicateDetecting] = useState(false);
+
   // Scroll detection for hiding header and search bar
   const [isHeaderHidden, setIsHeaderHidden] = useState(false);
   const lastScrollYRef = useRef(0);
