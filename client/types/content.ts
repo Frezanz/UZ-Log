@@ -23,6 +23,7 @@ export interface ContentItem {
   created_at: string;
   updated_at: string;
   word_count?: number;
+  uploader_name?: string;
 }
 
 export interface BookPage {
