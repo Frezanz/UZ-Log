@@ -102,11 +102,21 @@ export const useTextToSpeech = (options: UseTextToSpeechOptions = {}) => {
             .replace(/\[object\s+.*?\]/gi, "unknown")
             .trim() || "unknown";
 
+          // "interrupted" is expected behavior - happens when speech is stopped
+          // Don't log this as an error
+          if (errorType === "interrupted") {
+            console.debug("Speech interrupted (normal behavior when stopping)");
+            setIsPlaying(false);
+            setIsPaused(false);
+            setIsSpeaking(false);
+            return;
+          }
+
           // Only log if not a suppressed error
           if (!suppressErrorRef.current) {
             const errorMessage = getErrorMessage(errorType);
 
-            // Log with explicit string conversion
+            // Log with explicit string conversion - but only for real errors
             console.error("=== Speech Synthesis Error ===");
             console.error(`Error Type: ${errorType}`);
             console.error(`Error Message: ${errorMessage}`);
