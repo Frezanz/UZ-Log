@@ -11,7 +11,6 @@ import {
 import {
   Copy,
   Download,
-  X,
   FileText,
   Code,
   Image as ImageIcon,
