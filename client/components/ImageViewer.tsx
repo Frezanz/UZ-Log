@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { ContentItem } from "@/types/content";
 import { Button } from "@/components/ui/button";
-import { X, Download, Share, Heart, Trash2, Edit } from "lucide-react";
+import { X, Download, Share, Heart, Edit } from "lucide-react";
 import { toast } from "sonner";
 
 interface ImageViewerProps {
@@ -11,7 +11,6 @@ interface ImageViewerProps {
   onShare?: (item: ContentItem) => void;
   onDownload?: (item: ContentItem) => void;
   onEdit?: (item: ContentItem) => void;
-  onDelete?: (item: ContentItem) => void;
 }
 
 export const ImageViewer: React.FC<ImageViewerProps> = ({
@@ -21,7 +20,6 @@ export const ImageViewer: React.FC<ImageViewerProps> = ({
   onShare,
   onDownload,
   onEdit,
-  onDelete,
 }) => {
   const [isLiked, setIsLiked] = useState(false);
 
@@ -78,13 +76,6 @@ export const ImageViewer: React.FC<ImageViewerProps> = ({
     }
   };
 
-  const handleDelete = () => {
-    if (onDelete) {
-      onDelete(image);
-      onClose();
-    }
-  };
-
   return (
     <div
       className={`fixed inset-0 z-50 bg-black/95 transition-opacity duration-200 ${
@@ -105,8 +96,8 @@ export const ImageViewer: React.FC<ImageViewerProps> = ({
           <X className="w-6 h-6 text-white" />
         </button>
 
-        {/* Image Section */}
-        <div className="flex-1 flex items-center justify-center p-4 overflow-auto">
+        {/* Image Section - Flexible scrollable container */}
+        <div className="flex-1 flex flex-col items-center justify-center overflow-y-auto overflow-x-hidden p-2 sm:p-4 snap-center">
           <img
             src={image.file_url}
             alt={image.title}
@@ -115,9 +106,9 @@ export const ImageViewer: React.FC<ImageViewerProps> = ({
           />
         </div>
 
-        {/* Details Section - Instagram/Facebook Style */}
+        {/* Details Section - Instagram/Facebook Style, Flexible Scrolling */}
         <div
-          className="w-full lg:w-96 bg-card flex flex-col overflow-hidden max-h-[50vh] lg:max-h-full"
+          className="w-full lg:w-96 bg-card border-t lg:border-t-0 lg:border-l border-border flex flex-col overflow-hidden"
           onClick={(e) => e.stopPropagation()}
         >
           {/* Header with User Info */}
@@ -159,13 +150,15 @@ export const ImageViewer: React.FC<ImageViewerProps> = ({
             )}
           </div>
 
-          {/* Description/Content Area */}
-          <div className="flex-1 overflow-y-auto px-4 py-3 border-b border-border">
+          {/* Description/Content Area - Flexible Scrolling */}
+          <div className="flex-1 overflow-y-auto px-4 py-4 space-y-4 scrollbar-thin scrollbar-thumb-border scrollbar-track-transparent">
             {/* File Size */}
             {image.file_size && (
-              <div className="mb-3">
-                <p className="text-xs text-muted-foreground mb-1">File Size</p>
-                <p className="text-sm font-medium text-foreground">
+              <div className="space-y-1">
+                <p className="text-xs font-semibold text-foreground uppercase tracking-wide">
+                  File Size
+                </p>
+                <p className="text-sm text-muted-foreground">
                   {image.file_size}
                 </p>
               </div>
@@ -173,13 +166,15 @@ export const ImageViewer: React.FC<ImageViewerProps> = ({
 
             {/* Tags */}
             {image.tags && image.tags.length > 0 && (
-              <div className="mb-3">
-                <p className="text-xs text-muted-foreground mb-2">Tags</p>
-                <div className="flex gap-1 flex-wrap">
+              <div className="space-y-2">
+                <p className="text-xs font-semibold text-foreground uppercase tracking-wide">
+                  Tags
+                </p>
+                <div className="flex gap-2 flex-wrap">
                   {image.tags.map((tag, i) => (
                     <span
                       key={i}
-                      className="text-xs bg-secondary text-secondary-foreground px-2 py-1 rounded border border-border"
+                      className="text-xs bg-primary/10 text-primary px-3 py-1.5 rounded-full border border-primary/20 font-medium"
                     >
                       #{tag}
                     </span>
@@ -190,7 +185,10 @@ export const ImageViewer: React.FC<ImageViewerProps> = ({
 
             {/* Visibility Status */}
             {image.is_public && (
-              <div className="mb-3">
+              <div className="space-y-1">
+                <p className="text-xs font-semibold text-foreground uppercase tracking-wide">
+                  Sharing Status
+                </p>
                 <div className="bg-green-50 dark:bg-green-950/30 border border-green-200 dark:border-green-800 rounded-lg p-3">
                   <p className="text-xs text-green-700 dark:text-green-300 font-medium">
                     This image is publicly shared
@@ -200,77 +198,60 @@ export const ImageViewer: React.FC<ImageViewerProps> = ({
             )}
           </div>
 
-          {/* Engagement Section - Instagram Style */}
-          <div className="px-4 py-3 border-t border-border space-y-3">
+          {/* Action Section - Instagram Style */}
+          <div className="px-4 py-4 border-t border-border space-y-3 flex-shrink-0">
             {/* Like Button */}
-            <div className="flex gap-2">
-              <button
-                onClick={() => setIsLiked(!isLiked)}
-                className={`flex items-center gap-2 px-3 py-2 rounded-lg transition-colors flex-1 justify-center ${
-                  isLiked
-                    ? "bg-red-100 dark:bg-red-950 text-red-600 dark:text-red-400"
-                    : "bg-secondary hover:bg-secondary/80 text-foreground"
-                }`}
-              >
-                <Heart
-                  className={`w-4 h-4 ${isLiked ? "fill-current" : ""}`}
-                />
-                <span className="text-sm font-medium">
-                  {isLiked ? "Liked" : "Like"}
-                </span>
-              </button>
-            </div>
+            <button
+              onClick={() => setIsLiked(!isLiked)}
+              className={`w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg transition-all duration-200 font-medium ${
+                isLiked
+                  ? "bg-red-500 dark:bg-red-600 text-white shadow-lg"
+                  : "bg-secondary hover:bg-secondary/80 text-foreground"
+              }`}
+            >
+              <Heart
+                className={`w-5 h-5 ${isLiked ? "fill-current" : ""}`}
+              />
+              <span>{isLiked ? "Liked" : "Like Image"}</span>
+            </button>
 
-            {/* Action Buttons */}
-            <div className="grid grid-cols-3 gap-2">
+            {/* Action Buttons Grid */}
+            <div className="grid grid-cols-2 gap-2">
               <Button
                 variant="outline"
-                size="sm"
                 onClick={handleDownload}
-                className="flex items-center justify-center gap-1"
+                className="flex items-center justify-center gap-2 h-10"
                 title="Download image"
               >
                 <Download className="w-4 h-4" />
-                <span className="hidden sm:inline">Download</span>
+                <span>Download</span>
               </Button>
               <Button
                 variant="outline"
-                size="sm"
                 onClick={handleShare}
-                className="flex items-center justify-center gap-1"
+                className="flex items-center justify-center gap-2 h-10"
                 title="Share image"
               >
                 <Share className="w-4 h-4" />
-                <span className="hidden sm:inline">Share</span>
-              </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={handleEdit}
-                className="flex items-center justify-center gap-1"
-                title="Edit details"
-                disabled={!onEdit}
-              >
-                <Edit className="w-4 h-4" />
-                <span className="hidden sm:inline">Edit</span>
+                <span>Share</span>
               </Button>
             </div>
 
-            {/* Delete Button */}
-            {onDelete && (
+            {/* Edit Button - Full Width */}
+            {onEdit && (
               <Button
-                variant="outline"
-                onClick={handleDelete}
-                className="w-full text-destructive hover:text-destructive"
+                onClick={handleEdit}
+                className="w-full flex items-center justify-center gap-2 h-10"
+                title="Edit image details"
               >
-                <Trash2 className="w-4 h-4 mr-2" />
-                Delete Image
+                <Edit className="w-4 h-4" />
+                <span>Edit Details</span>
               </Button>
             )}
 
             {/* Click to Close Hint */}
-            <p className="text-center text-xs text-muted-foreground">
-              Click outside or press ESC to close
+            <p className="text-center text-xs text-muted-foreground pt-2">
+              Press ESC or click outside to close
             </p>
           </div>
         </div>
