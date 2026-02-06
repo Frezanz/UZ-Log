@@ -165,6 +165,7 @@ export const StatusDropdown: React.FC<StatusDropdownProps> = ({
         <div
           className="absolute top-full mt-1 left-0 z-50 bg-popover border border-border rounded-lg shadow-lg py-1 min-w-[140px]"
           role="listbox"
+          onClick={(e) => e.stopPropagation()}
         >
           {Object.entries(statusConfig).map(([key, cfg]) => {
             const StatusIcon = cfg.icon;
@@ -172,7 +173,10 @@ export const StatusDropdown: React.FC<StatusDropdownProps> = ({
             return (
               <button
                 key={key}
-                onClick={() => handleStatusSelect(key as ContentStatus)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleStatusSelect(key as ContentStatus);
+                }}
                 className={`w-full text-left px-3 py-2 flex items-center gap-2 text-xs transition-colors ${
                   isSelected
                     ? "bg-primary/10 text-primary font-medium"
