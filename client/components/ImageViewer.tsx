@@ -11,6 +11,7 @@ interface ImageViewerProps {
   onShare?: (item: ContentItem) => void;
   onDownload?: (item: ContentItem) => void;
   onEdit?: (item: ContentItem) => void;
+  onDelete?: (item: ContentItem) => void;
 }
 
 export const ImageViewer: React.FC<ImageViewerProps> = ({
@@ -20,9 +21,9 @@ export const ImageViewer: React.FC<ImageViewerProps> = ({
   onShare,
   onDownload,
   onEdit,
+  onDelete,
 }) => {
   const [isLiked, setIsLiked] = useState(false);
-  const [showDetails, setShowDetails] = useState(true);
 
   if (!isOpen || !image || !image.file_url) return null;
 
