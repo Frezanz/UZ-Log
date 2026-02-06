@@ -83,7 +83,7 @@ export const useContent = () => {
           newItem = createGuestContent(contentData);
         }
 
-        setItems([newItem, ...items]);
+        setItems((prev) => [newItem, ...prev]);
         return newItem;
       } catch (err) {
         const message =
@@ -104,7 +104,9 @@ export const useContent = () => {
           updated = updateGuestContent(id, data);
         }
 
-        setItems(items.map((item) => (item.id === id ? updated : item)));
+        setItems((prev) =>
+          prev.map((item) => (item.id === id ? updated : item)),
+        );
         return updated;
       } catch (err) {
         const message =
@@ -129,12 +131,8 @@ export const useContent = () => {
           await new Promise((resolve) => setTimeout(resolve, 100));
         }
 
-        const updatedItems = items.filter((item) => item.id !== id);
-        setItems(updatedItems);
-        console.log(
-          "Content removed from state, remaining items:",
-          updatedItems.length,
-        );
+        setItems((prev) => prev.filter((item) => item.id !== id));
+        console.log("Content removed from state");
       } catch (err) {
         const message =
           err instanceof Error ? err.message : "Failed to delete content";
@@ -155,7 +153,9 @@ export const useContent = () => {
           updated = updateGuestContent(id, { is_public: isPublic });
         }
 
-        setItems(items.map((item) => (item.id === id ? updated : item)));
+        setItems((prev) =>
+          prev.map((item) => (item.id === id ? updated : item)),
+        );
         return updated;
       } catch (err) {
         const message =
