@@ -8,6 +8,7 @@ interface ControlToggleProps {
   onFilterClick: () => void;
   onNewContentClick: () => void;
   isFilterActive?: boolean;
+  children?: React.ReactNode;
 }
 
 export const ControlToggle: React.FC<ControlToggleProps> = ({
@@ -16,6 +17,7 @@ export const ControlToggle: React.FC<ControlToggleProps> = ({
   onFilterClick,
   onNewContentClick,
   isFilterActive = false,
+  children,
 }) => {
   return (
     <div className="space-y-4">
