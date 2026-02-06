@@ -188,3 +188,30 @@ export const clearGuestContent = (): void => {
     console.error("Failed to clear guest content:", error);
   }
 };
+
+// Upload file for guest users (store as base64)
+export const uploadGuestFile = async (file: File): Promise<string> => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+
+    reader.onload = (e) => {
+      const base64 = e.target?.result as string;
+      if (base64) {
+        resolve(base64);
+      } else {
+        reject(new Error("Failed to read file"));
+      }
+    };
+
+    reader.onerror = () => {
+      reject(new Error("Failed to read file"));
+    };
+
+    reader.readAsDataURL(file);
+  });
+};
+
+// Get file size in MB
+export const getFileSizeMB = (file: File): string => {
+  return (file.size / 1024 / 1024).toFixed(2);
+};
