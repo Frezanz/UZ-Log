@@ -231,7 +231,7 @@ export default function Index() {
         console.error("Error deleting item:", error);
       }
     }
-    setSelectedItems(new Set());
+    setSelectedItems([]);
     setShowBulkDeleteModal(false);
     toast.success("Items deleted successfully");
   };
@@ -246,7 +246,7 @@ export default function Index() {
         console.error("Error changing status:", error);
       }
     }
-    setSelectedItems(new Set());
+    setSelectedItems([]);
     toast.success(`Status changed to ${status} for selected items`);
   };
 
@@ -261,7 +261,7 @@ export default function Index() {
         }
       }
     }
-    setSelectedItems(new Set());
+    setSelectedItems([]);
     toast.success(
       `Items marked as ${isPublic ? "public" : "private"} successfully`,
     );
