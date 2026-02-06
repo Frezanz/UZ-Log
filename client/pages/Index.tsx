@@ -519,7 +519,7 @@ export default function Index() {
                 onEdit={handleOpenEdit}
                 onDelete={handleOpenDelete}
                 onShare={handleOpenShare}
-                onStatusChange={changeStatus}
+                onStatusChange={handleStatusChange}
                 onDownload={handleDownload}
               />
             ))}
