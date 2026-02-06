@@ -8,14 +8,19 @@ export function cn(...inputs: ClassValue[]) {
 export async function copyToClipboard(text: string): Promise<void> {
   if (!text) return;
 
-  try {
-    // Try modern API first
-    if (navigator.clipboard && window.isSecureContext) {
+  // Try modern API first if available and in secure context
+  if (navigator.clipboard && window.isSecureContext) {
+    try {
       await navigator.clipboard.writeText(text);
       return;
+    } catch (err) {
+      // If NotAllowedError (permission policy) or other failure, fall through to fallback method
+      console.warn("Modern Clipboard API failed, trying fallback:", err);
     }
+  }
 
-    // Fallback for non-secure contexts or when clipboard API is unavailable
+  try {
+    // Fallback for non-secure contexts, older browsers, or when API is blocked
     const textArea = document.createElement("textarea");
     textArea.value = text;
 
