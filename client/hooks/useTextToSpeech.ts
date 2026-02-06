@@ -6,6 +6,20 @@ interface UseTextToSpeechOptions {
   volume?: number;
 }
 
+// Helper function to get user-friendly error messages
+const getErrorMessage = (errorType: string): string => {
+  const errorMap: Record<string, string> = {
+    "network-error": "Network error - check your internet connection",
+    "synthesis-unavailable": "Speech synthesis is not available",
+    "synthesis-in-progress": "Speech is already playing",
+    "invalid-argument": "Invalid text or parameters",
+    "not-allowed": "Permission denied - check browser permissions",
+    "audio-busy": "Audio device is busy",
+  };
+
+  return errorMap[errorType] || `Speech synthesis error: ${errorType || "unknown"}`;
+};
+
 export const useTextToSpeech = (options: UseTextToSpeechOptions = {}) => {
   const { rate = 1, pitch = 1, volume = 1 } = options;
   const [isPlaying, setIsPlaying] = useState(false);
