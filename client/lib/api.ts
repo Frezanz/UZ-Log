@@ -233,9 +233,10 @@ export const getAllContent = async (filters?: {
       );
     }
 
-    // Calculate word count
+    // Calculate word count and ensure status is set
     results = results.map((item) => ({
       ...item,
+      status: item.status || "active",
       word_count: item.content ? item.content.split(/\s+/).length : 0,
     }));
 
@@ -436,9 +437,10 @@ export const getAllPublicContent = async (filters?: {
       );
     }
 
-    // Calculate word count
+    // Calculate word count and ensure status is set
     results = results.map((item) => ({
       ...item,
+      status: item.status || "active",
       word_count: item.content ? item.content.split(/\s+/).length : 0,
     }));
 
