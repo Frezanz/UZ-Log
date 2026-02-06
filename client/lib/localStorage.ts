@@ -81,9 +81,18 @@ export const updateGuestContent = (
 
 // Delete guest content item
 export const deleteGuestContent = (id: string): void => {
-  const items = getGuestContent();
-  const filtered = items.filter((item) => item.id !== id);
-  saveGuestContent(filtered);
+  try {
+    console.log('deleteGuestContent called for:', id);
+    const items = getGuestContent();
+    console.log('Current items in localStorage:', items.length);
+    const filtered = items.filter((item) => item.id !== id);
+    console.log('Items after filtering:', filtered.length);
+    saveGuestContent(filtered);
+    console.log('localStorage updated successfully');
+  } catch (error) {
+    console.error('Error in deleteGuestContent:', error);
+    throw error;
+  }
 };
 
 // Filter and sort guest content
