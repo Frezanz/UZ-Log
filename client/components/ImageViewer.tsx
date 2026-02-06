@@ -25,6 +25,22 @@ export const ImageViewer: React.FC<ImageViewerProps> = ({
 }) => {
   const [isLiked, setIsLiked] = useState(false);
 
+  // Handle ESC key to close viewer
+  React.useEffect(() => {
+    const handleEsc = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && isOpen) {
+        onClose();
+      }
+    };
+
+    if (isOpen) {
+      window.addEventListener("keydown", handleEsc);
+      return () => {
+        window.removeEventListener("keydown", handleEsc);
+      };
+    }
+  }, [isOpen, onClose]);
+
   if (!isOpen || !image || !image.file_url) return null;
 
   const createdDate = new Date(image.created_at).toLocaleDateString();
