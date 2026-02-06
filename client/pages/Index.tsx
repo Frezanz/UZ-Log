@@ -587,19 +587,19 @@ export default function Index() {
         ) : displayItems.length > 0 ? (
           <div>
             {/* Bulk Selection Toolbar */}
-            {selectedItems.size > 0 && (
+            {selectedItems.length > 0 && (
               <div className="mb-4 p-4 bg-primary/5 border border-primary/20 rounded-lg flex items-center justify-between gap-4 flex-wrap">
                 <div className="flex items-center gap-4">
                   <input
                     type="checkbox"
-                    checked={selectedItems.size === displayItems.length}
+                    checked={selectedItems.length === displayItems.length}
                     onChange={handleSelectAll}
-                    className="w-5 h-5 rounded border-border cursor-pointer"
+                    className="w-5 h-5 rounded border border-border cursor-pointer"
                     title="Select all"
                   />
                   <span className="text-sm font-medium text-foreground">
-                    {selectedItems.size} item
-                    {selectedItems.size !== 1 ? "s" : ""} selected
+                    {selectedItems.length} item
+                    {selectedItems.length !== 1 ? "s" : ""} selected
                   </span>
                 </div>
 
