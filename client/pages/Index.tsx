@@ -55,7 +55,9 @@ export default function Index() {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deleteItem, setDeleteItem] = useState<ContentItem | null>(null);
   const [showAutoDeleteModal, setShowAutoDeleteModal] = useState(false);
-  const [autoDeleteItem, setAutoDeleteItem] = useState<ContentItem | null>(null);
+  const [autoDeleteItem, setAutoDeleteItem] = useState<ContentItem | null>(
+    null,
+  );
   const [pendingStatusId, setPendingStatusId] = useState<string | null>(null);
   const [showFilters, setShowFilters] = useState(false);
   const [showActions, setShowActions] = useState(false);

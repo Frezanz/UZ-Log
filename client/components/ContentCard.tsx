@@ -101,7 +101,10 @@ export const ContentCard: React.FC<ContentCardProps> = ({
       onClick={() => onView?.(item)}
     >
       {/* Type Badge */}
-      <div className="px-3 pt-2 flex items-center justify-between gap-1.5" onClick={(e) => e.stopPropagation()}>
+      <div
+        className="px-3 pt-2 flex items-center justify-between gap-1.5"
+        onClick={(e) => e.stopPropagation()}
+      >
         <span
           className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-medium ${typeColors[item.type]}`}
         >
@@ -215,7 +218,8 @@ export const ContentCard: React.FC<ContentCardProps> = ({
         )}
         {item.auto_delete_enabled && item.auto_delete_at && (
           <div className="text-[10px] text-orange-600 dark:text-orange-400 font-medium">
-            Will auto-delete: {new Date(item.auto_delete_at).toLocaleDateString()} at{" "}
+            Will auto-delete:{" "}
+            {new Date(item.auto_delete_at).toLocaleDateString()} at{" "}
             {new Date(item.auto_delete_at).toLocaleTimeString(undefined, {
               hour: "2-digit",
               minute: "2-digit",

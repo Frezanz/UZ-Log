@@ -285,8 +285,12 @@ export const useContent = () => {
           const original = items.find((i) => i.id === id);
           if (!original) throw new Error("Item not found");
 
-          const { id: _id, created_at: _ca, updated_at: _ua, ...rest } =
-            original;
+          const {
+            id: _id,
+            created_at: _ca,
+            updated_at: _ua,
+            ...rest
+          } = original;
           // createNewContent already adds to state
           await createNewContent({
             ...rest,

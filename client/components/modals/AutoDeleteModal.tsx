@@ -70,7 +70,8 @@ export const AutoDeleteModal: React.FC<AutoDeleteModalProps> = ({
       const deleteAt = new Date(Date.now() + hours * 60 * 60 * 1000);
       const deleteAtTime = deleteAt.toISOString();
 
-      const daysOrHours = hours >= 24 ? `${hours / 24} day(s)` : `${hours} hour(s)`;
+      const daysOrHours =
+        hours >= 24 ? `${hours / 24} day(s)` : `${hours} hour(s)`;
       onConfirm(deleteAtTime);
       toast.success(`Item will be deleted in ${daysOrHours}`);
     }
@@ -118,7 +119,9 @@ export const AutoDeleteModal: React.FC<AutoDeleteModalProps> = ({
 
           {/* Custom Days Input */}
           <div className="space-y-2">
-            <p className="text-sm font-medium text-foreground">Custom (Days):</p>
+            <p className="text-sm font-medium text-foreground">
+              Custom (Days):
+            </p>
             <div className="flex gap-2">
               <input
                 type="number"
@@ -133,7 +136,9 @@ export const AutoDeleteModal: React.FC<AutoDeleteModalProps> = ({
                 className="flex-1 px-3 py-2 rounded-lg border border-border bg-background text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                 placeholder="Enter number of days"
               />
-              <span className="px-3 py-2 text-sm text-muted-foreground">days</span>
+              <span className="px-3 py-2 text-sm text-muted-foreground">
+                days
+              </span>
             </div>
           </div>
 
