@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { ContentItem } from "@/types/content";
 import { Button } from "@/components/ui/button";
-import { X, Download, Share, Heart } from "lucide-react";
+import { X, Download, Share } from "lucide-react";
 import { toast } from "sonner";
 
 interface ImageViewerProps {
