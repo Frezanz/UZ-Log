@@ -209,9 +209,7 @@ export const ImageViewer: React.FC<ImageViewerProps> = ({
                   : "bg-secondary hover:bg-secondary/80 text-foreground"
               }`}
             >
-              <Heart
-                className={`w-5 h-5 ${isLiked ? "fill-current" : ""}`}
-              />
+              <Heart className={`w-5 h-5 ${isLiked ? "fill-current" : ""}`} />
               <span>{isLiked ? "Liked" : "Like Image"}</span>
             </button>
 

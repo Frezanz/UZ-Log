@@ -130,7 +130,7 @@ function checkJavaScriptSyntax(content: string): SyntaxError[] {
     ) {
       errors.push({
         line: lineNum,
-        message: 'Missing semicolon after const declaration',
+        message: "Missing semicolon after const declaration",
         type: "warning",
         code: "MISSING_SEMICOLON",
       });
@@ -291,7 +291,7 @@ export function analyzeSyntax(content: string): SyntaxAnalysisResult {
 
   // Deduplicate errors on same line with same message
   const uniqueErrors = Array.from(
-    new Map(errors.map((e) => [`${e.line}-${e.message}`, e])).values()
+    new Map(errors.map((e) => [`${e.line}-${e.message}`, e])).values(),
   );
 
   const affectedLines = new Set(uniqueErrors.map((e) => e.line)).size;

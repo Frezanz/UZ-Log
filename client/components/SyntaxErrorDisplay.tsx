@@ -32,7 +32,7 @@ export const SyntaxErrorDisplay: React.FC<SyntaxErrorDisplayProps> = ({
         hasErrors
           ? "bg-red-50 dark:bg-red-950/30 border-red-200 dark:border-red-800"
           : "bg-green-50 dark:bg-green-950/30 border-green-200 dark:border-green-800",
-        className
+        className,
       )}
     >
       <button
@@ -41,7 +41,7 @@ export const SyntaxErrorDisplay: React.FC<SyntaxErrorDisplayProps> = ({
           "w-full px-4 py-3 flex items-center justify-between hover:bg-black/5 dark:hover:bg-white/5 transition-colors",
           hasErrors
             ? "text-red-900 dark:text-red-200"
-            : "text-green-900 dark:text-green-200"
+            : "text-green-900 dark:text-green-200",
         )}
       >
         <div className="flex items-center gap-2">
@@ -52,13 +52,12 @@ export const SyntaxErrorDisplay: React.FC<SyntaxErrorDisplayProps> = ({
           )}
           <span className="text-sm font-medium">{summary}</span>
         </div>
-        {hasErrors && (
-          expanded ? (
+        {hasErrors &&
+          (expanded ? (
             <ChevronUp className="w-4 h-4" />
           ) : (
             <ChevronDown className="w-4 h-4" />
-          )
-        )}
+          ))}
       </button>
 
       {expanded && hasErrors && result.errors.length > 0 && (
@@ -71,7 +70,7 @@ export const SyntaxErrorDisplay: React.FC<SyntaxErrorDisplayProps> = ({
                   "px-4 py-3 text-sm border-t border-inherit first:border-t-0",
                   error.type === "error"
                     ? "bg-red-100/50 dark:bg-red-900/30 text-red-900 dark:text-red-200"
-                    : "bg-yellow-100/50 dark:bg-yellow-900/30 text-yellow-900 dark:text-yellow-200"
+                    : "bg-yellow-100/50 dark:bg-yellow-900/30 text-yellow-900 dark:text-yellow-200",
                 )}
               >
                 <div className="flex items-start gap-2">
@@ -81,7 +80,7 @@ export const SyntaxErrorDisplay: React.FC<SyntaxErrorDisplayProps> = ({
                         "inline-flex items-center justify-center w-6 h-6 rounded text-xs font-semibold",
                         error.type === "error"
                           ? "bg-red-200 dark:bg-red-800 text-red-800 dark:text-red-200"
-                          : "bg-yellow-200 dark:bg-yellow-800 text-yellow-800 dark:text-yellow-200"
+                          : "bg-yellow-200 dark:bg-yellow-800 text-yellow-800 dark:text-yellow-200",
                       )}
                     >
                       L{error.line}
@@ -101,11 +100,10 @@ export const SyntaxErrorDisplay: React.FC<SyntaxErrorDisplayProps> = ({
                         "inline-flex items-center gap-1 text-xs px-2 py-1 rounded",
                         error.type === "error"
                           ? "bg-red-200 dark:bg-red-800"
-                          : "bg-yellow-200 dark:bg-yellow-800"
+                          : "bg-yellow-200 dark:bg-yellow-800",
                       )}
                     >
-                      {error.type.charAt(0).toUpperCase() +
-                        error.type.slice(1)}
+                      {error.type.charAt(0).toUpperCase() + error.type.slice(1)}
                     </span>
                   </div>
                 </div>
