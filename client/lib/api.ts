@@ -289,6 +289,31 @@ export const deleteContent = async (id: string): Promise<void> => {
   if (error) throw error;
 };
 
+export const duplicateContent = async (id: string): Promise<ContentItem> => {
+  const supabase = getSupabase();
+  const user = await getCurrentUser();
+
+  if (!user) throw new Error("User not authenticated");
+
+  // Get the original content
+  const original = await getContent(id);
+
+  // Create new item with duplicated content
+  const duplicatedContent: Omit<
+    ContentItem,
+    "id" | "created_at" | "updated_at" | "user_id"
+  > = {
+    ...original,
+    title: `${original.title} (copy)`,
+    is_public: false, // Always make duplicates private
+    auto_delete_at: null, // Don't copy auto-delete settings
+    auto_delete_enabled: false,
+    status: "active", // Reset status to active
+  };
+
+  return createContent(duplicatedContent);
+};
+
 // ============ File Upload ============
 export const uploadFile = async (
   file: File,
