@@ -22,35 +22,29 @@ export const Header: React.FC = () => {
 
   // Handle scroll to hide/show header like YouTube, Instagram, Facebook
   useEffect(() => {
-    let timeoutId: NodeJS.Timeout;
-
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
       const scrollDifference = currentScrollY - lastScrollYRef.current;
 
-      // Clear any existing timeout
-      clearTimeout(timeoutId);
-
-      // Show header when at the top
-      if (currentScrollY < 50) {
+      // Show header when at the top of page
+      if (currentScrollY < 10) {
         setIsHidden(false);
       }
-      // Hide header when scrolling down
-      else if (scrollDifference > 10 && currentScrollY > 50) {
+      // Hide header when scrolling down more than 5px with speed
+      else if (scrollDifference > 5 && currentScrollY > 50) {
         setIsHidden(true);
       }
-      // Show header when scrolling up
-      else if (scrollDifference < -10) {
+      // Show header immediately when scrolling up
+      else if (scrollDifference < -5) {
         setIsHidden(false);
       }
 
       lastScrollYRef.current = currentScrollY;
     };
 
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => {
       window.removeEventListener('scroll', handleScroll);
-      clearTimeout(timeoutId);
     };
   }, []);
 
