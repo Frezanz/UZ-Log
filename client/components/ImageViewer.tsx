@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { ContentItem } from "@/types/content";
 import { Button } from "@/components/ui/button";
-import { X, Download, Share, Heart } from "lucide-react";
+import { X, Download, Share, Heart, Trash2, Edit } from "lucide-react";
 import { toast } from "sonner";
 
 interface ImageViewerProps {
@@ -50,6 +50,22 @@ export const ImageViewer: React.FC<ImageViewerProps> = ({
   const handleShare = () => {
     if (onShare) {
       onShare(image);
+    } else {
+      toast.info("Share feature not available");
+    }
+  };
+
+  const handleEdit = () => {
+    if (onEdit) {
+      onEdit(image);
+      onClose();
+    }
+  };
+
+  const handleDelete = () => {
+    if (onDelete) {
+      onDelete(image);
+      onClose();
     }
   };
 
@@ -190,37 +206,49 @@ export const ImageViewer: React.FC<ImageViewerProps> = ({
             </div>
 
             {/* Action Buttons */}
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid grid-cols-3 gap-2">
               <Button
                 variant="outline"
                 size="sm"
                 onClick={handleDownload}
-                className="flex items-center gap-2"
+                className="flex items-center justify-center gap-1"
+                title="Download image"
               >
                 <Download className="w-4 h-4" />
-                <span>Download</span>
+                <span className="hidden sm:inline">Download</span>
               </Button>
               <Button
                 variant="outline"
                 size="sm"
                 onClick={handleShare}
-                className="flex items-center gap-2"
+                className="flex items-center justify-center gap-1"
+                title="Share image"
               >
                 <Share className="w-4 h-4" />
-                <span>Share</span>
+                <span className="hidden sm:inline">Share</span>
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleEdit}
+                className="flex items-center justify-center gap-1"
+                title="Edit details"
+                disabled={!onEdit}
+              >
+                <Edit className="w-4 h-4" />
+                <span className="hidden sm:inline">Edit</span>
               </Button>
             </div>
 
-            {/* Edit Button if applicable */}
-            {onEdit && (
+            {/* Delete Button */}
+            {onDelete && (
               <Button
-                onClick={() => {
-                  onEdit(image);
-                  onClose();
-                }}
-                className="w-full"
+                variant="outline"
+                onClick={handleDelete}
+                className="w-full text-destructive hover:text-destructive"
               >
-                Edit Image Details
+                <Trash2 className="w-4 h-4 mr-2" />
+                Delete Image
               </Button>
             )}
 
