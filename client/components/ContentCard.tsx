@@ -8,7 +8,6 @@ import {
   Download,
   Share,
   Edit,
-  Trash2,
   CopyPlus,
   FileText,
   Code,
