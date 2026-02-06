@@ -34,8 +34,9 @@ export const AudioRecorder: React.FC<AudioRecorderProps> = ({
             audio: true,
           });
 
-          const audioContext = new (window.AudioContext ||
-            (window as any).webkitAudioContext)();
+          const audioContext = new (
+            window.AudioContext || (window as any).webkitAudioContext
+          )();
           audioContextRef.current = audioContext;
 
           const mediaRecorder = new MediaRecorder(stream);

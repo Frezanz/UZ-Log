@@ -68,7 +68,9 @@ export const TextToSpeechButton: React.FC<TextToSpeechButtonProps> = ({
         // Give user immediate feedback
         setTimeout(() => {
           if (!isPlaying) {
-            console.warn("Speech did not start - this may be a browser limitation");
+            console.warn(
+              "Speech did not start - this may be a browser limitation",
+            );
           }
         }, 500);
       }
@@ -109,18 +111,24 @@ export const TextToSpeechButton: React.FC<TextToSpeechButtonProps> = ({
           isPaused ? (
             <>
               <Play className="w-3 h-3" />
-              {showLabel && <span className="ml-1 text-xs hidden sm:inline">Resume</span>}
+              {showLabel && (
+                <span className="ml-1 text-xs hidden sm:inline">Resume</span>
+              )}
             </>
           ) : (
             <>
               <Pause className="w-3 h-3" />
-              {showLabel && <span className="ml-1 text-xs hidden sm:inline">Pause</span>}
+              {showLabel && (
+                <span className="ml-1 text-xs hidden sm:inline">Pause</span>
+              )}
             </>
           )
         ) : (
           <>
             <Volume2 className="w-3 h-3" />
-            {showLabel && <span className="ml-1 text-xs hidden sm:inline">Read</span>}
+            {showLabel && (
+              <span className="ml-1 text-xs hidden sm:inline">Read</span>
+            )}
           </>
         )}
       </Button>

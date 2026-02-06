@@ -143,7 +143,13 @@ export const ContentModal: React.FC<ContentModalProps> = ({
       }
 
       // Handle voice attachment upload for text-based content
-      if (recordedVoiceBlob && (formData.type === "text" || formData.type === "code" || formData.type === "prompt" || formData.type === "script")) {
+      if (
+        recordedVoiceBlob &&
+        (formData.type === "text" ||
+          formData.type === "code" ||
+          formData.type === "prompt" ||
+          formData.type === "script")
+      ) {
         setIsUploading(true);
         try {
           const voiceFile = new File([recordedVoiceBlob], "voice.webm", {
@@ -310,7 +316,6 @@ export const ContentModal: React.FC<ContentModalProps> = ({
             </div>
           )}
 
-
           {/* Content */}
           {formData.type === "link" ? (
             <div>
@@ -404,7 +409,8 @@ export const ContentModal: React.FC<ContentModalProps> = ({
                       />
                       {!isAuthenticated && (
                         <p className="text-xs text-amber-600 dark:text-amber-400 mt-2">
-                          Note: Voice attachment is stored locally in your browser. Sign in to upload to cloud storage.
+                          Note: Voice attachment is stored locally in your
+                          browser. Sign in to upload to cloud storage.
                         </p>
                       )}
                     </div>

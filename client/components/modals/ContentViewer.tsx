@@ -163,12 +163,10 @@ export const ContentViewer: React.FC<ContentViewerProps> = ({
               </div>
               {content.voice_url && (
                 <div className="bg-secondary/30 rounded-lg p-4">
-                  <p className="text-sm font-medium text-foreground mb-3">Voice Attachment</p>
-                  <audio
-                    controls
-                    className="w-full"
-                    controlsList="nodownload"
-                  >
+                  <p className="text-sm font-medium text-foreground mb-3">
+                    Voice Attachment
+                  </p>
+                  <audio controls className="w-full" controlsList="nodownload">
                     <source src={content.voice_url} type="audio/webm" />
                     Your browser does not support the audio element.
                   </audio>
@@ -190,12 +188,10 @@ export const ContentViewer: React.FC<ContentViewerProps> = ({
               </div>
               {content.voice_url && (
                 <div className="bg-secondary/30 rounded-lg p-4">
-                  <p className="text-sm font-medium text-foreground mb-3">Voice Attachment</p>
-                  <audio
-                    controls
-                    className="w-full"
-                    controlsList="nodownload"
-                  >
+                  <p className="text-sm font-medium text-foreground mb-3">
+                    Voice Attachment
+                  </p>
+                  <audio controls className="w-full" controlsList="nodownload">
                     <source src={content.voice_url} type="audio/webm" />
                     Your browser does not support the audio element.
                   </audio>
@@ -217,12 +213,10 @@ export const ContentViewer: React.FC<ContentViewerProps> = ({
               </div>
               {content.voice_url && (
                 <div className="bg-secondary/30 rounded-lg p-4">
-                  <p className="text-sm font-medium text-foreground mb-3">Voice Attachment</p>
-                  <audio
-                    controls
-                    className="w-full"
-                    controlsList="nodownload"
-                  >
+                  <p className="text-sm font-medium text-foreground mb-3">
+                    Voice Attachment
+                  </p>
+                  <audio controls className="w-full" controlsList="nodownload">
                     <source src={content.voice_url} type="audio/webm" />
                     Your browser does not support the audio element.
                   </audio>
@@ -244,12 +238,10 @@ export const ContentViewer: React.FC<ContentViewerProps> = ({
               </div>
               {content.voice_url && (
                 <div className="bg-secondary/30 rounded-lg p-4">
-                  <p className="text-sm font-medium text-foreground mb-3">Voice Attachment</p>
-                  <audio
-                    controls
-                    className="w-full"
-                    controlsList="nodownload"
-                  >
+                  <p className="text-sm font-medium text-foreground mb-3">
+                    Voice Attachment
+                  </p>
+                  <audio controls className="w-full" controlsList="nodownload">
                     <source src={content.voice_url} type="audio/webm" />
                     Your browser does not support the audio element.
                   </audio>
@@ -294,7 +286,6 @@ export const ContentViewer: React.FC<ContentViewerProps> = ({
               </Button>
             </div>
           )}
-
 
           {/* Content Metadata */}
           <div className="grid grid-cols-2 gap-3 text-sm">

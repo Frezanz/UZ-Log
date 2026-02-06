@@ -15,10 +15,12 @@ const getErrorMessage = (errorType: string): string => {
     "invalid-argument": "Invalid text or parameters",
     "not-allowed": "Permission denied - check browser permissions",
     "audio-busy": "Audio device is busy",
-    "interrupted": "Speech was interrupted (normal when stopping)",
+    interrupted: "Speech was interrupted (normal when stopping)",
   };
 
-  return errorMap[errorType] || `Speech synthesis error: ${errorType || "unknown"}`;
+  return (
+    errorMap[errorType] || `Speech synthesis error: ${errorType || "unknown"}`
+  );
 };
 
 export const useTextToSpeech = (options: UseTextToSpeechOptions = {}) => {
@@ -99,9 +101,9 @@ export const useTextToSpeech = (options: UseTextToSpeechOptions = {}) => {
           }
 
           // Sanitize error type - remove any [object] strings
-          errorType = errorType
-            .replace(/\[object\s+.*?\]/gi, "unknown")
-            .trim() || "unknown";
+          errorType =
+            errorType.replace(/\[object\s+.*?\]/gi, "unknown").trim() ||
+            "unknown";
 
           // "interrupted" is expected behavior - happens when speech is stopped
           // Don't log this as an error
@@ -127,22 +129,34 @@ export const useTextToSpeech = (options: UseTextToSpeechOptions = {}) => {
             // Log specific error guidance only for real errors
             switch (errorType) {
               case "network-error":
-                console.warn("Network Error: Check your internet connection and try again");
+                console.warn(
+                  "Network Error: Check your internet connection and try again",
+                );
                 break;
               case "synthesis-unavailable":
-                console.warn("Unavailable: Speech synthesis is not available - Try a different browser");
+                console.warn(
+                  "Unavailable: Speech synthesis is not available - Try a different browser",
+                );
                 break;
               case "synthesis-in-progress":
-                console.debug("In Progress: Waiting for current speech to finish");
+                console.debug(
+                  "In Progress: Waiting for current speech to finish",
+                );
                 break;
               case "invalid-argument":
-                console.warn("Invalid Argument: The text or parameters may be invalid");
+                console.warn(
+                  "Invalid Argument: The text or parameters may be invalid",
+                );
                 break;
               case "not-allowed":
-                console.warn("Permission Denied: Check browser permissions for speech synthesis");
+                console.warn(
+                  "Permission Denied: Check browser permissions for speech synthesis",
+                );
                 break;
               case "audio-busy":
-                console.warn("Audio Busy: Audio device is busy - Try again shortly");
+                console.warn(
+                  "Audio Busy: Audio device is busy - Try again shortly",
+                );
                 break;
               default:
                 if (errorType !== "unknown") {
@@ -169,7 +183,9 @@ export const useTextToSpeech = (options: UseTextToSpeechOptions = {}) => {
         const isPaused = window.speechSynthesis.paused;
 
         if (isSpeaking && !isPaused) {
-          console.info("Speech synthesis already speaking, canceling previous speech");
+          console.info(
+            "Speech synthesis already speaking, canceling previous speech",
+          );
           window.speechSynthesis.cancel();
         }
 
@@ -209,7 +225,12 @@ export const useTextToSpeech = (options: UseTextToSpeechOptions = {}) => {
         setIsPaused(true);
         setIsPlaying(false);
       } else {
-        console.warn("No active speech to pause - speaking:", synth.speaking, "paused:", synth.paused);
+        console.warn(
+          "No active speech to pause - speaking:",
+          synth.speaking,
+          "paused:",
+          synth.paused,
+        );
       }
     } catch (error) {
       const errorMsg = error instanceof Error ? error.message : String(error);
@@ -233,7 +254,12 @@ export const useTextToSpeech = (options: UseTextToSpeechOptions = {}) => {
         setIsPaused(false);
         setIsPlaying(true);
       } else {
-        console.warn("No paused speech to resume - speaking:", synth.speaking, "paused:", synth.paused);
+        console.warn(
+          "No paused speech to resume - speaking:",
+          synth.speaking,
+          "paused:",
+          synth.paused,
+        );
       }
     } catch (error) {
       const errorMsg = error instanceof Error ? error.message : String(error);
