@@ -40,6 +40,7 @@ export const createGuestContent = (
     id: generateId(),
     user_id: "guest",
     uploader_name: "Anonymous",
+    status: content.status || "active",
     created_at: now,
     updated_at: now,
     word_count: content.content ? content.content.split(/\s+/).length : 0,
