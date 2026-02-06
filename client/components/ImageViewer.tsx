@@ -217,16 +217,16 @@ export const ImageViewer: React.FC<ImageViewerProps> = ({
               <Button
                 variant="outline"
                 onClick={handleDownload}
-                className="flex items-center justify-center gap-2 h-10"
+                className="flex items-center justify-center gap-2 h-9 text-sm"
                 title="Download image"
               >
-                <Download className="w-4 h-4" />
+                <Download className="w-3.5 h-3.5" />
                 <span>Download</span>
               </Button>
               <Button
                 variant="outline"
                 onClick={handleShare}
-                className="flex items-center justify-center gap-2 h-10"
+                className="flex items-center justify-center gap-2 h-9 text-sm"
                 title="Share image"
               >
                 <Share className="w-4 h-4" />
