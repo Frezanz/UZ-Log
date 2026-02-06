@@ -23,6 +23,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { copyToClipboard } from "@/lib/utils";
+import { TextToSpeechButton } from "@/components/TextToSpeechButton";
 
 interface ContentViewerProps {
   isOpen: boolean;
