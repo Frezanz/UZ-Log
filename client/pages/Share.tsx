@@ -216,15 +216,20 @@ export default function Share() {
             </div>
           )}
         </div>
-        {/* Copy Button */}
-        (content.content || content.file_url) && (
-        <div className="flex justify-center mb-8">
-          <Button onClick={handleCopy} className="gap-2">
-            <Copy className="w-4 h-4" />
-            Copy to Clipboard
+        {/* Action Buttons */}
+        <div className="flex justify-center gap-3 mb-8 flex-wrap">
+          <Button onClick={() => setShowViewer(true)} variant="outline">
+            View Full Content
           </Button>
+          {(content.content || content.file_url) && (
+            <Button onClick={handleCopy} className="gap-2">
+              <Copy className="w-4 h-4" />
+              Copy to Clipboard
+            </Button>
+          )}
         </div>
-        ){/* Footer Info */}
+
+        {/* Footer Info */}
         <div className="text-center text-sm text-muted-foreground border-t border-border pt-6">
           <p>
             Shared via{" "}
