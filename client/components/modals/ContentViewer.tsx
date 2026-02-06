@@ -34,7 +34,7 @@ interface ContentViewerProps {
   onDelete?: (item: ContentItem) => void;
 }
 
-const typeIcons = {
+const typeIcons: Record<ContentType, React.ReactNode> = {
   text: <FileText className="w-4 h-4" />,
   code: <Code className="w-4 h-4" />,
   image: <ImageIcon className="w-4 h-4" />,
@@ -47,7 +47,7 @@ const typeIcons = {
   voice: <Mic className="w-4 h-4" />,
 };
 
-const typeColors = {
+const typeColors: Record<ContentType, string> = {
   text: "bg-blue-50 dark:bg-blue-950 text-blue-700 dark:text-blue-300",
   code: "bg-purple-50 dark:bg-purple-950 text-purple-700 dark:text-purple-300",
   image: "bg-green-50 dark:bg-green-950 text-green-700 dark:text-green-300",
