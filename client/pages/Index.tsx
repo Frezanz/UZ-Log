@@ -388,7 +388,7 @@ export default function Index() {
 
           {/* Filter Panel - Only shows when showFilters is true */}
           {showFilters && (
-            <div className="bg-secondary/30 border border-border rounded-lg p-4 space-y-4 animate-in fade-in duration-200">
+            <div className="bg-secondary/30 border border-border rounded-lg p-3 space-y-3 animate-in fade-in duration-200">
               {/* Sort Options */}
               <div className="text-center space-y-2">
                     <h3 className="text-sm font-medium text-foreground">
