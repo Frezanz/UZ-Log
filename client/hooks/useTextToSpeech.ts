@@ -101,27 +101,54 @@ export const useTextToSpeech = (options: UseTextToSpeechOptions = {}) => {
   );
 
   const pause = useCallback(() => {
-    if (isSupported() && isPlaying) {
-      window.speechSynthesis.pause();
-      setIsPaused(true);
-      setIsPlaying(false);
+    if (!isSupported()) {
+      console.warn("Text-to-speech is not supported in this browser");
+      return;
     }
-  }, [isSupported, isPlaying]);
+
+    try {
+      // Check if there's something actually speaking
+      if (window.speechSynthesis.speaking && !window.speechSynthesis.paused) {
+        window.speechSynthesis.pause();
+        setIsPaused(true);
+        setIsPlaying(false);
+      }
+    } catch (error) {
+      console.error("Error pausing speech:", error);
+    }
+  }, [isSupported]);
 
   const resume = useCallback(() => {
-    if (isSupported() && isPaused) {
-      window.speechSynthesis.resume();
-      setIsPaused(false);
-      setIsPlaying(true);
+    if (!isSupported()) {
+      console.warn("Text-to-speech is not supported in this browser");
+      return;
     }
-  }, [isSupported, isPaused]);
+
+    try {
+      // Check if speech is paused
+      if (window.speechSynthesis.paused) {
+        window.speechSynthesis.resume();
+        setIsPaused(false);
+        setIsPlaying(true);
+      }
+    } catch (error) {
+      console.error("Error resuming speech:", error);
+    }
+  }, [isSupported]);
 
   const stop = useCallback(() => {
-    if (isSupported()) {
+    if (!isSupported()) {
+      console.warn("Text-to-speech is not supported in this browser");
+      return;
+    }
+
+    try {
       window.speechSynthesis.cancel();
       setIsPlaying(false);
       setIsPaused(false);
       setIsSpeaking(false);
+    } catch (error) {
+      console.error("Error stopping speech:", error);
     }
   }, [isSupported]);
 
