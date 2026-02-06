@@ -31,6 +31,17 @@ export const ShareModal: React.FC<ShareModalProps> = ({
   const { isAuthenticated } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [shareLinks, setShareLinks] = useState<ShareLink[]>([]);
+  const [showLinkForm, setShowLinkForm] = useState(false);
+  const [expirationDays, setExpirationDays] = useState<string>("");
+  const [password, setPassword] = useState("");
+  const [isCreatingLink, setIsCreatingLink] = useState(false);
+
+  useEffect(() => {
+    if (item && isAuthenticated && isOpen) {
+      loadShareLinks();
+    }
+  }, [item, isAuthenticated, isOpen]);
 
   if (!item) return null;
 
