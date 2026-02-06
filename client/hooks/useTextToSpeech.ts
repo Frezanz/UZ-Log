@@ -155,11 +155,18 @@ export const useTextToSpeech = (options: UseTextToSpeechOptions = {}) => {
   // Cleanup on unmount
   useEffect(() => {
     return () => {
-      if (isSupported()) {
-        window.speechSynthesis.cancel();
+      try {
+        if (typeof window !== "undefined" && window.speechSynthesis) {
+          window.speechSynthesis.cancel();
+          setIsPlaying(false);
+          setIsPaused(false);
+          setIsSpeaking(false);
+        }
+      } catch (error) {
+        console.error("Error during cleanup:", error);
       }
     };
-  }, [isSupported]);
+  }, []);
 
   return {
     speak,
