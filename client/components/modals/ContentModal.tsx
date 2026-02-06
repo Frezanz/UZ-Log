@@ -104,21 +104,30 @@ export const ContentModal: React.FC<ContentModalProps> = ({
           formData.type === "image" ||
           formData.type === "video")
       ) {
-        if (!isAuthenticated || !user) {
-          toast.error("Please sign in to upload files");
-          setIsLoading(false);
-          return;
-        }
-
         setIsUploading(true);
         try {
-          const fileUrl = await uploadFile(selectedFile, user.id);
+          let fileUrl: string;
+
+          if (isAuthenticated && user) {
+            // Upload to Supabase for authenticated users
+            fileUrl = await uploadFile(selectedFile, user.id);
+          } else {
+            // Store as base64 for guest users
+            fileUrl = await uploadGuestFile(selectedFile);
+          }
+
           dataToSave = {
             ...dataToSave,
             file_url: fileUrl,
             file_size: `${(selectedFile.size / 1024 / 1024).toFixed(2)} MB`,
             title: dataToSave.title || selectedFile.name,
           };
+        } catch (error) {
+          const errorMsg = error instanceof Error ? error.message : "Upload failed";
+          toast.error(`File upload failed: ${errorMsg}`);
+          setIsUploading(false);
+          setIsLoading(false);
+          return;
         } finally {
           setIsUploading(false);
         }
