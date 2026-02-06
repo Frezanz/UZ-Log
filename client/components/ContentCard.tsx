@@ -115,18 +115,18 @@ export const ContentCard: React.FC<ContentCardProps> = ({
         </span>
         <div className="flex items-center gap-0.5">
           {item.user_id === "guest" ? (
-            <span className="text-[10px] font-medium text-amber-700 dark:text-amber-300 bg-amber-100 dark:bg-amber-950 px-1.5 py-0.5 rounded inline-flex items-center gap-0.5">
+            <span className="text-[10px] font-medium text-amber-700 dark:text-amber-300 bg-amber-100 dark:bg-amber-950 px-1.5 py-0.5 inline-flex items-center gap-0.5">
               <HardDrive className="w-2.5 h-2.5" />
               Local
             </span>
           ) : (
-            <span className="text-[10px] font-medium text-blue-700 dark:text-blue-300 bg-blue-100 dark:bg-blue-950 px-1.5 py-0.5 rounded inline-flex items-center gap-0.5">
+            <span className="text-[10px] font-medium text-blue-700 dark:text-blue-300 bg-blue-100 dark:bg-blue-950 px-1.5 py-0.5 inline-flex items-center gap-0.5">
               <Cloud className="w-2.5 h-2.5" />
               Cloud
             </span>
           )}
           {item.is_public && (
-            <span className="text-[10px] font-medium text-primary bg-secondary px-1.5 py-0.5 rounded">
+            <span className="text-[10px] font-medium text-primary bg-secondary px-1.5 py-0.5">
               Public
             </span>
           )}
@@ -216,7 +216,7 @@ export const ContentCard: React.FC<ContentCardProps> = ({
             {item.tags.slice(0, 2).map((tag, i) => (
               <span
                 key={i}
-                className="bg-card px-1 py-0 rounded text-[9px] border border-border"
+                className="bg-card px-1 py-0 text-[9px] border border-border"
               >
                 #{tag}
               </span>
