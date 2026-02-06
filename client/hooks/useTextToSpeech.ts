@@ -66,19 +66,42 @@ export const useTextToSpeech = (options: UseTextToSpeechOptions = {}) => {
       };
 
       utterance.onerror = (event: SpeechSynthesisErrorEvent) => {
-        const errorDetails = {
-          error: event.error,
-          message: `Speech synthesis error: ${event.error}`,
-        };
-        console.error("Speech synthesis error:", errorDetails);
+        try {
+          const errorType = event.error || "unknown";
+          const errorMessage = getErrorMessage(errorType);
 
-        // Log more details for debugging
-        if (event.error === "network-error") {
-          console.warn("Network error - check internet connection");
-        } else if (event.error === "synthesis-unavailable") {
-          console.warn("Speech synthesis not available");
-        } else if (event.error === "synthesis-in-progress") {
-          console.warn("Speech synthesis already in progress");
+          // Log with clear formatting
+          console.error("Speech synthesis error details:", {
+            errorType: errorType,
+            message: errorMessage,
+            timestamp: new Date().toISOString(),
+          });
+
+          // Log specific error guidance
+          switch (errorType) {
+            case "network-error":
+              console.warn("Network error - Check your internet connection and try again");
+              break;
+            case "synthesis-unavailable":
+              console.warn("Speech synthesis not available - Try a different browser");
+              break;
+            case "synthesis-in-progress":
+              console.warn("Speech synthesis already in progress - Wait for current speech to finish");
+              break;
+            case "invalid-argument":
+              console.warn("Invalid argument - The text or parameters may be invalid");
+              break;
+            case "not-allowed":
+              console.warn("Not allowed - Check browser permissions");
+              break;
+            case "audio-busy":
+              console.warn("Audio device is busy - Try again shortly");
+              break;
+            default:
+              console.warn(`Unknown error type: ${errorType}`);
+          }
+        } catch (err) {
+          console.error("Error in error handler:", err);
         }
 
         setIsPlaying(false);
