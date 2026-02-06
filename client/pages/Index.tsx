@@ -464,6 +464,61 @@ export default function Index() {
                     )}
                   </div>
 
+                  {/* Content Type Filter */}
+                  <div className="text-center space-y-0.5">
+                    <h3 className="text-xs font-medium text-foreground leading-tight">
+                      Content Type
+                    </h3>
+                    <div className="flex justify-center">
+                      <button
+                        onClick={() => setShowTypes(!showTypes)}
+                        className="text-muted-foreground hover:text-foreground transition-colors duration-200 focus:outline-none p-1 active:bg-transparent active:text-foreground"
+                        title={
+                          showTypes ? "Hide content types" : "Show content types"
+                        }
+                      >
+                        <ChevronDown
+                          className="w-4 h-4 transition-transform duration-200"
+                          style={{
+                            transform: showTypes
+                              ? "rotate(180deg)"
+                              : "rotate(0deg)",
+                          }}
+                        />
+                      </button>
+                    </div>
+
+                    {showTypes && (
+                      <div className="flex flex-wrap gap-0.5 justify-center animate-in fade-in duration-200">
+                        {(
+                          ["text", "code", "image", "video", "file", "link", "prompt", "script", "book"] as const
+                        ).map((type) => (
+                          <Button
+                            key={type}
+                            variant={
+                              displayFilters.types.includes(type)
+                                ? "default"
+                                : "outline"
+                            }
+                            size="sm"
+                            className="h-7 px-2 text-xs"
+                            onClick={() => {
+                              const newTypes = displayFilters.types.includes(type)
+                                ? displayFilters.types.filter((t) => t !== type)
+                                : [...displayFilters.types, type];
+                              setDisplayFilters({
+                                ...displayFilters,
+                                types: newTypes,
+                              });
+                            }}
+                          >
+                            {type.charAt(0).toUpperCase() + type.slice(1)}
+                          </Button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+
                   {/* Category Filter */}
                   {categories.length > 0 && (
                     <div className="text-center space-y-0.5">
