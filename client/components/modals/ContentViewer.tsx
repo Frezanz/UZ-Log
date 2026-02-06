@@ -373,6 +373,15 @@ export const ContentViewer: React.FC<ContentViewerProps> = ({
           </div>
         </div>
 
+        {/* Content Links Section */}
+        {allContent && allContent.length > 0 && (
+          <ContentLinks
+            content={content}
+            allContent={allContent}
+            onUpdate={onLinksUpdate}
+          />
+        )}
+
         {/* Action Buttons */}
         <div className="flex gap-2 mt-6 pt-4 border-t border-border flex-wrap">
           {(content.content || content.file_url) && (
