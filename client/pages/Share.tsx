@@ -237,6 +237,13 @@ export default function Share() {
           </p>
         </div>
       </main>
+
+      {/* Content Viewer Modal */}
+      <ContentViewer
+        isOpen={showViewer}
+        onClose={() => setShowViewer(false)}
+        content={content}
+      />
     </div>
   );
 }
