@@ -397,7 +397,7 @@ export default function Index() {
                     <div className="flex justify-center">
                       <button
                         onClick={() => setShowSortBy(!showSortBy)}
-                        className="text-muted-foreground hover:text-foreground transition-colors duration-200 focus:outline-none p-2 active:bg-transparent active:text-foreground"
+                        className="text-muted-foreground hover:text-foreground transition-colors duration-200 focus:outline-none p-1 active:bg-transparent active:text-foreground"
                         title={
                           showSortBy ? "Hide sort options" : "Show sort options"
                         }
@@ -455,7 +455,7 @@ export default function Index() {
                       <div className="flex justify-center">
                         <button
                           onClick={() => setShowCategories(!showCategories)}
-                          className="text-muted-foreground hover:text-foreground transition-colors duration-200 focus:outline-none p-2 active:bg-transparent active:text-foreground"
+                          className="text-muted-foreground hover:text-foreground transition-colors duration-200 focus:outline-none p-1 active:bg-transparent active:text-foreground"
                           title={
                             showCategories
                               ? "Hide categories"
@@ -514,7 +514,7 @@ export default function Index() {
                       <div className="flex justify-center">
                         <button
                           onClick={() => setShowTags(!showTags)}
-                          className="text-muted-foreground hover:text-foreground transition-colors duration-200 focus:outline-none p-2 active:bg-transparent active:text-foreground"
+                          className="text-muted-foreground hover:text-foreground transition-colors duration-200 focus:outline-none p-1 active:bg-transparent active:text-foreground"
                           title={showTags ? "Hide tags" : "Show tags"}
                         >
                           <ChevronDown
