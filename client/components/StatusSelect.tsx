@@ -10,7 +10,7 @@ import {
 import { Check, Clock, CheckCircle2 } from "lucide-react";
 
 interface StatusSelectProps {
-  value: ContentStatus;
+  value?: ContentStatus;
   onChange: (status: ContentStatus) => void;
   disabled?: boolean;
 }
