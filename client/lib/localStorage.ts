@@ -12,10 +12,12 @@ export const getGuestContent = (): ContentItem[] => {
   try {
     const data = localStorage.getItem(STORAGE_KEY);
     const items = data ? JSON.parse(data) : [];
-    // Ensure all items have a status
+    // Ensure all items have a status and auto_delete fields
     return items.map((item: ContentItem) => ({
       ...item,
       status: item.status || "active",
+      auto_delete_at: item.auto_delete_at || null,
+      auto_delete_enabled: item.auto_delete_enabled || false,
     }));
   } catch (error) {
     console.error("Failed to read guest content from localStorage:", error);
