@@ -70,31 +70,39 @@ export const ShareModal: React.FC<ShareModalProps> = ({
       return;
     }
 
+    console.log("Share button clicked, navigator.share available:", !!navigator.share);
+
     if (!navigator.share) {
-      toast.error("Web Share API not supported on this device");
+      console.log("Web Share API not available, showing fallback menu");
+      setShowMoreMenu(true);
       return;
     }
 
     try {
+      console.log("Attempting to share via Web Share API");
       await navigator.share({
         title: item.title,
         text: `Check out this content on UZ-log: ${item.title}`,
         url: shareUrl,
       });
+      console.log("Share successful");
     } catch (error) {
+      console.error("Share error:", error);
       if (error instanceof Error) {
         // Ignore user cancellation
         if (error.name === "AbortError" || error.message.includes("cancelled")) {
+          console.log("User cancelled share");
           return;
         }
-        // Handle permission denied or other errors
+        // Handle permission denied - show fallback menu
         if (error.name === "NotAllowedError" || error.message.includes("Permission")) {
-          toast.error("Share permission denied. Try copying the link instead.");
+          console.log("Permission denied, showing fallback menu");
+          setShowMoreMenu(true);
           return;
         }
-        console.error("Share error:", error);
-        toast.error("Failed to share. Try copying the link instead.");
       }
+      // Show fallback menu on any error
+      setShowMoreMenu(true);
     }
   };
 
