@@ -129,4 +129,42 @@
   select:focus {
     @apply outline-none ring-0;
   }
+
+  /* Smooth scrollbar styling for Instagram-like experience */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: rgb(200, 200, 200);
+    border-radius: 3px;
+    transition: background 0.2s ease;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgb(150, 150, 150);
+  }
+
+  .dark ::-webkit-scrollbar-thumb {
+    background: rgb(100, 100, 100);
+  }
+
+  .dark ::-webkit-scrollbar-thumb:hover {
+    background: rgb(120, 120, 120);
+  }
+
+  /* Firefox scrollbar styling */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: rgb(200, 200, 200) transparent;
+  }
+
+  .dark * {
+    scrollbar-color: rgb(100, 100, 100) transparent;
+  }
 }
