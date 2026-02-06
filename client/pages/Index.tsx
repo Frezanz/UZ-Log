@@ -167,6 +167,32 @@ export default function Index() {
     }
   };
 
+  const handleStatusChange = async (
+    id: string,
+    status: "active" | "pending" | "completed",
+  ) => {
+    // If changing to completed, show auto-delete modal
+    if (status === "completed") {
+      const item = items.find((i) => i.id === id);
+      if (item) {
+        setAutoDeleteItem(item);
+        setPendingStatusId(id);
+        setShowAutoDeleteModal(true);
+      }
+    } else {
+      // For other status changes, apply immediately
+      await changeStatus(id, status);
+    }
+  };
+
+  const handleAutoDeleteConfirm = async (deleteAtTime: string | null) => {
+    if (pendingStatusId) {
+      await changeStatus(pendingStatusId, "completed", deleteAtTime);
+      setPendingStatusId(null);
+      setAutoDeleteItem(null);
+    }
+  };
+
   const handleModalClose = () => {
     setShowContentModal(false);
     setEditingItem(undefined);
