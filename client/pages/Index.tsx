@@ -69,6 +69,38 @@ export default function Index() {
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
   const [showBulkDeleteModal, setShowBulkDeleteModal] = useState(false);
 
+  // Scroll detection for hiding header and search bar
+  const [isHeaderHidden, setIsHeaderHidden] = useState(false);
+  const lastScrollYRef = useRef(0);
+
+  // Handle scroll to hide/show header and search bar
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      const scrollDifference = currentScrollY - lastScrollYRef.current;
+
+      // Show header when at the top of page
+      if (currentScrollY < 10) {
+        setIsHeaderHidden(false);
+      }
+      // Hide header when scrolling down more than 5px with speed
+      else if (scrollDifference > 5 && currentScrollY > 50) {
+        setIsHeaderHidden(true);
+      }
+      // Show header immediately when scrolling up
+      else if (scrollDifference < -5) {
+        setIsHeaderHidden(false);
+      }
+
+      lastScrollYRef.current = currentScrollY;
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
   // Load public content for anonymous users (if Supabase is available)
   // If not, guests will just see their own localStorage content
   useEffect(() => {
