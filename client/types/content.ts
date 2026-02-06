@@ -22,6 +22,7 @@ export interface ContentItem {
   tags: string[];
   file_url: string | null;
   file_size: string | null;
+  voice_url?: string | null;
   is_public: boolean;
   status?: ContentStatus;
   created_at: string;
