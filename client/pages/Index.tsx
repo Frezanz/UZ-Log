@@ -130,7 +130,8 @@ export default function Index() {
   // Determine which data to display
   // Authenticated users see their Supabase content
   // Guest users see their localStorage content (items is populated from localStorage via useContent hook)
-  const displayItems = items;
+  // Filter out hidden items from display
+  const displayItems = items.filter((item) => item.status !== "hidden");
   const displayLoading = isLoading;
   const displayFilters = filters;
   const setDisplayFilters = setFilters;
