@@ -70,8 +70,8 @@ export const ControlToggle: React.FC<ControlToggleProps> = ({
         )}
       </div>
 
-      {/* Expanded Content Area - Smooth Transitions */}
-      {isExpanded && (
+      {/* Expanded Content Area - Only shows if children exist */}
+      {children && (
         <div
           className="animate-in fade-in duration-200 origin-top"
           style={{
