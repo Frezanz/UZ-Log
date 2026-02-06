@@ -10,7 +10,6 @@ interface ImageViewerProps {
   image: ContentItem | null;
   onShare?: (item: ContentItem) => void;
   onDownload?: (item: ContentItem) => void;
-  onEdit?: (item: ContentItem) => void;
 }
 
 export const ImageViewer: React.FC<ImageViewerProps> = ({
