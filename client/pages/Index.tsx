@@ -475,6 +475,7 @@ export default function Index() {
                 onEdit={handleOpenEdit}
                 onDelete={handleOpenDelete}
                 onShare={handleOpenShare}
+                onStatusChange={changeStatus}
                 onDownload={handleDownload}
               />
             ))}
