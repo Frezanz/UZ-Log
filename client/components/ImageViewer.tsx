@@ -93,7 +93,7 @@ export const ImageViewer: React.FC<ImageViewerProps> = ({
       onClick={onClose}
     >
       <div
-        className="h-full flex flex-col md:flex-row overflow-hidden"
+        className="h-full flex flex-col lg:flex-row overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Close Button */}
@@ -117,7 +117,7 @@ export const ImageViewer: React.FC<ImageViewerProps> = ({
 
         {/* Details Section - Instagram/Facebook Style */}
         <div
-          className="w-full md:w-96 bg-card flex flex-col overflow-hidden"
+          className="w-full lg:w-96 bg-card flex flex-col overflow-hidden max-h-[50vh] lg:max-h-full"
           onClick={(e) => e.stopPropagation()}
         >
           {/* Header with User Info */}
