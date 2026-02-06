@@ -200,8 +200,9 @@ export const ShareModal: React.FC<ShareModalProps> = ({
                 onClick={handleNativeShare}
                 variant="outline"
                 size="sm"
-                className="w-full"
-                title="Share to other apps"
+                className={`w-full ${!item.is_public ? "opacity-50 cursor-not-allowed" : ""}`}
+                disabled={!item.is_public}
+                title={item.is_public ? "Share to other apps" : "Make content public to share"}
               >
                 <MoreHorizontal className="w-4 h-4 mr-1" />
                 More
