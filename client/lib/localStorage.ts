@@ -23,6 +23,18 @@ export const getGuestContent = (): ContentItem[] => {
   }
 };
 
+// Get a single guest content item by ID
+export const getGuestContentById = (id: string): ContentItem | null => {
+  try {
+    const items = getGuestContent();
+    const item = items.find((item) => item.id === id);
+    return item ? { ...item, status: item.status || "active" } : null;
+  } catch (error) {
+    console.error("Failed to retrieve guest content by ID:", error);
+    return null;
+  }
+};
+
 // Save guest content to localStorage
 const saveGuestContent = (items: ContentItem[]): void => {
   try {
