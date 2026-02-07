@@ -78,7 +78,7 @@ const ChatInterface = ({ onToggleVisualMode }: ChatInterfaceProps) => {
           id: `msg-${Date.now()}`,
           role: "assistant",
           content:
-            "Hello! I'm here to help you manage your content. You can create, view, edit, delete, or organize your content. What would you like to do?",
+            "Hello! I'm Uz-Assistant, your content management companion. I can help you create, view, edit, delete, and organize your content. What would you like to do?",
           timestamp: new Date().toISOString(),
         };
         setMessages([greeting]);
