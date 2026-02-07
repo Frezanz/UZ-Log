@@ -7,6 +7,7 @@ import { SettingsModal } from "./modals/SettingsModal";
 import { useTheme } from "@/hooks/useTheme";
 
 export const Header: React.FC = () => {
+  const navigate = useNavigate();
   const { user, signOut } = useAuth();
   const [showSettings, setShowSettings] = useState(false);
   const { isDark, toggleDarkMode } = useTheme();
