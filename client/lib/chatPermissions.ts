@@ -52,7 +52,10 @@ export function canEditContent(user: User | null, item: ContentItem): boolean {
 /**
  * Check if user can delete a content item
  */
-export function canDeleteContent(user: User | null, item: ContentItem): boolean {
+export function canDeleteContent(
+  user: User | null,
+  item: ContentItem,
+): boolean {
   // Only owner can delete
   if (user && user.id === item.user_id) {
     return true;
@@ -88,7 +91,10 @@ export function canShareContent(user: User | null, item: ContentItem): boolean {
 /**
  * Check if user can duplicate a content item
  */
-export function canDuplicateContent(user: User | null, item: ContentItem): boolean {
+export function canDuplicateContent(
+  user: User | null,
+  item: ContentItem,
+): boolean {
   // Can only duplicate if you can view it
   return canViewContent(user, item);
 }
@@ -96,7 +102,10 @@ export function canDuplicateContent(user: User | null, item: ContentItem): boole
 /**
  * Check if user can protect a content item (set password, etc.)
  */
-export function canProtectContent(user: User | null, item: ContentItem): boolean {
+export function canProtectContent(
+  user: User | null,
+  item: ContentItem,
+): boolean {
   // Only owner can protect content
   if (user && user.id === item.user_id) {
     return true;
@@ -112,7 +121,10 @@ export function canProtectContent(user: User | null, item: ContentItem): boolean
 /**
  * Check if user can perform bulk operations on multiple items
  */
-export function canBulkDelete(user: User | null, items: ContentItem[]): boolean {
+export function canBulkDelete(
+  user: User | null,
+  items: ContentItem[],
+): boolean {
   // User must be able to delete all items
   return items.every((item) => canDeleteContent(user, item));
 }
@@ -130,10 +142,7 @@ export function canBulkShare(user: User | null, items: ContentItem[]): boolean {
 /**
  * Get permission error message
  */
-export function getPermissionError(
-  action: string,
-  user: User | null,
-): string {
+export function getPermissionError(action: string, user: User | null): string {
   if (!user) {
     return `You must be signed in to ${action} this content. Please sign in and try again.`;
   }

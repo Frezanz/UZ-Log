@@ -17,7 +17,11 @@ import { Button } from "@/components/ui/button";
 import { ChevronDown, Plus, Copy } from "lucide-react";
 import { toast } from "sonner";
 import { getAllPublicContent, mergeContent } from "@/lib/api";
-import { detectDuplicates, mergeContentItems, DuplicatePair } from "@/lib/duplicateDetector";
+import {
+  detectDuplicates,
+  mergeContentItems,
+  DuplicatePair,
+} from "@/lib/duplicateDetector";
 
 export default function Index() {
   const navigate = useNavigate();
@@ -75,7 +79,9 @@ export default function Index() {
 
   // Duplicate detection states
   const [showDuplicateModal, setShowDuplicateModal] = useState(false);
-  const [detectedDuplicates, setDetectedDuplicates] = useState<DuplicatePair[]>([]);
+  const [detectedDuplicates, setDetectedDuplicates] = useState<DuplicatePair[]>(
+    [],
+  );
   const [isDuplicateDetecting, setIsDuplicateDetecting] = useState(false);
 
   // Scroll detection for hiding header and search bar
@@ -285,7 +291,10 @@ export default function Index() {
   };
 
   // Handle merge of duplicates
-  const handleMergeDuplicates = async (primaryId: string, duplicateId: string) => {
+  const handleMergeDuplicates = async (
+    primaryId: string,
+    duplicateId: string,
+  ) => {
     const primaryItem = items.find((item) => item.id === primaryId);
     const duplicateItem = items.find((item) => item.id === duplicateId);
 
@@ -429,7 +438,11 @@ export default function Index() {
                 </span>
               </div>
               <div className="flex items-center gap-2">
-                <Button variant="outline" onClick={() => navigate("/chat")} size="sm">
+                <Button
+                  variant="outline"
+                  onClick={() => navigate("/chat")}
+                  size="sm"
+                >
                   AI Assistant
                 </Button>
                 <Button variant="outline" onClick={() => navigate("/settings")}>
@@ -483,236 +496,242 @@ export default function Index() {
             <div className="bg-secondary/30 border border-border rounded-lg p-2 space-y-2 animate-in fade-in duration-200">
               {/* Sort Options */}
               <div className="text-center space-y-0.5">
-                    <h3 className="text-xs font-medium text-foreground leading-tight">
-                      Sort By
-                    </h3>
-                    <div className="flex justify-center">
-                      <button
-                        onClick={() => setShowSortBy(!showSortBy)}
-                        className="text-muted-foreground hover:text-foreground transition-colors duration-200 focus:outline-none p-1 active:bg-transparent active:text-foreground"
-                        title={
-                          showSortBy ? "Hide sort options" : "Show sort options"
-                        }
-                      >
-                        <ChevronDown
-                          className="w-4 h-4 transition-transform duration-200"
-                          style={{
-                            transform: showSortBy
-                              ? "rotate(180deg)"
-                              : "rotate(0deg)",
-                          }}
-                        />
-                      </button>
-                    </div>
+                <h3 className="text-xs font-medium text-foreground leading-tight">
+                  Sort By
+                </h3>
+                <div className="flex justify-center">
+                  <button
+                    onClick={() => setShowSortBy(!showSortBy)}
+                    className="text-muted-foreground hover:text-foreground transition-colors duration-200 focus:outline-none p-1 active:bg-transparent active:text-foreground"
+                    title={
+                      showSortBy ? "Hide sort options" : "Show sort options"
+                    }
+                  >
+                    <ChevronDown
+                      className="w-4 h-4 transition-transform duration-200"
+                      style={{
+                        transform: showSortBy
+                          ? "rotate(180deg)"
+                          : "rotate(0deg)",
+                      }}
+                    />
+                  </button>
+                </div>
 
-                    {showSortBy && (
-                      <div className="flex flex-wrap gap-0.5 justify-center animate-in fade-in duration-200">
-                        {(
-                          ["newest", "oldest", "a-z", "word-count"] as const
-                        ).map((option) => (
-                          <Button
-                            key={option}
-                            variant={
-                              displayFilters.sortBy === option
-                                ? "default"
-                                : "outline"
-                            }
-                            size="sm"
-                            className="h-7 px-2 text-xs"
-                            onClick={() =>
-                              setDisplayFilters({
-                                ...displayFilters,
-                                sortBy: option,
-                              })
-                            }
-                          >
-                            {option === "newest"
-                              ? "Newest"
-                              : option === "oldest"
-                                ? "Oldest"
-                                : option === "a-z"
-                                  ? "A-Z"
-                                  : "Word Count"}
-                          </Button>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Content Type Filter */}
-                  <div className="text-center space-y-0.5">
-                    <h3 className="text-xs font-medium text-foreground leading-tight">
-                      Content Type
-                    </h3>
-                    <div className="flex justify-center">
-                      <button
-                        onClick={() => setShowTypes(!showTypes)}
-                        className="text-muted-foreground hover:text-foreground transition-colors duration-200 focus:outline-none p-1 active:bg-transparent active:text-foreground"
-                        title={
-                          showTypes ? "Hide content types" : "Show content types"
-                        }
-                      >
-                        <ChevronDown
-                          className="w-4 h-4 transition-transform duration-200"
-                          style={{
-                            transform: showTypes
-                              ? "rotate(180deg)"
-                              : "rotate(0deg)",
-                          }}
-                        />
-                      </button>
-                    </div>
-
-                    {showTypes && (
-                      <div className="flex flex-wrap gap-0.5 justify-center animate-in fade-in duration-200">
-                        {(
-                          ["text", "code", "image", "video", "file", "link", "prompt", "script", "book"] as const
-                        ).map((type) => (
-                          <Button
-                            key={type}
-                            variant={
-                              displayFilters.types.includes(type)
-                                ? "default"
-                                : "outline"
-                            }
-                            size="sm"
-                            className="h-7 px-2 text-xs"
-                            onClick={() => {
-                              const newTypes = displayFilters.types.includes(type)
-                                ? displayFilters.types.filter((t) => t !== type)
-                                : [...displayFilters.types, type];
-                              setDisplayFilters({
-                                ...displayFilters,
-                                types: newTypes,
-                              });
-                            }}
-                          >
-                            {type.charAt(0).toUpperCase() + type.slice(1)}
-                          </Button>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Category Filter */}
-                  {categories.length > 0 && (
-                    <div className="text-center space-y-0.5">
-                      <h3 className="text-xs font-medium text-foreground leading-tight">
-                        Categories
-                      </h3>
-                      <div className="flex justify-center">
-                        <button
-                          onClick={() => setShowCategories(!showCategories)}
-                          className="text-muted-foreground hover:text-foreground transition-colors duration-200 focus:outline-none p-1 active:bg-transparent active:text-foreground"
-                          title={
-                            showCategories
-                              ? "Hide categories"
-                              : "Show categories"
+                {showSortBy && (
+                  <div className="flex flex-wrap gap-0.5 justify-center animate-in fade-in duration-200">
+                    {(["newest", "oldest", "a-z", "word-count"] as const).map(
+                      (option) => (
+                        <Button
+                          key={option}
+                          variant={
+                            displayFilters.sortBy === option
+                              ? "default"
+                              : "outline"
+                          }
+                          size="sm"
+                          className="h-7 px-2 text-xs"
+                          onClick={() =>
+                            setDisplayFilters({
+                              ...displayFilters,
+                              sortBy: option,
+                            })
                           }
                         >
-                          <ChevronDown
-                            className="w-4 h-4 transition-transform duration-200"
-                            style={{
-                              transform: showCategories
-                                ? "rotate(180deg)"
-                                : "rotate(0deg)",
-                            }}
-                          />
-                        </button>
-                      </div>
+                          {option === "newest"
+                            ? "Newest"
+                            : option === "oldest"
+                              ? "Oldest"
+                              : option === "a-z"
+                                ? "A-Z"
+                                : "Word Count"}
+                        </Button>
+                      ),
+                    )}
+                  </div>
+                )}
+              </div>
 
-                      {showCategories && (
-                        <div className="flex flex-wrap gap-0.5 justify-center animate-in fade-in duration-200">
-                          {categories.map((cat) => (
-                            <Button
-                              key={cat}
-                              variant={
-                                displayFilters.categories.includes(cat)
-                                  ? "default"
-                                  : "outline"
-                              }
-                              size="sm"
-                              className="h-7 px-2 text-xs"
-                              onClick={() => {
-                                const newCategories =
-                                  displayFilters.categories.includes(cat)
-                                    ? displayFilters.categories.filter(
-                                        (c) => c !== cat,
-                                      )
-                                    : [...displayFilters.categories, cat];
-                                setDisplayFilters({
-                                  ...displayFilters,
-                                  categories: newCategories,
-                                });
-                              }}
-                            >
-                              {cat}
-                            </Button>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  )}
+              {/* Content Type Filter */}
+              <div className="text-center space-y-0.5">
+                <h3 className="text-xs font-medium text-foreground leading-tight">
+                  Content Type
+                </h3>
+                <div className="flex justify-center">
+                  <button
+                    onClick={() => setShowTypes(!showTypes)}
+                    className="text-muted-foreground hover:text-foreground transition-colors duration-200 focus:outline-none p-1 active:bg-transparent active:text-foreground"
+                    title={
+                      showTypes ? "Hide content types" : "Show content types"
+                    }
+                  >
+                    <ChevronDown
+                      className="w-4 h-4 transition-transform duration-200"
+                      style={{
+                        transform: showTypes
+                          ? "rotate(180deg)"
+                          : "rotate(0deg)",
+                      }}
+                    />
+                  </button>
+                </div>
 
-                  {/* Tag Filter */}
-                  {tags.length > 0 && (
-                    <div className="text-center space-y-0.5">
-                      <h3 className="text-xs font-medium text-foreground leading-tight">
-                        Tags
-                      </h3>
-                      <div className="flex justify-center">
-                        <button
-                          onClick={() => setShowTags(!showTags)}
-                          className="text-muted-foreground hover:text-foreground transition-colors duration-200 focus:outline-none p-1 active:bg-transparent active:text-foreground"
-                          title={showTags ? "Hide tags" : "Show tags"}
+                {showTypes && (
+                  <div className="flex flex-wrap gap-0.5 justify-center animate-in fade-in duration-200">
+                    {(
+                      [
+                        "text",
+                        "code",
+                        "image",
+                        "video",
+                        "file",
+                        "link",
+                        "prompt",
+                        "script",
+                        "book",
+                      ] as const
+                    ).map((type) => (
+                      <Button
+                        key={type}
+                        variant={
+                          displayFilters.types.includes(type)
+                            ? "default"
+                            : "outline"
+                        }
+                        size="sm"
+                        className="h-7 px-2 text-xs"
+                        onClick={() => {
+                          const newTypes = displayFilters.types.includes(type)
+                            ? displayFilters.types.filter((t) => t !== type)
+                            : [...displayFilters.types, type];
+                          setDisplayFilters({
+                            ...displayFilters,
+                            types: newTypes,
+                          });
+                        }}
+                      >
+                        {type.charAt(0).toUpperCase() + type.slice(1)}
+                      </Button>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* Category Filter */}
+              {categories.length > 0 && (
+                <div className="text-center space-y-0.5">
+                  <h3 className="text-xs font-medium text-foreground leading-tight">
+                    Categories
+                  </h3>
+                  <div className="flex justify-center">
+                    <button
+                      onClick={() => setShowCategories(!showCategories)}
+                      className="text-muted-foreground hover:text-foreground transition-colors duration-200 focus:outline-none p-1 active:bg-transparent active:text-foreground"
+                      title={
+                        showCategories ? "Hide categories" : "Show categories"
+                      }
+                    >
+                      <ChevronDown
+                        className="w-4 h-4 transition-transform duration-200"
+                        style={{
+                          transform: showCategories
+                            ? "rotate(180deg)"
+                            : "rotate(0deg)",
+                        }}
+                      />
+                    </button>
+                  </div>
+
+                  {showCategories && (
+                    <div className="flex flex-wrap gap-0.5 justify-center animate-in fade-in duration-200">
+                      {categories.map((cat) => (
+                        <Button
+                          key={cat}
+                          variant={
+                            displayFilters.categories.includes(cat)
+                              ? "default"
+                              : "outline"
+                          }
+                          size="sm"
+                          className="h-7 px-2 text-xs"
+                          onClick={() => {
+                            const newCategories =
+                              displayFilters.categories.includes(cat)
+                                ? displayFilters.categories.filter(
+                                    (c) => c !== cat,
+                                  )
+                                : [...displayFilters.categories, cat];
+                            setDisplayFilters({
+                              ...displayFilters,
+                              categories: newCategories,
+                            });
+                          }}
                         >
-                          <ChevronDown
-                            className="w-4 h-4 transition-transform duration-200"
-                            style={{
-                              transform: showTags
-                                ? "rotate(180deg)"
-                                : "rotate(0deg)",
-                            }}
-                          />
-                        </button>
-                      </div>
+                          {cat}
+                        </Button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
 
-                      {showTags && (
-                        <div className="flex flex-wrap gap-0.5 justify-center animate-in fade-in duration-200">
-                          {tags.slice(0, 10).map((tag) => (
-                            <Button
-                              key={tag}
-                              variant={
-                                displayFilters.tags.includes(tag)
-                                  ? "default"
-                                  : "outline"
-                              }
-                              size="sm"
-                              className="h-7 px-2 text-xs"
-                              onClick={() => {
-                                const newTags = displayFilters.tags.includes(
-                                  tag,
-                                )
-                                  ? displayFilters.tags.filter((t) => t !== tag)
-                                  : [...displayFilters.tags, tag];
-                                setDisplayFilters({
-                                  ...displayFilters,
-                                  tags: newTags,
-                                });
-                              }}
-                            >
-                              #{tag}
-                            </Button>
-                          ))}
-                          {tags.length > 10 && (
-                            <span className="text-xs text-muted-foreground px-2 py-1.5">
-                              +{tags.length - 10} more
-                            </span>
-                          )}
-                        </div>
+              {/* Tag Filter */}
+              {tags.length > 0 && (
+                <div className="text-center space-y-0.5">
+                  <h3 className="text-xs font-medium text-foreground leading-tight">
+                    Tags
+                  </h3>
+                  <div className="flex justify-center">
+                    <button
+                      onClick={() => setShowTags(!showTags)}
+                      className="text-muted-foreground hover:text-foreground transition-colors duration-200 focus:outline-none p-1 active:bg-transparent active:text-foreground"
+                      title={showTags ? "Hide tags" : "Show tags"}
+                    >
+                      <ChevronDown
+                        className="w-4 h-4 transition-transform duration-200"
+                        style={{
+                          transform: showTags
+                            ? "rotate(180deg)"
+                            : "rotate(0deg)",
+                        }}
+                      />
+                    </button>
+                  </div>
+
+                  {showTags && (
+                    <div className="flex flex-wrap gap-0.5 justify-center animate-in fade-in duration-200">
+                      {tags.slice(0, 10).map((tag) => (
+                        <Button
+                          key={tag}
+                          variant={
+                            displayFilters.tags.includes(tag)
+                              ? "default"
+                              : "outline"
+                          }
+                          size="sm"
+                          className="h-7 px-2 text-xs"
+                          onClick={() => {
+                            const newTags = displayFilters.tags.includes(tag)
+                              ? displayFilters.tags.filter((t) => t !== tag)
+                              : [...displayFilters.tags, tag];
+                            setDisplayFilters({
+                              ...displayFilters,
+                              tags: newTags,
+                            });
+                          }}
+                        >
+                          #{tag}
+                        </Button>
+                      ))}
+                      {tags.length > 10 && (
+                        <span className="text-xs text-muted-foreground px-2 py-1.5">
+                          +{tags.length - 10} more
+                        </span>
                       )}
                     </div>
                   )}
+                </div>
+              )}
 
               <div className="flex gap-0.5 pt-0.5">
                 <Button

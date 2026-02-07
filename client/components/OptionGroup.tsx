@@ -167,9 +167,7 @@ export const OptionGroup = ({
             {required && <span className="text-red-500 ml-1">*</span>}
           </h3>
           {description && (
-            <p className="text-xs text-muted-foreground mt-1">
-              {description}
-            </p>
+            <p className="text-xs text-muted-foreground mt-1">{description}</p>
           )}
         </div>
       )}
@@ -178,9 +176,7 @@ export const OptionGroup = ({
         {options.map((option) => (
           <Button
             key={option.value}
-            variant={
-              selectedRadio === option.value ? "default" : "outline"
-            }
+            variant={selectedRadio === option.value ? "default" : "outline"}
             size="sm"
             onClick={() => {
               handleRadioChange(option.value);

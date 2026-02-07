@@ -309,10 +309,12 @@ function findItemReference(
   }
 
   // Look for title pattern "about X"
-  const aboutMatch = message.match(/(?:about|called|named)\s+(.+?)(?:\s+(?:for|from)|$)/i);
+  const aboutMatch = message.match(
+    /(?:about|called|named)\s+(.+?)(?:\s+(?:for|from)|$)/i,
+  );
   if (aboutMatch) {
-    const item = contentItems.find(
-      (i) => i.title.toLowerCase().includes(aboutMatch[1].toLowerCase()),
+    const item = contentItems.find((i) =>
+      i.title.toLowerCase().includes(aboutMatch[1].toLowerCase()),
     );
     if (item) return item;
   }

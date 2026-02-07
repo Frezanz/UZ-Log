@@ -68,7 +68,9 @@ export const ChatMessage = ({
         )}
 
         {/* Message Metadata */}
-        <div className={`text-xs opacity-70 mt-2 flex justify-between items-center`}>
+        <div
+          className={`text-xs opacity-70 mt-2 flex justify-between items-center`}
+        >
           <span>
             {new Date(message.timestamp).toLocaleTimeString([], {
               hour: "2-digit",

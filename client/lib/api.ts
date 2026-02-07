@@ -1,5 +1,13 @@
 import { getSupabase } from "./supabase";
-import { ContentItem, BookPage, User, ContentLink, ContentLinkWithTarget, LinkType, ShareLink } from "@/types/content";
+import {
+  ContentItem,
+  BookPage,
+  User,
+  ContentLink,
+  ContentLinkWithTarget,
+  LinkType,
+  ShareLink,
+} from "@/types/content";
 
 // ============ Authentication ============
 export const signInWithGoogle = async () => {
@@ -667,7 +675,8 @@ export const createShareLink = async (
   if (!user) throw new Error("User not authenticated");
 
   // Generate a unique token
-  const token = Math.random().toString(36).substring(2, 15) +
+  const token =
+    Math.random().toString(36).substring(2, 15) +
     Math.random().toString(36).substring(2, 15);
 
   let expiresAt: string | null = null;
@@ -693,7 +702,9 @@ export const createShareLink = async (
   return data;
 };
 
-export const getShareLinks = async (contentId: string): Promise<ShareLink[]> => {
+export const getShareLinks = async (
+  contentId: string,
+): Promise<ShareLink[]> => {
   const supabase = getSupabase();
   const user = await getCurrentUser();
 

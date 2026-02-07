@@ -40,12 +40,13 @@ const ChatInterface = ({ onToggleVisualMode }: ChatInterfaceProps) => {
       // For now, generate a temporary session ID
       const id = `session-${Date.now()}`;
       setSessionId(id);
-      
+
       // Add initial greeting
       const greeting: ChatMessageType = {
         id: `msg-${Date.now()}`,
         role: "assistant",
-        content: "Hello! I'm here to help you manage your content. You can create, view, edit, delete, or organize your content. What would you like to do?",
+        content:
+          "Hello! I'm here to help you manage your content. You can create, view, edit, delete, or organize your content. What would you like to do?",
         timestamp: new Date().toISOString(),
       };
       setMessages([greeting]);
@@ -91,7 +92,7 @@ const ChatInterface = ({ onToggleVisualMode }: ChatInterfaceProps) => {
 
       // Simulate delay
       await new Promise((resolve) => setTimeout(resolve, 1000));
-      
+
       setMessages((prev) => [...prev, assistantMessage]);
     } catch (error) {
       console.error("Error processing message:", error);
@@ -222,7 +223,10 @@ const ChatInterface = ({ onToggleVisualMode }: ChatInterfaceProps) => {
       {/* Debug info */}
       {process.env.NODE_ENV === "development" && (
         <div className="border-t px-6 py-2 text-xs text-muted-foreground bg-muted/30">
-          <p>Session: {sessionId} | User: {user?.email || "Guest"} | Items: {items.length}</p>
+          <p>
+            Session: {sessionId} | User: {user?.email || "Guest"} | Items:{" "}
+            {items.length}
+          </p>
         </div>
       )}
     </div>

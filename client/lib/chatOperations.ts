@@ -74,7 +74,8 @@ export async function chatCreateContent(
       data: { id: newItem.id, title: newItem.title, type: newItem.type },
     };
   } catch (error) {
-    const message = error instanceof Error ? error.message : "Failed to create content";
+    const message =
+      error instanceof Error ? error.message : "Failed to create content";
     return {
       success: false,
       message: `Error creating content: ${message}`,
@@ -129,7 +130,8 @@ export async function chatRetrieveContent(
       },
     };
   } catch (error) {
-    const message = error instanceof Error ? error.message : "Failed to retrieve content";
+    const message =
+      error instanceof Error ? error.message : "Failed to retrieve content";
     return {
       success: false,
       message,
@@ -189,7 +191,8 @@ export async function chatUpdateContent(
       data: { id: updated.id, title: updated.title },
     };
   } catch (error) {
-    const message = error instanceof Error ? error.message : "Failed to update content";
+    const message =
+      error instanceof Error ? error.message : "Failed to update content";
     return {
       success: false,
       message: `Error updating content: ${message}`,
@@ -242,7 +245,8 @@ export async function chatDeleteContent(
       data: { id: item.id },
     };
   } catch (error) {
-    const message = error instanceof Error ? error.message : "Failed to delete content";
+    const message =
+      error instanceof Error ? error.message : "Failed to delete content";
     return {
       success: false,
       message: `Error deleting content: ${message}`,
@@ -296,7 +300,8 @@ export async function chatShareContent(
       data: { id: updated.id, is_public: updated.is_public },
     };
   } catch (error) {
-    const message = error instanceof Error ? error.message : "Failed to share content";
+    const message =
+      error instanceof Error ? error.message : "Failed to share content";
     return {
       success: false,
       message: `Error sharing content: ${message}`,
@@ -349,7 +354,8 @@ export async function chatDuplicateContent(
       data: { id: item.id },
     };
   } catch (error) {
-    const message = error instanceof Error ? error.message : "Failed to duplicate content";
+    const message =
+      error instanceof Error ? error.message : "Failed to duplicate content";
     return {
       success: false,
       message: `Error duplicating content: ${message}`,
@@ -377,7 +383,9 @@ export function chatListContent(
 
     // Filter by category
     if (parameters.category) {
-      filtered = filtered.filter((item) => item.category === parameters.category);
+      filtered = filtered.filter(
+        (item) => item.category === parameters.category,
+      );
     }
 
     // Filter by tags
@@ -403,7 +411,8 @@ export function chatListContent(
       },
     };
   } catch (error) {
-    const message = error instanceof Error ? error.message : "Failed to list content";
+    const message =
+      error instanceof Error ? error.message : "Failed to list content";
     return {
       success: false,
       message,

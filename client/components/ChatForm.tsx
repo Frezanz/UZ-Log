@@ -28,7 +28,9 @@ export const ChatForm = ({
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>,
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >,
   ) => {
     const { name, value } = e.target;
     setValues((prev) => ({ ...prev, [name]: value }));
@@ -133,11 +135,7 @@ export const ChatForm = ({
               {cancelLabel}
             </Button>
           )}
-          <Button
-            type="submit"
-            disabled={isLoading}
-            className="min-w-20"
-          >
+          <Button type="submit" disabled={isLoading} className="min-w-20">
             {isLoading ? "..." : submitLabel}
           </Button>
         </div>

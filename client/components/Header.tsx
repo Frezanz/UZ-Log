@@ -2,7 +2,14 @@ import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
 import { Button } from "@/components/ui/button";
-import { BookOpen, Settings, LogOut, Moon, Sun, MessageCircle } from "lucide-react";
+import {
+  BookOpen,
+  Settings,
+  LogOut,
+  Moon,
+  Sun,
+  MessageCircle,
+} from "lucide-react";
 import { SettingsModal } from "./modals/SettingsModal";
 import { useTheme } from "@/hooks/useTheme";
 

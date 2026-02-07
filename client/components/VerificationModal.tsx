@@ -137,19 +137,18 @@ export const VerificationModal = ({
           </div>
 
           {/* Debug mode - show passcode hint */}
-          {process.env.NODE_ENV === "development" && type === "passcode" && passcode && (
-            <p className="text-xs text-muted-foreground text-center border-t pt-2">
-              Dev mode: Passcode is <code className="bg-muted px-1 py-0.5 rounded">{passcode}</code>
-            </p>
-          )}
+          {process.env.NODE_ENV === "development" &&
+            type === "passcode" &&
+            passcode && (
+              <p className="text-xs text-muted-foreground text-center border-t pt-2">
+                Dev mode: Passcode is{" "}
+                <code className="bg-muted px-1 py-0.5 rounded">{passcode}</code>
+              </p>
+            )}
         </div>
 
         <DialogFooter className="flex gap-2">
-          <Button
-            variant="outline"
-            onClick={handleCancel}
-            disabled={isLoading}
-          >
+          <Button variant="outline" onClick={handleCancel} disabled={isLoading}>
             Cancel
           </Button>
           <Button

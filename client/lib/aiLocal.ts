@@ -22,7 +22,16 @@ const CONTENT_TYPES: ContentType[] = [
 // Pattern definitions for intent detection
 const INTENT_PATTERNS = {
   CREATE: {
-    keywords: ["create", "add", "new", "make", "insert", "write", "compose", "start"],
+    keywords: [
+      "create",
+      "add",
+      "new",
+      "make",
+      "insert",
+      "write",
+      "compose",
+      "start",
+    ],
     phrases: [
       "new (text|code|image|video|file|link|prompt|script|book)",
       "create a?n? (text|code|image|video|file|link|prompt|script|book)",
@@ -30,19 +39,51 @@ const INTENT_PATTERNS = {
     ],
   },
   RETRIEVE: {
-    keywords: ["show", "view", "get", "find", "look", "search", "display", "open"],
+    keywords: [
+      "show",
+      "view",
+      "get",
+      "find",
+      "look",
+      "search",
+      "display",
+      "open",
+    ],
     phrases: ["show me", "view", "get", "find", "search for"],
   },
   UPDATE: {
-    keywords: ["update", "edit", "change", "modify", "revise", "alter", "adjust"],
+    keywords: [
+      "update",
+      "edit",
+      "change",
+      "modify",
+      "revise",
+      "alter",
+      "adjust",
+    ],
     phrases: ["update", "edit", "modify", "change"],
   },
   DELETE: {
-    keywords: ["delete", "remove", "erase", "destroy", "discard", "dump", "trash"],
+    keywords: [
+      "delete",
+      "remove",
+      "erase",
+      "destroy",
+      "discard",
+      "dump",
+      "trash",
+    ],
     phrases: ["delete", "remove", "erase"],
   },
   SHARE: {
-    keywords: ["share", "public", "publish", "make public", "post", "distribute"],
+    keywords: [
+      "share",
+      "public",
+      "publish",
+      "make public",
+      "post",
+      "distribute",
+    ],
     phrases: ["share", "make public", "publish"],
   },
   PROTECT: {
@@ -83,15 +124,27 @@ export function extractContentType(message: string): ContentType | null {
     return "code";
   }
 
-  if (lower.includes("url") || lower.includes("website") || lower.includes("web")) {
+  if (
+    lower.includes("url") ||
+    lower.includes("website") ||
+    lower.includes("web")
+  ) {
     return "link";
   }
 
-  if (lower.includes("photo") || lower.includes("picture") || lower.includes("img")) {
+  if (
+    lower.includes("photo") ||
+    lower.includes("picture") ||
+    lower.includes("img")
+  ) {
     return "image";
   }
 
-  if (lower.includes("movie") || lower.includes("clip") || lower.includes("stream")) {
+  if (
+    lower.includes("movie") ||
+    lower.includes("clip") ||
+    lower.includes("stream")
+  ) {
     return "video";
   }
 
@@ -109,13 +162,17 @@ export function extractTitle(message: string): string | null {
   }
 
   // Look for "about X" pattern
-  const aboutMatch = message.match(/(?:about|called|named|title|name)\s+(.+?)(?:\s+for|\s+of|$)/i);
+  const aboutMatch = message.match(
+    /(?:about|called|named|title|name)\s+(.+?)(?:\s+for|\s+of|$)/i,
+  );
   if (aboutMatch) {
     return aboutMatch[1].trim();
   }
 
   // Look for "X for ..." pattern (usually title is before "for")
-  const forMatch = message.match(/^(?:create|add|new)(?:\s+\w+)?\s+(.+?)\s+for/i);
+  const forMatch = message.match(
+    /^(?:create|add|new)(?:\s+\w+)?\s+(.+?)\s+for/i,
+  );
   if (forMatch) {
     return forMatch[1].trim();
   }
@@ -138,7 +195,9 @@ export function extractTags(message: string): string[] {
   }
 
   // Look for "tags:" or "tag:" prefix
-  const tagsMatch = message.match(/(?:tags?:)\s*(.+?)(?:\.|$|(?:for|by|in|at))/i);
+  const tagsMatch = message.match(
+    /(?:tags?:)\s*(.+?)(?:\.|$|(?:for|by|in|at))/i,
+  );
   if (tagsMatch) {
     const tagList = tagsMatch[1]
       .split(/[,;]+/)
@@ -155,7 +214,9 @@ export function extractTags(message: string): string[] {
  */
 export function extractCategory(message: string): string | null {
   // Look for "in category X" or "in X" patterns
-  const inMatch = message.match(/in\s+(?:category\s+)?(.+?)(?:\s+(?:with|for|by)|$)/i);
+  const inMatch = message.match(
+    /in\s+(?:category\s+)?(.+?)(?:\s+(?:with|for|by)|$)/i,
+  );
   if (inMatch) {
     return inMatch[1].trim();
   }
@@ -201,7 +262,9 @@ export function extractAutoDelete(
   const lower = message.toLowerCase();
 
   // Look for "delete after X days" or "expires in X days"
-  const daysMatch = message.match(/(?:delete|expire)(?:\s+after|\s+in)\s+(\d+)\s+days?/i);
+  const daysMatch = message.match(
+    /(?:delete|expire)(?:\s+after|\s+in)\s+(\d+)\s+days?/i,
+  );
   if (daysMatch) {
     return { enabled: true, days: parseInt(daysMatch[1], 10) };
   }
@@ -225,7 +288,10 @@ export function extractAutoDelete(
 /**
  * Check confidence of intent detection based on keyword strength
  */
-export function calculateConfidence(message: string, intentType: string): number {
+export function calculateConfidence(
+  message: string,
+  intentType: string,
+): number {
   const patterns = INTENT_PATTERNS[intentType as keyof typeof INTENT_PATTERNS];
   if (!patterns) return 0;
 
@@ -233,7 +299,9 @@ export function calculateConfidence(message: string, intentType: string): number
   let confidence = 0;
 
   // Check keywords (0.3 points each)
-  const keywordMatches = patterns.keywords.filter((kw) => lower.includes(kw)).length;
+  const keywordMatches = patterns.keywords.filter((kw) =>
+    lower.includes(kw),
+  ).length;
   confidence += (keywordMatches / patterns.keywords.length) * 0.3;
 
   // Check exact phrases (0.7 points)
@@ -306,7 +374,11 @@ export function suggestNextActions(
     CREATE: [
       { action: "view", label: "View", description: "View the new content" },
       { action: "share", label: "Share", description: "Share this content" },
-      { action: "add_more", label: "Add More", description: "Create another item" },
+      {
+        action: "add_more",
+        label: "Add More",
+        description: "Create another item",
+      },
     ],
     RETRIEVE: [
       { action: "edit", label: "Edit", description: "Edit this content" },
@@ -318,7 +390,11 @@ export function suggestNextActions(
       { action: "list", label: "List All", description: "View all content" },
     ],
     SHARE: [
-      { action: "copy", label: "Copy Link", description: "Copy the share link" },
+      {
+        action: "copy",
+        label: "Copy Link",
+        description: "Copy the share link",
+      },
       { action: "view", label: "View", description: "View the shared content" },
     ],
   };

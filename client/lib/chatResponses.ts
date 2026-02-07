@@ -18,7 +18,7 @@ export function formatCreateResponse(
   itemId: string,
 ): AssistantMessage {
   const nextActions = suggestNextActions("CREATE", true);
-  
+
   return {
     type: "success",
     content: `✓ Created ${contentType}: "${title}"`,
@@ -33,7 +33,10 @@ export function formatCreateResponse(
 /**
  * Format response after retrieving content
  */
-export function formatRetrieveResponse(title: string, itemId: string): AssistantMessage {
+export function formatRetrieveResponse(
+  title: string,
+  itemId: string,
+): AssistantMessage {
   return {
     type: "text",
     content: `Retrieved: ${title}. What would you like to do next?`,
@@ -174,7 +177,8 @@ export function formatListResponse(
   if (count === 0) {
     return {
       type: "text",
-      content: "No content found matching your criteria. Would you like to create something?",
+      content:
+        "No content found matching your criteria. Would you like to create something?",
       options: [
         {
           value: "create",

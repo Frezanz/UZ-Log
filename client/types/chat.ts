@@ -69,7 +69,14 @@ export interface AssistantMessage {
 export interface FormField {
   name: string;
   label: string;
-  type: "text" | "textarea" | "password" | "email" | "url" | "number" | "select";
+  type:
+    | "text"
+    | "textarea"
+    | "password"
+    | "email"
+    | "url"
+    | "number"
+    | "select";
   required: boolean;
   placeholder?: string;
   options?: { value: string; label: string }[];
