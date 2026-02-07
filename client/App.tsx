@@ -10,6 +10,7 @@ import { AuthProvider, useAuth } from "@/context/AuthContext";
 import { useTheme } from "@/hooks/useTheme";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import Index from "./pages/Index";
+import Chat from "./pages/Chat";
 import Login from "./pages/Login";
 import Share from "./pages/Share";
 import SharedContent from "./pages/SharedContent";
