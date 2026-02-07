@@ -43,6 +43,7 @@ const ChatInterface = ({ onToggleVisualMode }: ChatInterfaceProps) => {
   const [activeModal, setActiveModal] = useState<"content" | "share" | "delete" | null>(null);
   const [modalData, setModalData] = useState<Partial<ContentItem> | ContentItem | null>(null);
   const [modalItemId, setModalItemId] = useState<string | null>(null);
+  const [showSettings, setShowSettings] = useState(false);
 
   const handleToggleVisualMode = () => {
     if (onToggleVisualMode) {
