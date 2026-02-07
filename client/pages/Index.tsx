@@ -444,14 +444,12 @@ export default function Index() {
               </div>
               <div className="flex items-center gap-2">
                 <Button
-                  variant="outline"
-                  onClick={() => navigate("/chat")}
+                  variant="ghost"
                   size="sm"
+                  onClick={() => setShowSettings(true)}
+                  title="Settings"
                 >
-                  AI Assistant
-                </Button>
-                <Button variant="outline" onClick={() => navigate("/settings")}>
-                  Settings
+                  <Settings className="w-4 h-4" />
                 </Button>
               </div>
             </div>
