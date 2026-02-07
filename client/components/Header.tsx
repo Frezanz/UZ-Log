@@ -1,11 +1,20 @@
 import React, { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
 import { Button } from "@/components/ui/button";
-import { BookOpen, Settings, LogOut, Moon, Sun } from "lucide-react";
+import {
+  BookOpen,
+  Settings,
+  LogOut,
+  Moon,
+  Sun,
+  MessageCircle,
+} from "lucide-react";
 import { SettingsModal } from "./modals/SettingsModal";
 import { useTheme } from "@/hooks/useTheme";
 
 export const Header: React.FC = () => {
+  const navigate = useNavigate();
   const { user, signOut } = useAuth();
   const [showSettings, setShowSettings] = useState(false);
   const { isDark, toggleDarkMode } = useTheme();
@@ -94,6 +103,16 @@ export const Header: React.FC = () => {
                   </div>
                 </div>
               )}
+
+              {/* Chat Mode Button */}
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => navigate("/chat")}
+                title="AI Assistant"
+              >
+                <MessageCircle className="w-4 h-4 sm:w-5 sm:h-5" />
+              </Button>
 
               {/* Settings Button */}
               <Button

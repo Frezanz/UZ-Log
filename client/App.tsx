@@ -10,8 +10,10 @@ import { AuthProvider, useAuth } from "@/context/AuthContext";
 import { useTheme } from "@/hooks/useTheme";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import Index from "./pages/Index";
+import Chat from "./pages/Chat";
 import Login from "./pages/Login";
 import Share from "./pages/Share";
+import SharedContent from "./pages/SharedContent";
 import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
 
@@ -54,9 +56,12 @@ const App = () => (
             <BrowserRouter>
               <Routes>
                 <Route path="/login" element={<Login />} />
-                <Route path="/" element={<Index />} />
+                <Route path="/" element={<Chat />} />
+                <Route path="/chat" element={<Chat />} />
+                <Route path="/visual" element={<Index />} />
                 <Route path="/settings" element={<Settings />} />
                 <Route path="/share/:id" element={<Share />} />
+                <Route path="/s/:token" element={<SharedContent />} />
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                 <Route path="*" element={<NotFound />} />
               </Routes>
@@ -68,4 +73,15 @@ const App = () => (
   </QueryClientProvider>
 );
 
-createRoot(document.getElementById("root")!).render(<App />);
+// Initialize and render the app - only once
+declare global {
+  interface Window {
+    __REACT_ROOT_INITIALIZED__?: boolean;
+  }
+}
+
+const rootElement = document.getElementById("root");
+if (rootElement && !window.__REACT_ROOT_INITIALIZED__) {
+  createRoot(rootElement).render(<App />);
+  window.__REACT_ROOT_INITIALIZED__ = true;
+}

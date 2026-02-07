@@ -5,16 +5,23 @@ import { useContent } from "@/hooks/useContent";
 import { ContentItem, FilterState } from "@/types/content";
 import { Header } from "@/components/Header";
 import { SearchBar } from "@/components/SearchBar";
+import { ControlToggle } from "@/components/ControlToggle";
 import { ContentCard } from "@/components/ContentCard";
 import { ContentModal } from "@/components/modals/ContentModal";
 import { ContentViewer } from "@/components/modals/ContentViewer";
 import { ShareModal } from "@/components/modals/ShareModal";
 import { DeleteModal } from "@/components/modals/DeleteModal";
 import { AutoDeleteModal } from "@/components/modals/AutoDeleteModal";
+import { DuplicateModal } from "@/components/modals/DuplicateModal";
 import { Button } from "@/components/ui/button";
-import { Plus, Filter, ChevronDown } from "lucide-react";
+import { ChevronDown, Plus, Copy } from "lucide-react";
 import { toast } from "sonner";
-import { getAllPublicContent } from "@/lib/api";
+import { getAllPublicContent, mergeContent } from "@/lib/api";
+import {
+  detectDuplicates,
+  mergeContentItems,
+  DuplicatePair,
+} from "@/lib/duplicateDetector";
 
 export default function Index() {
   const navigate = useNavigate();
@@ -62,12 +69,20 @@ export default function Index() {
   const [showFilters, setShowFilters] = useState(false);
   const [showActions, setShowActions] = useState(false);
   const [showSortBy, setShowSortBy] = useState(false);
+  const [showTypes, setShowTypes] = useState(false);
   const [showCategories, setShowCategories] = useState(false);
   const [showTags, setShowTags] = useState(false);
 
   // Bulk selection states
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
   const [showBulkDeleteModal, setShowBulkDeleteModal] = useState(false);
+
+  // Duplicate detection states
+  const [showDuplicateModal, setShowDuplicateModal] = useState(false);
+  const [detectedDuplicates, setDetectedDuplicates] = useState<DuplicatePair[]>(
+    [],
+  );
+  const [isDuplicateDetecting, setIsDuplicateDetecting] = useState(false);
 
   // Scroll detection for hiding header and search bar
   const [isHeaderHidden, setIsHeaderHidden] = useState(false);
@@ -142,10 +157,26 @@ export default function Index() {
   // Handle create/edit
   const handleSaveContent = async (data: Partial<ContentItem>) => {
     try {
+      // Auto-generate title if empty
+      let dataToSave = { ...data };
+      if (!dataToSave.title?.trim()) {
+        // Get the count of items with the same type (for order number)
+        const sameTypeItems = items.filter((item) => item.type === data.type);
+        const orderNumber = sameTypeItems.length + 1;
+
+        // Get current day of week
+        const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+        const today = new Date();
+        const dayOfWeek = days[today.getDay()];
+
+        // Generate title in format: "type-order dayofweek"
+        dataToSave.title = `${data.type}-${orderNumber} ${dayOfWeek}`;
+      }
+
       if (editingItem) {
-        await editContent(editingItem.id, data);
+        await editContent(editingItem.id, dataToSave);
       } else {
-        await createNewContent(data);
+        await createNewContent(dataToSave);
       }
       setEditingItem(undefined);
     } catch (error) {
@@ -230,6 +261,72 @@ export default function Index() {
       await changeStatus(pendingStatusId, "completed", deleteAtTime);
       setPendingStatusId(null);
       setAutoDeleteItem(null);
+    }
+  };
+
+  // Detect duplicates
+  const handleDetectDuplicates = () => {
+    if (items.length < 2) {
+      toast.error("Need at least 2 items to detect duplicates");
+      return;
+    }
+
+    setIsDuplicateDetecting(true);
+    try {
+      const duplicates = detectDuplicates(items, 0.7);
+      if (duplicates.length === 0) {
+        toast.info("No duplicates found!");
+        setIsDuplicateDetecting(false);
+        return;
+      }
+      setDetectedDuplicates(duplicates);
+      setShowDuplicateModal(true);
+      toast.success(`Found ${duplicates.length} potential duplicate(s)`);
+    } catch (error) {
+      console.error("Error detecting duplicates:", error);
+      toast.error("Failed to detect duplicates");
+    } finally {
+      setIsDuplicateDetecting(false);
+    }
+  };
+
+  // Handle merge of duplicates
+  const handleMergeDuplicates = async (
+    primaryId: string,
+    duplicateId: string,
+  ) => {
+    const primaryItem = items.find((item) => item.id === primaryId);
+    const duplicateItem = items.find((item) => item.id === duplicateId);
+
+    if (!primaryItem || !duplicateItem) {
+      toast.error("Items not found");
+      return;
+    }
+
+    try {
+      const mergedData = mergeContentItems(primaryItem, duplicateItem, {
+        keepPrimaryTitle: true,
+        mergeTags: true,
+        mergeCategories: true,
+      });
+
+      await mergeContent(primaryId, duplicateId, mergedData);
+      toast.success("Content merged successfully");
+
+      // Remove merged duplicates from the list and refresh
+      const newDuplicates = detectedDuplicates.filter(
+        (pair) =>
+          (pair.item1.id !== primaryId && pair.item1.id !== duplicateId) ||
+          (pair.item2.id !== primaryId && pair.item2.id !== duplicateId),
+      );
+      setDetectedDuplicates(newDuplicates);
+
+      if (newDuplicates.length === 0) {
+        setShowDuplicateModal(false);
+      }
+    } catch (error) {
+      console.error("Error merging content:", error);
+      toast.error("Failed to merge content");
     }
   };
 
@@ -340,9 +437,18 @@ export default function Index() {
                   UZ-log
                 </span>
               </div>
-              <Button variant="outline" onClick={() => navigate("/settings")}>
-                Settings
-              </Button>
+              <div className="flex items-center gap-2">
+                <Button
+                  variant="outline"
+                  onClick={() => navigate("/chat")}
+                  size="sm"
+                >
+                  AI Assistant
+                </Button>
+                <Button variant="outline" onClick={() => navigate("/settings")}>
+                  Settings
+                </Button>
+              </div>
             </div>
           </div>
         </header>
@@ -367,245 +473,300 @@ export default function Index() {
             />
           </div>
 
-          {/* Centered Chevron Toggle */}
-          <div className="flex justify-center">
-            <button
-              onClick={() => setShowActions(!showActions)}
-              className="text-muted-foreground hover:text-foreground transition-colors duration-200 focus:outline-none p-2 active:bg-transparent active:text-foreground -webkit-tap-highlight-color-transparent"
-              title={showActions ? "Hide actions" : "Show actions"}
-            >
-              <ChevronDown
-                className="w-5 h-5 transition-transform duration-200"
-                style={{
-                  transform: showActions ? "rotate(180deg)" : "rotate(0deg)",
-                }}
-              />
-            </button>
-          </div>
+          {/* Control Toggle: Filter | Chevron | New Content */}
+          <ControlToggle
+            isExpanded={showActions}
+            onToggle={(expanded) => {
+              setShowActions(expanded);
+              // Close nested filters when collapsing main toggle
+              if (!expanded) {
+                setShowFilters(false);
+              }
+            }}
+            onFilterClick={() => setShowFilters(!showFilters)}
+            onNewContentClick={() => {
+              setEditingItem(undefined);
+              setShowContentModal(true);
+            }}
+            isFilterActive={showFilters}
+          />
 
-          {/* Action Buttons & Filters - Hidden by Default */}
-          {showActions && (
-            <div className="space-y-4 animate-in fade-in duration-200">
-              <div className="flex gap-2 w-full">
-                <Button
-                  onClick={() => setShowFilters(!showFilters)}
-                  variant="outline"
-                  className="flex-1 sm:flex-none"
-                >
-                  <Filter className="w-4 h-4 mr-2" />
-                  Filters
-                </Button>
-                <Button
-                  onClick={() => {
-                    setEditingItem(undefined);
-                    setShowContentModal(true);
-                  }}
-                  variant="outline"
-                  className="flex-1 sm:flex-none"
-                >
-                  <Plus className="w-4 h-4 mr-2" />
-                  New Content
-                </Button>
-              </div>
+          {/* Filter Panel - Only shows when showFilters is true */}
+          {showFilters && (
+            <div className="bg-secondary/30 border border-border rounded-lg p-2 space-y-2 animate-in fade-in duration-200">
+              {/* Sort Options */}
+              <div className="text-center space-y-0.5">
+                <h3 className="text-xs font-medium text-foreground leading-tight">
+                  Sort By
+                </h3>
+                <div className="flex justify-center">
+                  <button
+                    onClick={() => setShowSortBy(!showSortBy)}
+                    className="text-muted-foreground hover:text-foreground transition-colors duration-200 focus:outline-none p-1 active:bg-transparent active:text-foreground"
+                    title={
+                      showSortBy ? "Hide sort options" : "Show sort options"
+                    }
+                  >
+                    <ChevronDown
+                      className="w-4 h-4 transition-transform duration-200"
+                      style={{
+                        transform: showSortBy
+                          ? "rotate(180deg)"
+                          : "rotate(0deg)",
+                      }}
+                    />
+                  </button>
+                </div>
 
-              {/* Filters Section - Nested inside showActions */}
-              {showFilters && (
-                <div className="bg-secondary/30 border border-border rounded-lg p-4 space-y-4">
-                  {/* Sort Options */}
-                  <div className="text-center space-y-2">
-                    <h3 className="text-sm font-medium text-foreground">
-                      Sort By
-                    </h3>
-                    <div className="flex justify-center">
-                      <button
-                        onClick={() => setShowSortBy(!showSortBy)}
-                        className="text-muted-foreground hover:text-foreground transition-colors duration-200 focus:outline-none p-2 active:bg-transparent active:text-foreground"
-                        title={
-                          showSortBy ? "Hide sort options" : "Show sort options"
-                        }
-                      >
-                        <ChevronDown
-                          className="w-5 h-5 transition-transform duration-200"
-                          style={{
-                            transform: showSortBy
-                              ? "rotate(180deg)"
-                              : "rotate(0deg)",
-                          }}
-                        />
-                      </button>
-                    </div>
-
-                    {showSortBy && (
-                      <div className="flex flex-wrap gap-2 justify-center animate-in fade-in duration-200">
-                        {(
-                          ["newest", "oldest", "a-z", "word-count"] as const
-                        ).map((option) => (
-                          <Button
-                            key={option}
-                            variant={
-                              displayFilters.sortBy === option
-                                ? "default"
-                                : "outline"
-                            }
-                            size="sm"
-                            onClick={() =>
-                              setDisplayFilters({
-                                ...displayFilters,
-                                sortBy: option,
-                              })
-                            }
-                          >
-                            {option === "newest"
-                              ? "Newest"
-                              : option === "oldest"
-                                ? "Oldest"
-                                : option === "a-z"
-                                  ? "A-Z"
-                                  : "Word Count"}
-                          </Button>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Category Filter */}
-                  {categories.length > 0 && (
-                    <div className="text-center space-y-2">
-                      <h3 className="text-sm font-medium text-foreground">
-                        Categories
-                      </h3>
-                      <div className="flex justify-center">
-                        <button
-                          onClick={() => setShowCategories(!showCategories)}
-                          className="text-muted-foreground hover:text-foreground transition-colors duration-200 focus:outline-none p-2 active:bg-transparent active:text-foreground"
-                          title={
-                            showCategories
-                              ? "Hide categories"
-                              : "Show categories"
+                {showSortBy && (
+                  <div className="flex flex-wrap gap-0.5 justify-center animate-in fade-in duration-200">
+                    {(["newest", "oldest", "a-z", "word-count"] as const).map(
+                      (option) => (
+                        <Button
+                          key={option}
+                          variant={
+                            displayFilters.sortBy === option
+                              ? "default"
+                              : "outline"
+                          }
+                          size="sm"
+                          className="h-7 px-2 text-xs"
+                          onClick={() =>
+                            setDisplayFilters({
+                              ...displayFilters,
+                              sortBy: option,
+                            })
                           }
                         >
-                          <ChevronDown
-                            className="w-5 h-5 transition-transform duration-200"
-                            style={{
-                              transform: showCategories
-                                ? "rotate(180deg)"
-                                : "rotate(0deg)",
-                            }}
-                          />
-                        </button>
-                      </div>
-
-                      {showCategories && (
-                        <div className="flex flex-wrap gap-2 justify-center animate-in fade-in duration-200">
-                          {categories.map((cat) => (
-                            <Button
-                              key={cat}
-                              variant={
-                                displayFilters.categories.includes(cat)
-                                  ? "default"
-                                  : "outline"
-                              }
-                              size="sm"
-                              onClick={() => {
-                                const newCategories =
-                                  displayFilters.categories.includes(cat)
-                                    ? displayFilters.categories.filter(
-                                        (c) => c !== cat,
-                                      )
-                                    : [...displayFilters.categories, cat];
-                                setDisplayFilters({
-                                  ...displayFilters,
-                                  categories: newCategories,
-                                });
-                              }}
-                            >
-                              {cat}
-                            </Button>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  )}
-
-                  {/* Tag Filter */}
-                  {tags.length > 0 && (
-                    <div className="text-center space-y-2">
-                      <h3 className="text-sm font-medium text-foreground">
-                        Tags
-                      </h3>
-                      <div className="flex justify-center">
-                        <button
-                          onClick={() => setShowTags(!showTags)}
-                          className="text-muted-foreground hover:text-foreground transition-colors duration-200 focus:outline-none p-2 active:bg-transparent active:text-foreground"
-                          title={showTags ? "Hide tags" : "Show tags"}
-                        >
-                          <ChevronDown
-                            className="w-5 h-5 transition-transform duration-200"
-                            style={{
-                              transform: showTags
-                                ? "rotate(180deg)"
-                                : "rotate(0deg)",
-                            }}
-                          />
-                        </button>
-                      </div>
-
-                      {showTags && (
-                        <div className="flex flex-wrap gap-2 justify-center animate-in fade-in duration-200">
-                          {tags.slice(0, 10).map((tag) => (
-                            <Button
-                              key={tag}
-                              variant={
-                                displayFilters.tags.includes(tag)
-                                  ? "default"
-                                  : "outline"
-                              }
-                              size="sm"
-                              onClick={() => {
-                                const newTags = displayFilters.tags.includes(
-                                  tag,
-                                )
-                                  ? displayFilters.tags.filter((t) => t !== tag)
-                                  : [...displayFilters.tags, tag];
-                                setDisplayFilters({
-                                  ...displayFilters,
-                                  tags: newTags,
-                                });
-                              }}
-                            >
-                              #{tag}
-                            </Button>
-                          ))}
-                          {tags.length > 10 && (
-                            <span className="text-xs text-muted-foreground px-2 py-1.5">
-                              +{tags.length - 10} more
-                            </span>
-                          )}
-                        </div>
-                      )}
-                    </div>
-                  )}
-
-                  <div className="flex gap-2 pt-2">
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => {
-                        setDisplayFilters({
-                          searchQuery: "",
-                          categories: [],
-                          types: [],
-                          tags: [],
-                          sortBy: "newest",
-                        });
-                      }}
-                      className="flex-1 sm:flex-none"
-                    >
-                      Reset Filters
-                    </Button>
+                          {option === "newest"
+                            ? "Newest"
+                            : option === "oldest"
+                              ? "Oldest"
+                              : option === "a-z"
+                                ? "A-Z"
+                                : "Word Count"}
+                        </Button>
+                      ),
+                    )}
                   </div>
+                )}
+              </div>
+
+              {/* Content Type Filter */}
+              <div className="text-center space-y-0.5">
+                <h3 className="text-xs font-medium text-foreground leading-tight">
+                  Content Type
+                </h3>
+                <div className="flex justify-center">
+                  <button
+                    onClick={() => setShowTypes(!showTypes)}
+                    className="text-muted-foreground hover:text-foreground transition-colors duration-200 focus:outline-none p-1 active:bg-transparent active:text-foreground"
+                    title={
+                      showTypes ? "Hide content types" : "Show content types"
+                    }
+                  >
+                    <ChevronDown
+                      className="w-4 h-4 transition-transform duration-200"
+                      style={{
+                        transform: showTypes
+                          ? "rotate(180deg)"
+                          : "rotate(0deg)",
+                      }}
+                    />
+                  </button>
+                </div>
+
+                {showTypes && (
+                  <div className="flex flex-wrap gap-0.5 justify-center animate-in fade-in duration-200">
+                    {(
+                      [
+                        "text",
+                        "code",
+                        "image",
+                        "video",
+                        "file",
+                        "link",
+                        "prompt",
+                        "script",
+                        "book",
+                      ] as const
+                    ).map((type) => (
+                      <Button
+                        key={type}
+                        variant={
+                          displayFilters.types.includes(type)
+                            ? "default"
+                            : "outline"
+                        }
+                        size="sm"
+                        className="h-7 px-2 text-xs"
+                        onClick={() => {
+                          const newTypes = displayFilters.types.includes(type)
+                            ? displayFilters.types.filter((t) => t !== type)
+                            : [...displayFilters.types, type];
+                          setDisplayFilters({
+                            ...displayFilters,
+                            types: newTypes,
+                          });
+                        }}
+                      >
+                        {type.charAt(0).toUpperCase() + type.slice(1)}
+                      </Button>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* Category Filter */}
+              {categories.length > 0 && (
+                <div className="text-center space-y-0.5">
+                  <h3 className="text-xs font-medium text-foreground leading-tight">
+                    Categories
+                  </h3>
+                  <div className="flex justify-center">
+                    <button
+                      onClick={() => setShowCategories(!showCategories)}
+                      className="text-muted-foreground hover:text-foreground transition-colors duration-200 focus:outline-none p-1 active:bg-transparent active:text-foreground"
+                      title={
+                        showCategories ? "Hide categories" : "Show categories"
+                      }
+                    >
+                      <ChevronDown
+                        className="w-4 h-4 transition-transform duration-200"
+                        style={{
+                          transform: showCategories
+                            ? "rotate(180deg)"
+                            : "rotate(0deg)",
+                        }}
+                      />
+                    </button>
+                  </div>
+
+                  {showCategories && (
+                    <div className="flex flex-wrap gap-0.5 justify-center animate-in fade-in duration-200">
+                      {categories.map((cat) => (
+                        <Button
+                          key={cat}
+                          variant={
+                            displayFilters.categories.includes(cat)
+                              ? "default"
+                              : "outline"
+                          }
+                          size="sm"
+                          className="h-7 px-2 text-xs"
+                          onClick={() => {
+                            const newCategories =
+                              displayFilters.categories.includes(cat)
+                                ? displayFilters.categories.filter(
+                                    (c) => c !== cat,
+                                  )
+                                : [...displayFilters.categories, cat];
+                            setDisplayFilters({
+                              ...displayFilters,
+                              categories: newCategories,
+                            });
+                          }}
+                        >
+                          {cat}
+                        </Button>
+                      ))}
+                    </div>
+                  )}
                 </div>
               )}
+
+              {/* Tag Filter */}
+              {tags.length > 0 && (
+                <div className="text-center space-y-0.5">
+                  <h3 className="text-xs font-medium text-foreground leading-tight">
+                    Tags
+                  </h3>
+                  <div className="flex justify-center">
+                    <button
+                      onClick={() => setShowTags(!showTags)}
+                      className="text-muted-foreground hover:text-foreground transition-colors duration-200 focus:outline-none p-1 active:bg-transparent active:text-foreground"
+                      title={showTags ? "Hide tags" : "Show tags"}
+                    >
+                      <ChevronDown
+                        className="w-4 h-4 transition-transform duration-200"
+                        style={{
+                          transform: showTags
+                            ? "rotate(180deg)"
+                            : "rotate(0deg)",
+                        }}
+                      />
+                    </button>
+                  </div>
+
+                  {showTags && (
+                    <div className="flex flex-wrap gap-0.5 justify-center animate-in fade-in duration-200">
+                      {tags.slice(0, 10).map((tag) => (
+                        <Button
+                          key={tag}
+                          variant={
+                            displayFilters.tags.includes(tag)
+                              ? "default"
+                              : "outline"
+                          }
+                          size="sm"
+                          className="h-7 px-2 text-xs"
+                          onClick={() => {
+                            const newTags = displayFilters.tags.includes(tag)
+                              ? displayFilters.tags.filter((t) => t !== tag)
+                              : [...displayFilters.tags, tag];
+                            setDisplayFilters({
+                              ...displayFilters,
+                              tags: newTags,
+                            });
+                          }}
+                        >
+                          #{tag}
+                        </Button>
+                      ))}
+                      {tags.length > 10 && (
+                        <span className="text-xs text-muted-foreground px-2 py-1.5">
+                          +{tags.length - 10} more
+                        </span>
+                      )}
+                    </div>
+                  )}
+                </div>
+              )}
+
+              <div className="flex gap-0.5 pt-0.5">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => {
+                    setDisplayFilters({
+                      searchQuery: "",
+                      categories: [],
+                      types: [],
+                      tags: [],
+                      sortBy: "newest",
+                    });
+                  }}
+                  className="flex-1 sm:flex-none h-7 px-2 text-xs"
+                >
+                  Reset Filters
+                </Button>
+              </div>
+            </div>
+          )}
+
+          {/* Duplicate Detection Button */}
+          {isAuthenticated && items.length >= 2 && (
+            <div className="flex justify-center pt-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleDetectDuplicates}
+                disabled={isDuplicateDetecting}
+                className="h-7 px-3 text-xs gap-2"
+              >
+                <Copy className="w-3 h-3" />
+                {isDuplicateDetecting ? "Detecting..." : "Detect Duplicates"}
+              </Button>
             </div>
           )}
 
@@ -757,9 +918,13 @@ export default function Index() {
         isOpen={showViewer}
         onClose={handleCloseViewer}
         content={viewingItem}
+        allContent={items}
         onEdit={handleOpenEdit}
         onDelete={handleOpenDelete}
         onShare={handleOpenShare}
+        onLinksUpdate={() => {
+          // Refresh content when links are updated
+        }}
       />
 
       <ShareModal
@@ -797,6 +962,16 @@ export default function Index() {
         onClose={() => setShowBulkDeleteModal(false)}
         onConfirm={handleBulkDelete}
         title={`${selectedItems.length} Item${selectedItems.length !== 1 ? "s" : ""}`}
+      />
+
+      <DuplicateModal
+        isOpen={showDuplicateModal}
+        onClose={() => {
+          setShowDuplicateModal(false);
+          setDetectedDuplicates([]);
+        }}
+        duplicates={detectedDuplicates}
+        onMerge={handleMergeDuplicates}
       />
     </div>
   );

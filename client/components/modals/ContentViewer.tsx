@@ -27,14 +27,17 @@ import { TextToSpeechButton } from "@/components/TextToSpeechButton";
 import { SyntaxErrorDisplay } from "@/components/SyntaxErrorDisplay";
 import { analyzeSyntax } from "@/lib/syntaxChecker";
 import { ImageViewer } from "@/components/ImageViewer";
+import { ContentLinks } from "@/components/ContentLinks";
 
 interface ContentViewerProps {
   isOpen: boolean;
   onClose: () => void;
   content: ContentItem | null;
+  allContent?: ContentItem[];
   onEdit?: (item: ContentItem) => void;
   onDelete?: (item: ContentItem) => void;
   onShare?: (item: ContentItem) => void;
+  onLinksUpdate?: () => void;
 }
 
 const typeIcons: Record<ContentType, React.ReactNode> = {
@@ -66,9 +69,11 @@ export const ContentViewer: React.FC<ContentViewerProps> = ({
   isOpen,
   onClose,
   content,
+  allContent = [],
   onEdit,
   onDelete,
   onShare,
+  onLinksUpdate,
 }) => {
   const [copied, setCopied] = useState(false);
   const [showImageViewer, setShowImageViewer] = useState(false);
@@ -367,6 +372,15 @@ export const ContentViewer: React.FC<ContentViewerProps> = ({
             )}
           </div>
         </div>
+
+        {/* Content Links Section */}
+        {allContent && allContent.length > 0 && (
+          <ContentLinks
+            content={content}
+            allContent={allContent}
+            onUpdate={onLinksUpdate}
+          />
+        )}
 
         {/* Action Buttons */}
         <div className="flex gap-2 mt-6 pt-4 border-t border-border flex-wrap">

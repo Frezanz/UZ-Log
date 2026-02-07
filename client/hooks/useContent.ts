@@ -126,6 +126,7 @@ export const useContent = () => {
           tags: data.tags || [],
           file_url: data.file_url || null,
           file_size: data.file_size || null,
+          voice_url: data.voice_url || null,
           is_public: data.is_public || false,
         };
 

@@ -70,3 +70,44 @@ export interface FilterState {
   tags: string[];
   sortBy: "newest" | "oldest" | "a-z" | "word-count";
 }
+
+export type LinkType =
+  | "references"
+  | "referenced-by"
+  | "related-to"
+  | "generates"
+  | "depends-on"
+  | "solves";
+
+export interface ContentLink {
+  id: string;
+  user_id: string;
+  source_content_id: string;
+  target_content_id: string;
+  link_type: LinkType;
+  created_at: string;
+}
+
+export interface ContentLinkWithTarget extends ContentLink {
+  target_content?: ContentItem;
+}
+
+export interface ContentLinkWithSource extends ContentLink {
+  source_content?: ContentItem;
+}
+
+export interface ShareLink {
+  id: string;
+  user_id: string;
+  content_id: string;
+  token: string;
+  password?: string | null;
+  expires_at?: string | null;
+  created_at: string;
+}
+
+export interface ContentShareSettings {
+  contentId: string;
+  isPublic: boolean;
+  shareLinks?: ShareLink[];
+}

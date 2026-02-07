@@ -1,5 +1,13 @@
 import { getSupabase } from "./supabase";
-import { ContentItem, BookPage, User } from "@/types/content";
+import {
+  ContentItem,
+  BookPage,
+  User,
+  ContentLink,
+  ContentLinkWithTarget,
+  LinkType,
+  ShareLink,
+} from "@/types/content";
 
 // ============ Authentication ============
 export const signInWithGoogle = async () => {
@@ -545,4 +553,310 @@ export const deleteBookPage = async (pageId: string): Promise<void> => {
   const { error } = await supabase.from("book_pages").delete().eq("id", pageId);
 
   if (error) throw error;
+};
+
+// ============ Content Links ============
+export const createLink = async (
+  sourceContentId: string,
+  targetContentId: string,
+  linkType: LinkType,
+): Promise<ContentLink> => {
+  const supabase = getSupabase();
+  const user = await getCurrentUser();
+
+  if (!user) throw new Error("User not authenticated");
+
+  const { data, error } = await supabase
+    .from("content_links")
+    .insert({
+      source_content_id: sourceContentId,
+      target_content_id: targetContentId,
+      link_type: linkType,
+      user_id: user.id,
+    })
+    .select()
+    .single();
+
+  if (error) throw error;
+  return data;
+};
+
+export const deleteLink = async (linkId: string): Promise<void> => {
+  const supabase = getSupabase();
+  const { error } = await supabase
+    .from("content_links")
+    .delete()
+    .eq("id", linkId);
+
+  if (error) throw error;
+};
+
+export const getLinksForContent = async (
+  contentId: string,
+): Promise<ContentLinkWithTarget[]> => {
+  const supabase = getSupabase();
+  const user = await getCurrentUser();
+
+  if (!user) throw new Error("User not authenticated");
+
+  // Get all links where this content is the source
+  const { data: links, error } = await supabase
+    .from("content_links")
+    .select("*")
+    .eq("source_content_id", contentId)
+    .eq("user_id", user.id);
+
+  if (error) throw error;
+
+  // Fetch target content for each link
+  const linksWithTarget: ContentLinkWithTarget[] = [];
+  for (const link of links || []) {
+    try {
+      const targetContent = await getContent(link.target_content_id);
+      linksWithTarget.push({
+        ...link,
+        target_content: targetContent,
+      });
+    } catch {
+      // Skip if target content can't be retrieved
+      linksWithTarget.push(link);
+    }
+  }
+
+  return linksWithTarget;
+};
+
+export const getBacklinksForContent = async (
+  contentId: string,
+): Promise<ContentLinkWithTarget[]> => {
+  const supabase = getSupabase();
+  const user = await getCurrentUser();
+
+  if (!user) throw new Error("User not authenticated");
+
+  // Get all links where this content is the target
+  const { data: links, error } = await supabase
+    .from("content_links")
+    .select("*")
+    .eq("target_content_id", contentId)
+    .eq("user_id", user.id);
+
+  if (error) throw error;
+
+  // Fetch source content for each link
+  const linksWithSource: ContentLinkWithTarget[] = [];
+  for (const link of links || []) {
+    try {
+      const sourceContent = await getContent(link.source_content_id);
+      linksWithSource.push({
+        ...link,
+        target_content: sourceContent, // Store source as target for consistency
+      });
+    } catch {
+      // Skip if source content can't be retrieved
+      linksWithSource.push(link);
+    }
+  }
+
+  return linksWithSource;
+};
+
+// ============ Share Links ============
+export const createShareLink = async (
+  contentId: string,
+  options?: {
+    password?: string;
+    expiresIn?: number; // Days until expiration
+  },
+): Promise<ShareLink> => {
+  const supabase = getSupabase();
+  const user = await getCurrentUser();
+
+  if (!user) throw new Error("User not authenticated");
+
+  // Generate a unique token
+  const token =
+    Math.random().toString(36).substring(2, 15) +
+    Math.random().toString(36).substring(2, 15);
+
+  let expiresAt: string | null = null;
+  if (options?.expiresIn) {
+    const expirationDate = new Date();
+    expirationDate.setDate(expirationDate.getDate() + options.expiresIn);
+    expiresAt = expirationDate.toISOString();
+  }
+
+  const { data, error } = await supabase
+    .from("share_links")
+    .insert({
+      content_id: contentId,
+      token,
+      password: options?.password || null,
+      expires_at: expiresAt,
+      user_id: user.id,
+    })
+    .select()
+    .single();
+
+  if (error) throw error;
+  return data;
+};
+
+export const getShareLinks = async (
+  contentId: string,
+): Promise<ShareLink[]> => {
+  const supabase = getSupabase();
+  const user = await getCurrentUser();
+
+  if (!user) throw new Error("User not authenticated");
+
+  const { data, error } = await supabase
+    .from("share_links")
+    .select("*")
+    .eq("content_id", contentId)
+    .eq("user_id", user.id);
+
+  if (error) throw error;
+  return data || [];
+};
+
+export const deleteShareLink = async (linkId: string): Promise<void> => {
+  const supabase = getSupabase();
+  const { error } = await supabase
+    .from("share_links")
+    .delete()
+    .eq("id", linkId);
+
+  if (error) throw error;
+};
+
+export const getSharedContent = async (
+  token: string,
+  password?: string,
+): Promise<ContentItem> => {
+  const supabase = getSupabase();
+
+  // Get share link
+  const { data: shareLink, error: linkError } = await supabase
+    .from("share_links")
+    .select("*")
+    .eq("token", token)
+    .single();
+
+  if (linkError) throw new Error("Share link not found");
+
+  // Check if link has expired
+  if (shareLink.expires_at) {
+    const expirationDate = new Date(shareLink.expires_at);
+    if (new Date() > expirationDate) {
+      throw new Error("Share link has expired");
+    }
+  }
+
+  // Check password if required
+  if (shareLink.password && shareLink.password !== password) {
+    throw new Error("Invalid password");
+  }
+
+  // Get the content
+  const content = await getPublicContent(shareLink.content_id);
+  return content;
+};
+
+// ============ Content Merge (Duplicate Management) ============
+export const mergeContent = async (
+  primaryContentId: string,
+  duplicateContentId: string,
+  mergedData: Partial<ContentItem>,
+): Promise<ContentItem> => {
+  const supabase = getSupabase();
+
+  // Update primary content with merged data
+  const { data: updated, error: updateError } = await supabase
+    .from("content")
+    .update({
+      ...mergedData,
+      updated_at: new Date().toISOString(),
+    })
+    .eq("id", primaryContentId)
+    .select()
+    .single();
+
+  if (updateError) throw updateError;
+
+  // Delete the duplicate content
+  await deleteContent(duplicateContentId);
+
+  return updated;
+};
+
+// ============ Chat Sessions (AI Assistant) ============
+export const createChatSession = async () => {
+  const supabase = getSupabase();
+  const session = await getCurrentSession();
+  const userId = session?.user.id || null;
+
+  const { data, error } = await supabase
+    .from("chat_sessions")
+    .insert({
+      user_id: userId,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+    })
+    .select()
+    .single();
+
+  if (error) throw error;
+  return data;
+};
+
+export const getChatSession = async (sessionId: string) => {
+  const supabase = getSupabase();
+
+  const { data, error } = await supabase
+    .from("chat_sessions")
+    .select()
+    .eq("id", sessionId)
+    .single();
+
+  if (error) throw error;
+  return data;
+};
+
+export const addChatMessage = async (
+  sessionId: string,
+  role: "user" | "assistant",
+  content: string,
+  metadata?: Record<string, any>,
+) => {
+  const supabase = getSupabase();
+
+  const { data, error } = await supabase
+    .from("chat_messages")
+    .insert({
+      session_id: sessionId,
+      role,
+      content,
+      metadata,
+      created_at: new Date().toISOString(),
+    })
+    .select()
+    .single();
+
+  if (error) throw error;
+  return data;
+};
+
+export const getChatHistory = async (sessionId: string, limit: number = 50) => {
+  const supabase = getSupabase();
+
+  const { data, error } = await supabase
+    .from("chat_messages")
+    .select()
+    .eq("session_id", sessionId)
+    .order("created_at", { ascending: true })
+    .limit(limit);
+
+  if (error) throw error;
+  return data;
 };
