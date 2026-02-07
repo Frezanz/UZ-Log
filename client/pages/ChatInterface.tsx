@@ -126,15 +126,15 @@ const ChatInterface = ({ onToggleVisualMode }: ChatInterfaceProps) => {
       <div className="border-b px-6 py-4 flex justify-between items-center">
         <h1 className="text-2xl font-bold">Content Assistant</h1>
         <div className="flex gap-2">
-          {onToggleVisualMode && (
-            <Button
-              variant="outline"
-              onClick={onToggleVisualMode}
-              className="text-sm"
-            >
-              Visual Mode
-            </Button>
-          )}
+          <Button
+            variant="outline"
+            onClick={handleToggleVisualMode}
+            className="text-sm gap-2"
+            title="Switch to visual mode"
+          >
+            <Layout className="w-4 h-4" />
+            <span className="hidden sm:inline">Visual Mode</span>
+          </Button>
           <Button
             variant="ghost"
             size="sm"
