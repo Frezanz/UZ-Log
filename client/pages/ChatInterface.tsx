@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
 import { useContent } from "@/hooks/useContent";
+import { useTheme } from "@/hooks/useTheme";
 import { ChatMessage as ChatMessageType } from "@/types/chat";
 import { ContentItem } from "@/types/content";
 import { Button } from "@/components/ui/button";
@@ -9,7 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Loader2, Send, Trash2, Layout } from "lucide-react";
+import { Loader2, Send, Trash2, Layout, Moon, Sun } from "lucide-react";
 import { toast } from "sonner";
 import { processChatMessage, validateMessage } from "@/lib/chatMessageProcessor";
 import {
