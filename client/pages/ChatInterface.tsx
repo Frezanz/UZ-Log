@@ -300,7 +300,9 @@ const ChatInterface = ({ onToggleVisualMode }: ChatInterfaceProps) => {
   };
 
   return (
-    <div className="flex flex-col h-screen bg-gray-50">
+    <div className={`flex flex-col h-screen transition-colors ${
+      isDark ? "bg-gray-950" : "bg-gray-50"
+    }`}>
       {/* Header */}
       <div className={`border-b px-6 py-4 flex justify-between items-center transition-colors ${
         isDark ? "bg-gray-900 border-gray-800" : "bg-white border-gray-200"
