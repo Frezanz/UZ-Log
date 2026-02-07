@@ -73,11 +73,9 @@ const App = () => (
   </QueryClientProvider>
 );
 
-// Guard to prevent multiple root creations during hot reload
+// Initialize and render the app
 const rootElement = document.getElementById("root");
-if (rootElement && !rootElement._reactRootContainer) {
-  createRoot(rootElement).render(<App />);
-} else if (rootElement) {
-  // In development, root already exists from previous render
-  createRoot(rootElement).render(<App />);
+if (rootElement) {
+  const root = createRoot(rootElement);
+  root.render(<App />);
 }
