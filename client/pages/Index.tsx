@@ -428,9 +428,14 @@ export default function Index() {
                   UZ-log
                 </span>
               </div>
-              <Button variant="outline" onClick={() => navigate("/settings")}>
-                Settings
-              </Button>
+              <div className="flex items-center gap-2">
+                <Button variant="outline" onClick={() => navigate("/chat")} size="sm">
+                  AI Assistant
+                </Button>
+                <Button variant="outline" onClick={() => navigate("/settings")}>
+                  Settings
+                </Button>
+              </div>
             </div>
           </div>
         </header>
