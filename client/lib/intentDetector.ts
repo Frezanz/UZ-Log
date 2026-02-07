@@ -199,6 +199,18 @@ function isDuplicateIntent(lower: string): boolean {
   return duplicateKeywords.some((kw) => lower.includes(kw));
 }
 
+function isSearchIntent(lower: string): boolean {
+  const searchKeywords = [
+    "search",
+    "find",
+    "filter",
+    "look for",
+    "query",
+    "search for",
+  ];
+  return searchKeywords.some((kw) => lower.includes(kw));
+}
+
 // ============ Parameter Extraction ============
 
 function extractParameters(
