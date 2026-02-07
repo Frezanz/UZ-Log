@@ -313,6 +313,24 @@ function extractParameters(
   return params;
 }
 
+function extractSearchQuery(message: string): string {
+  // Remove search intent keywords and extract the query
+  const keywords = [
+    "search",
+    "find",
+    "filter",
+    "look for",
+    "query",
+    "search for",
+  ];
+  let query = message.toLowerCase();
+  keywords.forEach((kw) => {
+    const regex = new RegExp(`\\b${kw}\\b\\s*`, "i");
+    query = query.replace(regex, "");
+  });
+  return query.trim();
+}
+
 function findItemReference(
   message: string,
   contentItems: ContentItem[],
