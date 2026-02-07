@@ -30,6 +30,7 @@ interface ChatInterfaceProps {
 const ChatInterface = ({ onToggleVisualMode }: ChatInterfaceProps) => {
   const navigate = useNavigate();
   const { user } = useAuth();
+  const { isDark, toggleDarkMode } = useTheme();
   const { items, createContent, updateContent, deleteContent, shareContent } = useContent();
 
   const [messages, setMessages] = useState<ChatMessageType[]>([]);
