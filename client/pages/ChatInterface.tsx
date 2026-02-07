@@ -325,46 +325,52 @@ const ChatInterface = ({ onToggleVisualMode }: ChatInterfaceProps) => {
         </div>
       </div>
 
-      {/* Messages area */}
-      <ScrollArea className="flex-1 px-6 py-4 overflow-hidden">
-        <div className="space-y-4 pr-4">
-          {messages.map((message) => (
-            <div
-              key={message.id}
-              className={`flex ${
-                message.role === "user" ? "justify-end" : "justify-start"
-              }`}
-            >
-              <Card
-                className={`max-w-xs md:max-w-md lg:max-w-lg px-4 py-3 ${
-                  message.role === "user"
-                    ? "bg-primary text-primary-foreground"
-                    : "bg-muted text-muted-foreground"
-                }`}
+      {/* Messages area - ChatGPT style */}
+      <ScrollArea className="flex-1 overflow-hidden">
+        <div className="w-full h-full flex flex-col justify-start p-4 sm:p-6">
+          <div className="max-w-4xl mx-auto w-full space-y-4">
+            {messages.map((message) => (
+              <div
+                key={message.id}
+                className={`flex ${
+                  message.role === "user" ? "justify-end" : "justify-start"
+                } w-full`}
               >
-                <p className="text-sm leading-relaxed whitespace-pre-wrap">
-                  {message.content}
-                </p>
-                <span className="text-xs opacity-70 mt-2 block">
-                  {new Date(message.timestamp).toLocaleTimeString([], {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  })}
-                </span>
-              </Card>
-            </div>
-          ))}
-          {isLoading && (
-            <div className="flex justify-start">
-              <Card className="bg-muted px-4 py-3">
-                <div className="flex items-center gap-2">
-                  <Loader2 className="w-4 h-4 animate-spin" />
-                  <span className="text-sm">Thinking...</span>
+                <div
+                  className={`max-w-2xl rounded-lg px-4 py-3 ${
+                    message.role === "user"
+                      ? "bg-blue-600 text-white rounded-br-none"
+                      : "bg-gray-200 text-gray-900 rounded-bl-none"
+                  }`}
+                >
+                  <p className="text-sm leading-relaxed whitespace-pre-wrap">
+                    {message.content}
+                  </p>
+                  <span
+                    className={`text-xs opacity-60 mt-1 block ${
+                      message.role === "user" ? "text-blue-100" : "text-gray-600"
+                    }`}
+                  >
+                    {new Date(message.timestamp).toLocaleTimeString([], {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })}
+                  </span>
                 </div>
-              </Card>
-            </div>
-          )}
-          <div ref={scrollRef} />
+              </div>
+            ))}
+            {isLoading && (
+              <div className="flex justify-start w-full">
+                <div className="bg-gray-200 text-gray-900 rounded-lg rounded-bl-none px-4 py-3">
+                  <div className="flex items-center gap-2">
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                    <span className="text-sm">Uz-Assistant is thinking...</span>
+                  </div>
+                </div>
+              </div>
+            )}
+            <div ref={scrollRef} />
+          </div>
         </div>
       </ScrollArea>
 
