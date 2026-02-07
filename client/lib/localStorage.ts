@@ -1,6 +1,9 @@
 import { ContentItem } from "@/types/content";
+import { ChatMessage, ChatSession } from "@/types/chat";
 
 const STORAGE_KEY = "uz-log-guest-content";
+const CHAT_SESSIONS_KEY = "uz-log-chat-sessions";
+const CHAT_MESSAGES_KEY = "uz-log-chat-messages";
 let idCounter = 0;
 
 // Generate a truly unique UUID
