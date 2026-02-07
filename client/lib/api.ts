@@ -778,3 +778,74 @@ export const mergeContent = async (
 
   return updated;
 };
+
+// ============ Chat Sessions (AI Assistant) ============
+export const createChatSession = async () => {
+  const supabase = getSupabase();
+  const session = await getCurrentSession();
+  const userId = session?.user.id || null;
+
+  const { data, error } = await supabase
+    .from("chat_sessions")
+    .insert({
+      user_id: userId,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+    })
+    .select()
+    .single();
+
+  if (error) throw error;
+  return data;
+};
+
+export const getChatSession = async (sessionId: string) => {
+  const supabase = getSupabase();
+
+  const { data, error } = await supabase
+    .from("chat_sessions")
+    .select()
+    .eq("id", sessionId)
+    .single();
+
+  if (error) throw error;
+  return data;
+};
+
+export const addChatMessage = async (
+  sessionId: string,
+  role: "user" | "assistant",
+  content: string,
+  metadata?: Record<string, any>,
+) => {
+  const supabase = getSupabase();
+
+  const { data, error } = await supabase
+    .from("chat_messages")
+    .insert({
+      session_id: sessionId,
+      role,
+      content,
+      metadata,
+      created_at: new Date().toISOString(),
+    })
+    .select()
+    .single();
+
+  if (error) throw error;
+  return data;
+};
+
+export const getChatHistory = async (sessionId: string, limit: number = 50) => {
+  const supabase = getSupabase();
+
+  const { data, error } = await supabase
+    .from("chat_messages")
+    .select()
+    .eq("session_id", sessionId)
+    .order("created_at", { ascending: true })
+    .limit(limit);
+
+  if (error) throw error;
+  return data;
+};
