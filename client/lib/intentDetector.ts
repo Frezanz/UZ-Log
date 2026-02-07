@@ -71,6 +71,11 @@ export function detectIntent(
     detectedIntent = "DUPLICATE";
     confidence = calculateConfidence(message, "DUPLICATE");
   }
+  // Check for SEARCH intent
+  else if (isSearchIntent(lower)) {
+    detectedIntent = "SEARCH";
+    confidence = calculateConfidence(message, "SEARCH");
+  }
 
   // Extract parameters based on detected intent
   const parameters = extractParameters(message, detectedIntent, contentItems);
