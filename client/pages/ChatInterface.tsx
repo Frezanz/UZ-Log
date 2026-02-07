@@ -512,8 +512,10 @@ const ChatInterface = ({ onToggleVisualMode }: ChatInterfaceProps) => {
               {/* Clear History Setting */}
               <button
                 onClick={() => {
-                  handleClearHistory();
-                  setShowSettings(false);
+                  if (window.confirm("Clear chat history? This cannot be undone.")) {
+                    handleClearHistory();
+                    setShowSettings(false);
+                  }
                 }}
                 className={`w-full text-left p-4 rounded-lg transition-colors ${
                   isDark
