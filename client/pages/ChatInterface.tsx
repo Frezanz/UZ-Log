@@ -10,7 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Loader2, Send, Trash2, Layout, Moon, Sun } from "lucide-react";
+import { Loader2, Send, Layout, Moon, Sun, Settings } from "lucide-react";
 import { toast } from "sonner";
 import { processChatMessage, validateMessage } from "@/lib/chatMessageProcessor";
 import {
