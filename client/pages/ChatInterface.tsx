@@ -519,6 +519,29 @@ const ChatInterface = ({ onToggleVisualMode }: ChatInterfaceProps) => {
                   Remove all conversation history
                 </p>
               </button>
+
+              {/* Switch to Visual Mode Setting */}
+              <button
+                onClick={() => {
+                  setShowSettings(false);
+                  handleToggleVisualMode();
+                }}
+                className={`w-full text-left p-4 rounded-lg transition-colors ${
+                  isDark
+                    ? "bg-blue-900/20 hover:bg-blue-900/30 text-blue-400"
+                    : "bg-blue-100 hover:bg-blue-200 text-blue-700"
+                }`}
+              >
+                <div className="flex items-center gap-3">
+                  <Layout className="w-5 h-5" />
+                  <div>
+                    <p className="font-medium">Visual Mode</p>
+                    <p className={`text-sm ${isDark ? "text-blue-300" : "text-blue-600"}`}>
+                      Switch to visual content editor
+                    </p>
+                  </div>
+                </div>
+              </button>
             </div>
 
             {/* Close Button */}
