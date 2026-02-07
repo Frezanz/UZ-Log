@@ -315,19 +315,11 @@ const ChatInterface = ({ onToggleVisualMode }: ChatInterfaceProps) => {
           <Button
             variant="ghost"
             size="sm"
-            onClick={toggleDarkMode}
-            title={isDark ? "Switch to light mode" : "Switch to dark mode"}
-            className={`transition-colors ${
-              isDark
-                ? "text-yellow-400 hover:bg-gray-800"
-                : "text-gray-700 hover:bg-gray-100"
-            }`}
+            onClick={() => setShowSettings(true)}
+            title="Settings"
+            className={isDark ? "text-gray-300 hover:bg-gray-800" : "text-gray-700 hover:bg-gray-100"}
           >
-            {isDark ? (
-              <Sun className="w-4 h-4" />
-            ) : (
-              <Moon className="w-4 h-4" />
-            )}
+            <Settings className="w-4 h-4" />
           </Button>
           <Button
             variant="ghost"
@@ -337,15 +329,6 @@ const ChatInterface = ({ onToggleVisualMode }: ChatInterfaceProps) => {
             className={isDark ? "text-gray-300 hover:bg-gray-800" : "text-gray-700 hover:bg-gray-100"}
           >
             <Layout className="w-4 h-4" />
-          </Button>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={handleClearHistory}
-            title="Clear chat history"
-            className={isDark ? "text-gray-300 hover:bg-gray-800" : "text-gray-700 hover:bg-gray-100"}
-          >
-            <Trash2 className="w-4 h-4" />
           </Button>
         </div>
       </div>
