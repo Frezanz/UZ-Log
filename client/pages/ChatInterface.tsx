@@ -321,15 +321,6 @@ const ChatInterface = ({ onToggleVisualMode }: ChatInterfaceProps) => {
           >
             <Settings className="w-4 h-4" />
           </Button>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={handleToggleVisualMode}
-            title="Switch to visual mode"
-            className={isDark ? "text-gray-300 hover:bg-gray-800" : "text-gray-700 hover:bg-gray-100"}
-          >
-            <Layout className="w-4 h-4" />
-          </Button>
         </div>
       </div>
 
