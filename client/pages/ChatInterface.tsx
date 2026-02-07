@@ -368,34 +368,41 @@ const ChatInterface = ({ onToggleVisualMode }: ChatInterfaceProps) => {
         </div>
       </ScrollArea>
 
-      {/* Input area */}
-      <div className="border-t px-6 py-4">
-        <form onSubmit={handleSendMessage} className="flex gap-2">
-          <Textarea
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            placeholder="What would you like to do? (Create, view, edit, delete content...)"
-            className="resize-none max-h-24"
-            rows={2}
-            disabled={isLoading}
-            onKeyDown={(e) => {
-              if (e.key === "Enter" && !e.shiftKey) {
-                e.preventDefault();
-                handleSendMessage(e as any);
-              }
-            }}
-          />
-          <Button
-            type="submit"
-            disabled={isLoading || !input.trim()}
-            className="self-end"
-          >
-            <Send className="w-4 h-4" />
-          </Button>
-        </form>
-        <p className="text-xs text-muted-foreground mt-2">
-          Press Enter to send, Shift+Enter for new line
-        </p>
+      {/* Input area - ChatGPT style */}
+      <div className="border-t bg-white px-4 py-4 sm:px-6">
+        <div className="max-w-4xl mx-auto">
+          <form onSubmit={handleSendMessage} className="relative">
+            <Textarea
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              placeholder="What would you like to do? (Create, view, edit, delete content...)"
+              className="resize-none w-full pr-12 rounded-lg border border-gray-300 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent shadow-sm p-3 text-sm"
+              rows={2}
+              disabled={isLoading}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && !e.shiftKey) {
+                  e.preventDefault();
+                  handleSendMessage(e as any);
+                }
+              }}
+            />
+            <Button
+              type="submit"
+              disabled={isLoading || !input.trim()}
+              className="absolute right-2 bottom-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg p-2 h-8 w-8 flex items-center justify-center transition-colors"
+              size="sm"
+            >
+              {isLoading ? (
+                <Loader2 className="w-4 h-4 animate-spin" />
+              ) : (
+                <Send className="w-4 h-4" />
+              )}
+            </Button>
+          </form>
+          <p className="text-xs text-gray-500 mt-2 text-center">
+            Press Enter to send, Shift+Enter for new line
+          </p>
+        </div>
       </div>
 
       {/* Debug info */}
