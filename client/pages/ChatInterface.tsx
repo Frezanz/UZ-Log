@@ -351,7 +351,9 @@ const ChatInterface = ({ onToggleVisualMode }: ChatInterfaceProps) => {
 
       {/* Messages area - ChatGPT style */}
       <ScrollArea className="flex-1 overflow-hidden">
-        <div className="w-full h-full flex flex-col justify-start p-4 sm:p-6">
+        <div className={`w-full h-full flex flex-col justify-start p-4 sm:p-6 ${
+          isDark ? "bg-gray-950" : "bg-gray-50"
+        }`}>
           <div className="max-w-4xl mx-auto w-full space-y-4">
             {messages.map((message) => (
               <div
@@ -364,7 +366,9 @@ const ChatInterface = ({ onToggleVisualMode }: ChatInterfaceProps) => {
                   className={`max-w-2xl rounded-lg px-4 py-3 ${
                     message.role === "user"
                       ? "bg-blue-600 text-white rounded-br-none"
-                      : "bg-gray-200 text-gray-900 rounded-bl-none"
+                      : isDark
+                        ? "bg-gray-800 text-gray-100 rounded-bl-none"
+                        : "bg-gray-200 text-gray-900 rounded-bl-none"
                   }`}
                 >
                   <p className="text-sm leading-relaxed whitespace-pre-wrap">
@@ -372,7 +376,11 @@ const ChatInterface = ({ onToggleVisualMode }: ChatInterfaceProps) => {
                   </p>
                   <span
                     className={`text-xs opacity-60 mt-1 block ${
-                      message.role === "user" ? "text-blue-100" : "text-gray-600"
+                      message.role === "user"
+                        ? "text-blue-100"
+                        : isDark
+                          ? "text-gray-400"
+                          : "text-gray-600"
                     }`}
                   >
                     {new Date(message.timestamp).toLocaleTimeString([], {
@@ -385,7 +393,11 @@ const ChatInterface = ({ onToggleVisualMode }: ChatInterfaceProps) => {
             ))}
             {isLoading && (
               <div className="flex justify-start w-full">
-                <div className="bg-gray-200 text-gray-900 rounded-lg rounded-bl-none px-4 py-3">
+                <div className={`rounded-lg rounded-bl-none px-4 py-3 ${
+                  isDark
+                    ? "bg-gray-800 text-gray-100"
+                    : "bg-gray-200 text-gray-900"
+                }`}>
                   <div className="flex items-center gap-2">
                     <Loader2 className="w-4 h-4 animate-spin" />
                     <span className="text-sm">Uz-Assistant is thinking...</span>
