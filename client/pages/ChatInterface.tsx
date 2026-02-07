@@ -411,14 +411,20 @@ const ChatInterface = ({ onToggleVisualMode }: ChatInterfaceProps) => {
       </ScrollArea>
 
       {/* Input area - ChatGPT style */}
-      <div className="border-t bg-white px-4 py-4 sm:px-6">
+      <div className={`border-t px-4 py-4 sm:px-6 transition-colors ${
+        isDark ? "bg-gray-900 border-gray-800" : "bg-white border-gray-200"
+      }`}>
         <div className="max-w-4xl mx-auto">
           <form onSubmit={handleSendMessage} className="relative">
             <Textarea
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder="What would you like to do? (Create, view, edit, delete content...)"
-              className="resize-none w-full pr-12 rounded-lg border border-gray-300 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent shadow-sm p-3 text-sm"
+              className={`resize-none w-full pr-12 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent shadow-sm p-3 text-sm transition-colors ${
+                isDark
+                  ? "bg-gray-800 border-gray-700 text-gray-100 placeholder-gray-400"
+                  : "bg-white border-gray-300 text-gray-900 placeholder-gray-500"
+              }`}
               rows={2}
               disabled={isLoading}
               onKeyDown={(e) => {
@@ -431,7 +437,7 @@ const ChatInterface = ({ onToggleVisualMode }: ChatInterfaceProps) => {
             <Button
               type="submit"
               disabled={isLoading || !input.trim()}
-              className="absolute right-2 bottom-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg p-2 h-8 w-8 flex items-center justify-center transition-colors"
+              className="absolute right-2 bottom-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg p-2 h-8 w-8 flex items-center justify-center transition-colors disabled:opacity-50"
               size="sm"
             >
               {isLoading ? (
@@ -441,7 +447,9 @@ const ChatInterface = ({ onToggleVisualMode }: ChatInterfaceProps) => {
               )}
             </Button>
           </form>
-          <p className="text-xs text-gray-500 mt-2 text-center">
+          <p className={`text-xs mt-2 text-center transition-colors ${
+            isDark ? "text-gray-400" : "text-gray-500"
+          }`}>
             Press Enter to send, Shift+Enter for new line
           </p>
         </div>
