@@ -86,6 +86,9 @@ export default function Index() {
   );
   const [isDuplicateDetecting, setIsDuplicateDetecting] = useState(false);
 
+  // Settings modal state
+  const [showSettings, setShowSettings] = useState(false);
+
   // Scroll detection for hiding header and search bar
   const [isHeaderHidden, setIsHeaderHidden] = useState(false);
   const lastScrollYRef = useRef(0);
