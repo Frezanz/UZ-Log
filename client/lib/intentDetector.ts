@@ -435,6 +435,7 @@ function intentToOperation(intentType: IntentType): string {
     PROTECT: "protectContent",
     LIST: "listContent",
     DUPLICATE: "duplicateContent",
+    SEARCH: "searchContent",
     UNKNOWN: "unknown",
   };
 
