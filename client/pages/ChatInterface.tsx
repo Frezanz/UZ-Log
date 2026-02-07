@@ -53,24 +53,57 @@ const ChatInterface = ({ onToggleVisualMode }: ChatInterfaceProps) => {
   // Initialize or load chat session
   useEffect(() => {
     const loadSession = async () => {
-      // TODO: Load session from database/localStorage
-      // For now, generate a temporary session ID
-      const id = `session-${Date.now()}`;
-      setSessionId(id);
+      try {
+        let session;
 
-      // Add initial greeting
-      const greeting: ChatMessageType = {
-        id: `msg-${Date.now()}`,
-        role: "assistant",
-        content:
-          "Hello! I'm here to help you manage your content. You can create, view, edit, delete, or organize your content. What would you like to do?",
-        timestamp: new Date().toISOString(),
-      };
-      setMessages([greeting]);
+        // Create new session for authenticated users
+        if (user) {
+          session = await createChatSession(user.id);
+          setSessionId(session.id);
+
+          // Load existing messages from this session
+          const savedMessages = await loadChatSession(session.id);
+          if (savedMessages.length > 0) {
+            setMessages(savedMessages);
+            return;
+          }
+        } else {
+          // Generate temporary session ID for guests
+          const id = `session-${Date.now()}`;
+          setSessionId(id);
+        }
+
+        // Add initial greeting if no messages
+        const greeting: ChatMessageType = {
+          id: `msg-${Date.now()}`,
+          role: "assistant",
+          content:
+            "Hello! I'm here to help you manage your content. You can create, view, edit, delete, or organize your content. What would you like to do?",
+          timestamp: new Date().toISOString(),
+        };
+        setMessages([greeting]);
+
+        // Save greeting to persistence
+        if (session) {
+          await saveChatMessage(session.id, greeting);
+        }
+      } catch (error) {
+        console.error("Error initializing chat session:", error);
+        // Fallback: show greeting without persistence
+        const greeting: ChatMessageType = {
+          id: `msg-${Date.now()}`,
+          role: "assistant",
+          content:
+            "Hello! I'm here to help you manage your content. You can create, view, edit, delete, or organize your content. What would you like to do?",
+          timestamp: new Date().toISOString(),
+        };
+        setMessages([greeting]);
+        setSessionId(`session-${Date.now()}`);
+      }
     };
 
     loadSession();
-  }, []);
+  }, [user]);
 
   // Auto-scroll to latest message
   useEffect(() => {
