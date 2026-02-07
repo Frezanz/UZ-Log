@@ -302,25 +302,45 @@ const ChatInterface = ({ onToggleVisualMode }: ChatInterfaceProps) => {
   return (
     <div className="flex flex-col h-screen bg-gray-50">
       {/* Header */}
-      <div className="border-b bg-white px-6 py-4 flex justify-between items-center">
+      <div className={`border-b px-6 py-4 flex justify-between items-center transition-colors ${
+        isDark ? "bg-gray-900 border-gray-800" : "bg-white border-gray-200"
+      }`}>
         <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
           Uz-Assistant
         </h1>
         <div className="flex gap-2">
           <Button
-            variant="outline"
+            variant="ghost"
+            size="sm"
+            onClick={toggleDarkMode}
+            title={isDark ? "Switch to light mode" : "Switch to dark mode"}
+            className={`transition-colors ${
+              isDark
+                ? "text-yellow-400 hover:bg-gray-800"
+                : "text-gray-700 hover:bg-gray-100"
+            }`}
+          >
+            {isDark ? (
+              <Sun className="w-4 h-4" />
+            ) : (
+              <Moon className="w-4 h-4" />
+            )}
+          </Button>
+          <Button
+            variant="ghost"
+            size="sm"
             onClick={handleToggleVisualMode}
-            className="text-sm gap-2"
             title="Switch to visual mode"
+            className={isDark ? "text-gray-300 hover:bg-gray-800" : "text-gray-700 hover:bg-gray-100"}
           >
             <Layout className="w-4 h-4" />
-            <span className="hidden sm:inline">Visual Mode</span>
           </Button>
           <Button
             variant="ghost"
             size="sm"
             onClick={handleClearHistory}
             title="Clear chat history"
+            className={isDark ? "text-gray-300 hover:bg-gray-800" : "text-gray-700 hover:bg-gray-100"}
           >
             <Trash2 className="w-4 h-4" />
           </Button>
