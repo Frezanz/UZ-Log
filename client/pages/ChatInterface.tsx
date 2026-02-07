@@ -15,14 +15,23 @@ interface ChatInterfaceProps {
 }
 
 const ChatInterface = ({ onToggleVisualMode }: ChatInterfaceProps) => {
+  const navigate = useNavigate();
   const { user } = useAuth();
   const { items } = useContent();
-  
+
   const [messages, setMessages] = useState<ChatMessageType[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [sessionId, setSessionId] = useState<string | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
+
+  const handleToggleVisualMode = () => {
+    if (onToggleVisualMode) {
+      onToggleVisualMode();
+    } else {
+      navigate("/visual");
+    }
+  };
 
   // Initialize or load chat session
   useEffect(() => {
