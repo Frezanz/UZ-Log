@@ -244,3 +244,107 @@ export const uploadGuestFile = async (file: File): Promise<string> => {
 export const getFileSizeMB = (file: File): string => {
   return (file.size / 1024 / 1024).toFixed(2);
 };
+
+// ============ Chat Sessions (Guest/Local) ============
+
+// Get all chat sessions
+export const getGuestChatSessions = (): ChatSession[] => {
+  try {
+    const data = localStorage.getItem(CHAT_SESSIONS_KEY);
+    return data ? JSON.parse(data) : [];
+  } catch (error) {
+    console.error("Failed to read chat sessions from localStorage:", error);
+    return [];
+  }
+};
+
+// Get a single chat session by ID
+export const getGuestChatSession = (sessionId: string): ChatSession | null => {
+  try {
+    const sessions = getGuestChatSessions();
+    return sessions.find((s) => s.id === sessionId) || null;
+  } catch (error) {
+    console.error("Failed to retrieve chat session:", error);
+    return null;
+  }
+};
+
+// Create a new chat session
+export const createGuestChatSession = (): ChatSession => {
+  try {
+    const now = new Date().toISOString();
+    const newSession: ChatSession = {
+      id: `session-${generateId()}`,
+      userId: null, // Guest session
+      messages: [],
+      createdAt: now,
+      updatedAt: now,
+    };
+
+    const sessions = getGuestChatSessions();
+    sessions.push(newSession);
+    localStorage.setItem(CHAT_SESSIONS_KEY, JSON.stringify(sessions));
+
+    return newSession;
+  } catch (error) {
+    console.error("Failed to create chat session:", error);
+    throw error;
+  }
+};
+
+// Add message to chat session
+export const addGuestChatMessage = (
+  sessionId: string,
+  role: "user" | "assistant",
+  content: string,
+  metadata?: Record<string, any>,
+): ChatMessage => {
+  try {
+    const sessions = getGuestChatSessions();
+    const session = sessions.find((s) => s.id === sessionId);
+
+    if (!session) {
+      throw new Error("Chat session not found");
+    }
+
+    const newMessage: ChatMessage = {
+      id: `msg-${generateId()}`,
+      role,
+      content,
+      timestamp: new Date().toISOString(),
+      metadata,
+    };
+
+    session.messages.push(newMessage);
+    session.updatedAt = new Date().toISOString();
+
+    localStorage.setItem(CHAT_SESSIONS_KEY, JSON.stringify(sessions));
+
+    return newMessage;
+  } catch (error) {
+    console.error("Failed to add chat message:", error);
+    throw error;
+  }
+};
+
+// Get chat history for a session
+export const getGuestChatHistory = (sessionId: string): ChatMessage[] => {
+  try {
+    const session = getGuestChatSession(sessionId);
+    return session?.messages || [];
+  } catch (error) {
+    console.error("Failed to retrieve chat history:", error);
+    return [];
+  }
+};
+
+// Clear a chat session
+export const clearGuestChatSession = (sessionId: string): void => {
+  try {
+    const sessions = getGuestChatSessions();
+    const filtered = sessions.filter((s) => s.id !== sessionId);
+    localStorage.setItem(CHAT_SESSIONS_KEY, JSON.stringify(filtered));
+  } catch (error) {
+    console.error("Failed to clear chat session:", error);
+  }
+};
