@@ -142,6 +142,92 @@ const ChatInterface = ({ onToggleVisualMode }: ChatInterfaceProps) => {
     }
   };
 
+  const handleModalClose = () => {
+    setActiveModal(null);
+    setModalData(null);
+    setModalItemId(null);
+  };
+
+  const handleContentModalSave = async (data: Partial<ContentItem>) => {
+    try {
+      setIsLoading(true);
+
+      if (modalItemId) {
+        // Update existing content
+        await updateContent(modalItemId, data);
+        toast.success("Content updated successfully");
+      } else {
+        // Create new content
+        await createContent(data as Omit<ContentItem, "id" | "created_at" | "updated_at">);
+        toast.success("Content created successfully");
+      }
+
+      handleModalClose();
+
+      // Add success message to chat
+      const successMessage: ChatMessageType = {
+        id: `msg-${Date.now()}`,
+        role: "assistant",
+        content: `${modalItemId ? "Updated" : "Created"} content successfully!`,
+        timestamp: new Date().toISOString(),
+      };
+      setMessages((prev) => [...prev, successMessage]);
+    } catch (error) {
+      console.error("Error saving content:", error);
+      toast.error("Failed to save content");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (!modalItemId) return;
+
+    try {
+      setIsLoading(true);
+      await deleteContent(modalItemId);
+      toast.success("Content deleted successfully");
+      handleModalClose();
+
+      // Add success message to chat
+      const successMessage: ChatMessageType = {
+        id: `msg-${Date.now()}`,
+        role: "assistant",
+        content: "Content deleted successfully!",
+        timestamp: new Date().toISOString(),
+      };
+      setMessages((prev) => [...prev, successMessage]);
+    } catch (error) {
+      console.error("Error deleting content:", error);
+      toast.error("Failed to delete content");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleShareToggle = async (item: ContentItem, isPublic: boolean) => {
+    try {
+      setIsLoading(true);
+      await shareContent(item.id, isPublic);
+      toast.success(isPublic ? "Content shared publicly" : "Content made private");
+      handleModalClose();
+
+      // Add success message to chat
+      const successMessage: ChatMessageType = {
+        id: `msg-${Date.now()}`,
+        role: "assistant",
+        content: `Content is now ${isPublic ? "public" : "private"}!`,
+        timestamp: new Date().toISOString(),
+      };
+      setMessages((prev) => [...prev, successMessage]);
+    } catch (error) {
+      console.error("Error sharing content:", error);
+      toast.error("Failed to update sharing settings");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <div className="flex flex-col h-screen bg-background">
       {/* Header */}
