@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
 import { useContent } from "@/hooks/useContent";
 import { ChatMessage as ChatMessageType } from "@/types/chat";
@@ -7,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Loader2, Send, Trash2 } from "lucide-react";
+import { Loader2, Send, Trash2, Layout } from "lucide-react";
 
 interface ChatInterfaceProps {
   onToggleVisualMode?: () => void;
