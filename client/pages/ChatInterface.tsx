@@ -23,13 +23,18 @@ interface ChatInterfaceProps {
 const ChatInterface = ({ onToggleVisualMode }: ChatInterfaceProps) => {
   const navigate = useNavigate();
   const { user } = useAuth();
-  const { items } = useContent();
+  const { items, createContent, updateContent, deleteContent, shareContent } = useContent();
 
   const [messages, setMessages] = useState<ChatMessageType[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [sessionId, setSessionId] = useState<string | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
+
+  // Modal states
+  const [activeModal, setActiveModal] = useState<"content" | "share" | "delete" | null>(null);
+  const [modalData, setModalData] = useState<Partial<ContentItem> | ContentItem | null>(null);
+  const [modalItemId, setModalItemId] = useState<string | null>(null);
 
   const handleToggleVisualMode = () => {
     if (onToggleVisualMode) {
