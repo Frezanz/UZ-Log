@@ -12,6 +12,12 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Loader2, Send, Trash2, Layout } from "lucide-react";
 import { toast } from "sonner";
 import { processChatMessage, validateMessage } from "@/lib/chatMessageProcessor";
+import {
+  createChatSession,
+  loadChatSession,
+  saveChatMessage,
+  updateSessionTimestamp,
+} from "@/lib/chatApi";
 import { ContentModal } from "@/components/modals/ContentModal";
 import { ShareModal } from "@/components/modals/ShareModal";
 import { DeleteModal } from "@/components/modals/DeleteModal";
