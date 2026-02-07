@@ -254,6 +254,12 @@ const ChatInterface = ({ onToggleVisualMode }: ChatInterfaceProps) => {
         timestamp: new Date().toISOString(),
       };
       setMessages((prev) => [...prev, successMessage]);
+
+      // Save success message to persistence
+      if (sessionId) {
+        await saveChatMessage(sessionId, successMessage);
+        await updateSessionTimestamp(sessionId);
+      }
     } catch (error) {
       console.error("Error deleting content:", error);
       toast.error("Failed to delete content");
