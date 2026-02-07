@@ -56,7 +56,9 @@ const App = () => (
             <BrowserRouter>
               <Routes>
                 <Route path="/login" element={<Login />} />
-                <Route path="/" element={<Index />} />
+                <Route path="/" element={<Chat />} />
+                <Route path="/chat" element={<Chat />} />
+                <Route path="/visual" element={<Index />} />
                 <Route path="/settings" element={<Settings />} />
                 <Route path="/share/:id" element={<Share />} />
                 <Route path="/s/:token" element={<SharedContent />} />
