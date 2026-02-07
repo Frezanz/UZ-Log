@@ -27,6 +27,7 @@ import {
 export default function Index() {
   const navigate = useNavigate();
   const { isAuthenticated, isLoading: authLoading } = useAuth();
+  const { isDark, toggleDarkMode } = useTheme();
   const {
     items,
     isLoading,
