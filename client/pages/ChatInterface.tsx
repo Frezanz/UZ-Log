@@ -336,6 +336,38 @@ const ChatInterface = ({ onToggleVisualMode }: ChatInterfaceProps) => {
           </p>
         </div>
       )}
+
+      {/* Modals */}
+      <ContentModal
+        isOpen={activeModal === "content"}
+        onClose={handleModalClose}
+        onSave={handleContentModalSave}
+        initialData={
+          modalData && "id" in modalData
+            ? (modalData as ContentItem)
+            : undefined
+        }
+      />
+
+      <DeleteModal
+        isOpen={activeModal === "delete"}
+        onClose={handleModalClose}
+        onConfirm={handleDeleteConfirm}
+        title={
+          modalData && "title" in modalData ? modalData.title : "Content"
+        }
+      />
+
+      <ShareModal
+        isOpen={activeModal === "share"}
+        onClose={handleModalClose}
+        item={
+          modalData && "id" in modalData
+            ? (modalData as ContentItem)
+            : null
+        }
+        onTogglePublic={handleShareToggle}
+      />
     </div>
   );
 };
