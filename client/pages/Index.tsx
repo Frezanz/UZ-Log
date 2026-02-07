@@ -14,7 +14,8 @@ import { DeleteModal } from "@/components/modals/DeleteModal";
 import { AutoDeleteModal } from "@/components/modals/AutoDeleteModal";
 import { DuplicateModal } from "@/components/modals/DuplicateModal";
 import { Button } from "@/components/ui/button";
-import { ChevronDown, Plus, Copy } from "lucide-react";
+import { ChevronDown, Plus, Copy, Settings, Moon, Sun } from "lucide-react";
+import { useTheme } from "@/hooks/useTheme";
 import { toast } from "sonner";
 import { getAllPublicContent, mergeContent } from "@/lib/api";
 import {
@@ -26,6 +27,7 @@ import {
 export default function Index() {
   const navigate = useNavigate();
   const { isAuthenticated, isLoading: authLoading } = useAuth();
+  const { isDark, toggleDarkMode } = useTheme();
   const {
     items,
     isLoading,
@@ -83,6 +85,9 @@ export default function Index() {
     [],
   );
   const [isDuplicateDetecting, setIsDuplicateDetecting] = useState(false);
+
+  // Settings modal state
+  const [showSettings, setShowSettings] = useState(false);
 
   // Scroll detection for hiding header and search bar
   const [isHeaderHidden, setIsHeaderHidden] = useState(false);
@@ -439,14 +444,12 @@ export default function Index() {
               </div>
               <div className="flex items-center gap-2">
                 <Button
-                  variant="outline"
-                  onClick={() => navigate("/chat")}
+                  variant="ghost"
                   size="sm"
+                  onClick={() => setShowSettings(true)}
+                  title="Settings"
                 >
-                  AI Assistant
-                </Button>
-                <Button variant="outline" onClick={() => navigate("/settings")}>
-                  Settings
+                  <Settings className="w-4 h-4" />
                 </Button>
               </div>
             </div>
@@ -905,6 +908,96 @@ export default function Index() {
           </div>
         )}
       </main>
+
+      {/* Settings Modal for Anonymous Users */}
+      {!isAuthenticated && showSettings && (
+        <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
+          <div className={`rounded-lg shadow-xl max-w-md w-full p-6 transition-colors ${
+            isDark ? "bg-gray-800" : "bg-white"
+          }`}>
+            <div className="flex justify-between items-center mb-6">
+              <h2 className={`text-lg font-bold ${isDark ? "text-gray-100" : "text-gray-900"}`}>
+                Settings
+              </h2>
+              <button
+                onClick={() => setShowSettings(false)}
+                className={`transition-colors ${
+                  isDark ? "text-gray-400 hover:text-gray-300" : "text-gray-500 hover:text-gray-700"
+                }`}
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+
+            {/* Theme Toggle Setting */}
+            <div className="space-y-4">
+              <div className={`flex items-center justify-between p-4 rounded-lg ${
+                isDark ? "bg-gray-700" : "bg-gray-100"
+              }`}>
+                <div className="flex items-center gap-3">
+                  {isDark ? (
+                    <Sun className="w-5 h-5 text-yellow-400" />
+                  ) : (
+                    <Moon className="w-5 h-5 text-gray-600" />
+                  )}
+                  <div>
+                    <p className={`font-medium ${isDark ? "text-gray-100" : "text-gray-900"}`}>
+                      Dark Mode
+                    </p>
+                    <p className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>
+                      {isDark ? "Currently enabled" : "Currently disabled"}
+                    </p>
+                  </div>
+                </div>
+                <button
+                  onClick={toggleDarkMode}
+                  className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+                    isDark ? "bg-blue-600" : "bg-gray-300"
+                  }`}
+                >
+                  <span
+                    className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                      isDark ? "translate-x-6" : "translate-x-1"
+                    }`}
+                  />
+                </button>
+              </div>
+
+              {/* AI Assistant Setting */}
+              <button
+                onClick={() => {
+                  navigate("/chat");
+                  setShowSettings(false);
+                }}
+                className={`w-full text-left p-4 rounded-lg transition-colors ${
+                  isDark
+                    ? "bg-blue-900/20 hover:bg-blue-900/30 text-blue-400"
+                    : "bg-blue-100 hover:bg-blue-200 text-blue-700"
+                }`}
+              >
+                <p className="font-medium">AI Assistant</p>
+                <p className={`text-sm ${isDark ? "text-blue-300" : "text-blue-600"}`}>
+                  Chat with Uz-Assistant for content management
+                </p>
+              </button>
+            </div>
+
+            {/* Close Button */}
+            <button
+              onClick={() => setShowSettings(false)}
+              className={`w-full mt-6 py-2 rounded-lg font-medium transition-colors ${
+                isDark
+                  ? "bg-gray-700 hover:bg-gray-600 text-gray-100"
+                  : "bg-gray-200 hover:bg-gray-300 text-gray-900"
+              }`}
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Modals - Available for all users */}
       <ContentModal

@@ -71,6 +71,11 @@ export function detectIntent(
     detectedIntent = "DUPLICATE";
     confidence = calculateConfidence(message, "DUPLICATE");
   }
+  // Check for SEARCH intent
+  else if (isSearchIntent(lower)) {
+    detectedIntent = "SEARCH";
+    confidence = calculateConfidence(message, "SEARCH");
+  }
 
   // Extract parameters based on detected intent
   const parameters = extractParameters(message, detectedIntent, contentItems);
@@ -194,6 +199,18 @@ function isDuplicateIntent(lower: string): boolean {
   return duplicateKeywords.some((kw) => lower.includes(kw));
 }
 
+function isSearchIntent(lower: string): boolean {
+  const searchKeywords = [
+    "search",
+    "find",
+    "filter",
+    "look for",
+    "query",
+    "search for",
+  ];
+  return searchKeywords.some((kw) => lower.includes(kw));
+}
+
 // ============ Parameter Extraction ============
 
 function extractParameters(
@@ -283,9 +300,35 @@ function extractParameters(
         params.itemId = dupRef.id;
       }
       break;
+
+    case "SEARCH":
+      // Search uses the query text and filters
+      params.query = title || extractSearchQuery(message);
+      if (tags.length > 0) params.tags = tags;
+      if (category) params.category = category;
+      if (contentType) params.type = contentType;
+      break;
   }
 
   return params;
+}
+
+function extractSearchQuery(message: string): string {
+  // Remove search intent keywords and extract the query
+  const keywords = [
+    "search",
+    "find",
+    "filter",
+    "look for",
+    "query",
+    "search for",
+  ];
+  let query = message.toLowerCase();
+  keywords.forEach((kw) => {
+    const regex = new RegExp(`\\b${kw}\\b\\s*`, "i");
+    query = query.replace(regex, "");
+  });
+  return query.trim();
 }
 
 function findItemReference(
@@ -392,6 +435,7 @@ function intentToOperation(intentType: IntentType): string {
     PROTECT: "protectContent",
     LIST: "listContent",
     DUPLICATE: "duplicateContent",
+    SEARCH: "searchContent",
     UNKNOWN: "unknown",
   };
 
