@@ -256,7 +256,10 @@ export function calculateConfidence(message: string, intentType: string): number
 /**
  * Determine if an operation requires verification based on sensitivity
  */
-export function requiresVerification(intentType: string, parameters: Record<string, any>): boolean {
+export function requiresVerification(
+  intentType: string,
+  parameters: Record<string, any>,
+): boolean {
   const sensitiveIntents = ["DELETE", "PROTECT", "SHARE"];
 
   if (sensitiveIntents.includes(intentType)) {
@@ -271,13 +274,19 @@ export function requiresVerification(intentType: string, parameters: Record<stri
   return false;
 }
 
+export interface SuggestedAction {
+  action: string;
+  label: string;
+  description: string;
+}
+
 /**
  * Generate next action suggestions based on completed operation
  */
 export function suggestNextActions(
   intentType: string,
   operationSuccess: boolean,
-): Array<{ action: string; label: string; description: string }> {
+): SuggestedAction[] {
   if (!operationSuccess) {
     return [
       {
@@ -293,7 +302,7 @@ export function suggestNextActions(
     ];
   }
 
-  const suggestions: { [key: string]: typeof [] } = {
+  const suggestions: { [key: string]: SuggestedAction[] } = {
     CREATE: [
       { action: "view", label: "View", description: "View the new content" },
       { action: "share", label: "Share", description: "Share this content" },
