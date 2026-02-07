@@ -283,6 +283,12 @@ const ChatInterface = ({ onToggleVisualMode }: ChatInterfaceProps) => {
         timestamp: new Date().toISOString(),
       };
       setMessages((prev) => [...prev, successMessage]);
+
+      // Save success message to persistence
+      if (sessionId) {
+        await saveChatMessage(sessionId, successMessage);
+        await updateSessionTimestamp(sessionId);
+      }
     } catch (error) {
       console.error("Error sharing content:", error);
       toast.error("Failed to update sharing settings");
