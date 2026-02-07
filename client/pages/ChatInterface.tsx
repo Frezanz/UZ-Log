@@ -79,32 +79,41 @@ const ChatInterface = ({ onToggleVisualMode }: ChatInterfaceProps) => {
     e.preventDefault();
     if (!input.trim() || isLoading) return;
 
-    // Add user message
-    const userMessage: ChatMessageType = {
-      id: `msg-${Date.now()}`,
-      role: "user",
-      content: input,
-      timestamp: new Date().toISOString(),
-    };
+    // Validate message
+    const validation = validateMessage(input);
+    if (!validation.valid) {
+      toast.error(validation.error);
+      return;
+    }
 
-    setMessages((prev) => [...prev, userMessage]);
+    const userInput = input;
     setInput("");
     setIsLoading(true);
 
     try {
-      // TODO: Process message and generate response
-      // For now, send a placeholder response
-      const assistantMessage: ChatMessageType = {
-        id: `msg-${Date.now()}-response`,
-        role: "assistant",
-        content: `I understood: "${input}". This feature is coming soon!`,
-        timestamp: new Date().toISOString(),
-      };
+      // Process the message
+      const result = await processChatMessage({
+        message: userInput,
+        contentItems: items,
+        user: user || null,
+      });
 
-      // Simulate delay
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      // Add user message
+      setMessages((prev) => [...prev, result.userMessage]);
 
-      setMessages((prev) => [...prev, assistantMessage]);
+      // Add assistant response
+      setMessages((prev) => [...prev, result.assistantMessage]);
+
+      // Handle modal if needed
+      if (result.modalState && result.modalState.type) {
+        setActiveModal(result.modalState.type);
+        setModalData(result.modalState.data || null);
+        if (result.operationResult.resultData?.itemId) {
+          setModalItemId(result.operationResult.resultData.itemId);
+        } else if (result.modalState.data && "id" in result.modalState.data) {
+          setModalItemId((result.modalState.data as ContentItem).id);
+        }
+      }
     } catch (error) {
       console.error("Error processing message:", error);
       const errorMessage: ChatMessageType = {
@@ -114,6 +123,7 @@ const ChatInterface = ({ onToggleVisualMode }: ChatInterfaceProps) => {
         timestamp: new Date().toISOString(),
       };
       setMessages((prev) => [...prev, errorMessage]);
+      toast.error("Failed to process message");
     } finally {
       setIsLoading(false);
     }
