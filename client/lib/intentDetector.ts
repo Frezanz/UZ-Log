@@ -300,6 +300,14 @@ function extractParameters(
         params.itemId = dupRef.id;
       }
       break;
+
+    case "SEARCH":
+      // Search uses the query text and filters
+      params.query = title || extractSearchQuery(message);
+      if (tags.length > 0) params.tags = tags;
+      if (category) params.category = category;
+      if (contentType) params.type = contentType;
+      break;
   }
 
   return params;
