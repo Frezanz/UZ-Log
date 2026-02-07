@@ -97,6 +97,16 @@ export const Header: React.FC = () => {
                 </div>
               )}
 
+              {/* Chat Mode Button */}
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => navigate("/chat")}
+                title="AI Assistant"
+              >
+                <MessageCircle className="w-4 h-4 sm:w-5 sm:h-5" />
+              </Button>
+
               {/* Settings Button */}
               <Button
                 variant="ghost"
