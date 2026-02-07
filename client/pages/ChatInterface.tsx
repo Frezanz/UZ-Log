@@ -186,7 +186,7 @@ const ChatInterface = ({ onToggleVisualMode }: ChatInterfaceProps) => {
         {
           id: `msg-${Date.now()}`,
           role: "assistant",
-          content: "Chat history cleared. How can I help you?",
+          content: "Chat history cleared. I'm ready to help! What would you like to do?",
           timestamp: new Date().toISOString(),
         },
       ]);
