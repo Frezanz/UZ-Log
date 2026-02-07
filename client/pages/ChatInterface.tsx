@@ -457,7 +457,11 @@ const ChatInterface = ({ onToggleVisualMode }: ChatInterfaceProps) => {
 
       {/* Debug info */}
       {process.env.NODE_ENV === "development" && (
-        <div className="border-t px-6 py-2 text-xs text-muted-foreground bg-muted/30">
+        <div className={`border-t px-6 py-2 text-xs transition-colors ${
+          isDark
+            ? "bg-gray-800 border-gray-700 text-gray-400"
+            : "bg-gray-100 border-gray-200 text-gray-600"
+        }`}>
           <p>
             Session: {sessionId} | User: {user?.email || "Guest"} | Items:{" "}
             {items.length}
