@@ -14,7 +14,8 @@ import { DeleteModal } from "@/components/modals/DeleteModal";
 import { AutoDeleteModal } from "@/components/modals/AutoDeleteModal";
 import { DuplicateModal } from "@/components/modals/DuplicateModal";
 import { Button } from "@/components/ui/button";
-import { ChevronDown, Plus, Copy } from "lucide-react";
+import { ChevronDown, Plus, Copy, Settings, Moon, Sun } from "lucide-react";
+import { useTheme } from "@/hooks/useTheme";
 import { toast } from "sonner";
 import { getAllPublicContent, mergeContent } from "@/lib/api";
 import {
