@@ -140,8 +140,20 @@ const ChatInterface = ({ onToggleVisualMode }: ChatInterfaceProps) => {
       // Add user message
       setMessages((prev) => [...prev, result.userMessage]);
 
+      // Save user message to persistence
+      if (sessionId) {
+        await saveChatMessage(sessionId, result.userMessage, result.intent);
+        await updateSessionTimestamp(sessionId);
+      }
+
       // Add assistant response
       setMessages((prev) => [...prev, result.assistantMessage]);
+
+      // Save assistant response to persistence
+      if (sessionId) {
+        await saveChatMessage(sessionId, result.assistantMessage, result.intent);
+        await updateSessionTimestamp(sessionId);
+      }
 
       // Handle modal if needed
       if (result.modalState && result.modalState.type) {
